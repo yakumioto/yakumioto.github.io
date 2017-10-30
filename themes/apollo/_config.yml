@@ -1,0 +1,20 @@
+menu:
+    Blog: /
+    Archive: /archives/
+    Twitter: https://twitter.com/yakumioto
+    GitHub: https://github.com/yakumioto
+    Rss: /atom.xml
+
+favicon: /favicon.png
+logo: /favicon.png
+
+# Comment
+# e.g disqus: seansun
+disqus: yakumioto
+
+# Analytics
+# google-analytics:
+ga: UA-102233768-1
+
+# Copyright Infomation
+startyear: 2017
