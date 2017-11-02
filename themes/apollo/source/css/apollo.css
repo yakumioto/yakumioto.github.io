@@ -312,14 +312,6 @@ header {
     min-height: 60px
 }
 
-header .logo-link {
-    float: left
-}
-
-header .logo-link img {
-    height: 60px
-}
-
 header .nav-list-item {
     display: inline-block;
     padding: 19px 10px
@@ -814,7 +806,6 @@ main.container {
     header {
         padding: 20px 0
     }
-    header a.logo-link,
     header ul.nav.nav-list {
         float: none;
         display: block;
