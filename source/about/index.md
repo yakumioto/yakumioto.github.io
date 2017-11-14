@@ -1,7 +1,7 @@
 ---
 title: About
 date: 2017-11-14 15:24:50
-comment: false
+comments: false
 ---
 
 ## GPG Fingerprint
