@@ -10,7 +10,8 @@ tags:
 我使用的是 `gogs` 作为自己私有的 git server. 正常的将 `.ssh` 目录直接导入到了 `docker` 中. 然后启动 `docker` 报错如下
 
 ```bash
-Warning: Permanently added the RSA host key for IP address 'xx.xx.xx.xx' to the list of known hosts.
+Warning: Permanently added the RSA host key for IP address
+'xx.xx.xx.xx' to the list of known hosts.
 ```
 
 想必经常玩vps的人对这个提示并不陌生.. 我们每次是有 `ssh` 尝试连接一台我们从没有连接过服务器都会出现, 但是在 docker 中如何避免这个提示? 
