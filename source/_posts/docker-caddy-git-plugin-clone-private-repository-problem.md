@@ -4,6 +4,8 @@ date: 2017-11-04 11:26:45
 tags:
 ---
 
+## 问题描述
+
 我使用的是 `gogs` 作为自己私有的 git server. 正常的将 `.ssh` 目录直接导入到了 `docker` 中. 然后启动 `docker` 报错如下
 
 ```bash
