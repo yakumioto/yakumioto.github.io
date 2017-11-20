@@ -4,4 +4,4 @@ git add --all
 
 git commit -m "UpdateAt: $(date "+%Y-%m-%d %H:%M:%S")"
 
-git push orgin master
+git push origin master
