@@ -1,9 +1,9 @@
 menu:
     Blog: /
     Archive: /archives/
+    About: /about
     Twitter: https://twitter.com/yakumioto
     GitHub: https://github.com/yakumioto
-    About: /about
     Rss: /atom.xml
 
 favicon: /favicon.png
