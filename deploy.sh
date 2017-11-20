@@ -12,8 +12,6 @@ git config --global user.name "yakumioto"
 hexo clean
 hexo generate
 
-git clone -b master git@github.com:yakumioto/yakumioto.github.io.git .deploy_git
-
 $(cd .deploy_git && mv .git/ ../public/)
 
 cd ./public
