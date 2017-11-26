@@ -14,9 +14,9 @@ tags:
 
 ## 实现
 
-1. 给 `hexo` 准备个仓库, 例: `github.com/xxxx/hexo-source`, 如果你有私有仓库 如 `gogs` `gitlib` 等都可以.
+给 `hexo` 准备个仓库, 例: `github.com/xxxx/hexo-source`, 如果你有私有仓库 如 `gogs` `gitlib` 等都可以.
 
-2. 在 `hexo` 的根目录创建一个  `deploy.sh` 的脚本.
+在 `hexo` 的根目录创建一个  `deploy.sh` 的脚本.
 
 ```bash
 #/bin/bash
@@ -30,7 +30,7 @@ npm install
 hexo g -d
 ```
 
-3. 制作 `node-caddy` 的 `docker`, 当然也可以使用我已经写好的. [yakumioto/node-caddy](https://hub.docker.com/r/yakumioto/node-caddy/), 并编写 `Caddyfile`, 因为我使用的是自己部署的 `Gogs` 所以引用了 `key`
+制作 `node-caddy` 的 `docker`, 当然也可以使用我已经写好的. [yakumioto/node-caddy](https://hub.docker.com/r/yakumioto/node-caddy/), 并编写 `Caddyfile`, 因为我使用的是自己部署的 `Gogs` 所以引用了 `key`
 
 ```caddy
 :80 {
