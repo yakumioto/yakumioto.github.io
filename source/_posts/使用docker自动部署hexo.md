@@ -9,14 +9,14 @@ tags:
 
 ## 原理
 
-我实现的原理其实很简单. 当 `source` 被提交后, 触发 `webhook` 然后通过执行 `bash script` 自动进行编译部署.
+我实现的原理其实很简单. 当 `source` 被提交后, 触发 `webhook` 然后通过执行 `bash script` 自动进行编译部署
 
 
 ## 实现
 
-给 `hexo` 准备个仓库, 例: `github.com/xxxx/hexo-source`, 如果你有私有仓库 如 `gogs` `gitlib` 等都可以.
+给 `hexo` 准备个仓库, 例: `github.com/xxxx/hexo-source`, 如果你有私有仓库 如 `gogs` `gitlib` 等都可以
 
-在 `hexo` 的根目录创建一个  `deploy.sh` 的脚本.
+在 `hexo` 的根目录创建一个  `deploy.sh` 的脚本
 
 ```bash
 #/bin/bash
@@ -59,4 +59,4 @@ ci-blog:
       - ../volumes/caddy/ci-blog:/srv
 ```
 
-到这里基本就算完成了.
+到这里基本就算完成了
