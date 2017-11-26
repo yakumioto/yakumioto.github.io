@@ -1,8 +1,11 @@
 ---
 title: About
 date: 2017-11-14 15:24:50
-comments: false
 ---
+
+## Email
+
+`admin@mioto.me`
 
 ## GPG Fingerprint
 
