@@ -1,7 +1,7 @@
 menu:
     Blog: /
-    Archive: /archives/
     Contact: /contact/
+    Archive: /archives/
     Twitter: https://twitter.com/yakumioto
     GitHub: https://github.com/yakumioto
     Rss: /atom.xml
