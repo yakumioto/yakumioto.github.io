@@ -2,7 +2,7 @@
 set -ev
 export TZ='Asia/Shanghai'
 
-npm install hexo -g
+npm install hexo-cli -g
 
 npm install
 
