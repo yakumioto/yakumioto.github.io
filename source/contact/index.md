@@ -1,6 +1,6 @@
 ---
 title: Contact
-date: 2017-11-14 15:24:50
+date: 2017-11-28 10:37:51
 ---
 
 Email: Yaku Mioto <yaku.mioto@gmail.com>
