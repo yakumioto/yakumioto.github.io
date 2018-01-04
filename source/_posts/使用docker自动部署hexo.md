@@ -1,5 +1,5 @@
 ---
-title: 使用docker自动部署hexo
+title: "使用docker自动部署hexo"
 date: 2017-11-26 22:16:29
 ---
 
@@ -59,3 +59,4 @@ ci-blog:
 ```
 
 到这里基本就算完成了
+
