@@ -1,6 +1,9 @@
 ---
 title: "docker caddy 克隆私有仓库遇到的问题"
 date: 2017-11-04 11:26:45
+tags:
+  - Docker
+  - Caddy
 ---
 
 ## 问题描述
