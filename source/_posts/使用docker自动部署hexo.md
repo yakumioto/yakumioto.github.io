@@ -13,6 +13,8 @@ tags:
 
 我实现的原理其实很简单. 当 `source` 被提交后, 触发 `webhook` 然后通过执行 `bash script` 自动进行编译部署
 
+<!-- more -->
+
 
 ## 实现
 

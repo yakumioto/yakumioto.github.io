@@ -4,10 +4,10 @@
 
 # Site
 title: Mioto's Blog
-subtitle: life
-description: Code every day
-author: Yaku Mioto
-language: zh-cn
+subtitle: 写写没用的文章 记录无聊的生活
+description: 整天无所事事...
+author: Mioto
+language: en
 timezone: Asia/Shanghai
 
 # URL
@@ -73,7 +73,7 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: apollo
+theme: next
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html

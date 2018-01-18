@@ -17,6 +17,8 @@ tags:
 
 新的配置文件目录在 `/etc/netplan` 文件夹中, 使用名为 `01-netcfg.yaml` 的文件作为第一的配置文件. 一下是 `DHCP` 的默认配置.
 
+<!-- more -->
+
 ```yaml
 # This file describes the network interfaces available on your system
 # For more information, see netplan(5).
