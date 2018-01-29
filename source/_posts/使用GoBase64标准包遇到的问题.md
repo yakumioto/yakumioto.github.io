@@ -21,6 +21,8 @@ if err := nil {
 // ...
 ```
 
+<!--more-->
+
 源码: <https://golang.org/src/encoding/base64/base64.go>
 
 ```go
