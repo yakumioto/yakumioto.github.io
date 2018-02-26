@@ -2,7 +2,7 @@
 title: "使用GoBase64标准包遇到的问题"
 date: 2018-01-29 15:53:07
 tags:
-  - Golang
+  - Go
 ---
 
 在解析 `jwt` 中的 `Playload` 部分的 `base64` 时遇到了错误.
