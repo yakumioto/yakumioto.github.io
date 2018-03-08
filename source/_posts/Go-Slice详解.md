@@ -22,7 +22,7 @@ func main() {
     fmt.Println(s1)
     fmt.Println(s2)
 }
-// ---
+//==========
 // [4 2 3]
 // [4]
 ```
@@ -61,7 +61,7 @@ func main() {
     sliceHeader1 := (*reflect.SliceHeader)((unsafe.Pointer)(&s1))
     fmt.Printf("data address: %#0x, len: %d, cap: %d\n", sliceHeader1.Data, sliceHeader1.Len, sliceHeader1.Cap)
 }
-//---
+//===
 // data address: 0x10414020, len: 3, cap: 3
 ```
 
