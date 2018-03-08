@@ -1,7 +1,7 @@
 ---
-title: My CV
+title: 简历
 date: 2018-03-08 23:15:32
-type: mycv
+type: cv
 ---
 
 # 联系方式
