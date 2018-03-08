@@ -25,18 +25,18 @@ func main() {
 // ---
 // [4 2 3]
 // [4]
-``` 
+```
 
 <!-- more -->
 
- # Slice 定义
+# Slice 定义
 
 先看看 `Slice` 在 `Go` 底层的定义
 
 ```go
 // https://github.com/golang/go/blob/master/src/reflect/value.go#L1806
 
- type sliceHeader struct {
+type sliceHeader struct {
     Data unsafe.Pointer   // Array pointer
     Len  int              // slice length
     Cap  int              // slice capacity
@@ -62,7 +62,7 @@ func main() {
     fmt.Printf("data address: %#0x, len: %d, cap: %d\n", sliceHeader1.Data, sliceHeader1.Len, sliceHeader1.Cap)
 }
 //---
-data address: 0x10414020, len: 3, cap: 3
+// data address: 0x10414020, len: 3, cap: 3
 ```
 
 ### 第二行
@@ -98,6 +98,7 @@ func (v Value) Slice(i, j int) Value {
     // if 为真
     if cap-i > 0 {
           // 所以这里是给 s2.Data 进行赋值.
+          // arrayAt 感觉是对地址进行操作的. 处理方法方法也很神奇..
           s.Data = arrayAt(base, i, typ.elem.Size(), "i < cap")
     } else {
           // do not advance pointer, to avoid pointing beyond end of slice
