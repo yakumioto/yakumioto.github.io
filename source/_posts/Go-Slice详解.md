@@ -97,16 +97,18 @@ func (v Value) Slice(i, j int) Value {
     // Reinterpret as *sliceHeader to edit.
     s := (*sliceHeader)(unsafe.Pointer(&x))
     // 这里是给 s2.Len 进行赋值. s1[:0]  i 没有传所以为 0, j 也为 0, 所以 j - i ...
-    s.Len = j -
+    s.Len = j - i
     // 这里是给 s2.Cap 进行赋值. cap 在上面的 case 中 被赋值为 3, 3 - 0  emmm...
     s.Cap = cap - i
     // if 为真
     if cap-i > 0 {
           // 所以这里是给 s2.Data 进行赋值.
+
           // arrayAt 的 4个参数类型:
           // p unsafe.Pointer, i int, eltSize uintptr, whySafe string
           // base 是 s1.Data, i 是 0, eltSize 这个值是根据类型来的,
-          // 在当前例子里是 []int, int 在根据系统, 32 平台下为 4 字节,在 64 位平台下是 8 字节
+          // 在当前例子里是 []int, 在 Go 中 int 在根据系统, 32 平台下为 4 字节,
+          // 在 64 位平台下是 8 字节
           // 最后一个参数 whySafe 可能是为了做个记录吧... 而且必须说明为啥安全...
           s.Data = arrayAt(base, i, typ.elem.Size(), "i < cap")
     } else {
@@ -117,7 +119,7 @@ func (v Value) Slice(i, j int) Value {
 
 // https://github.com/golang/go/blob/master/src/reflect/value.go#1826
 func arrayAt(p unsafe.Pointer, i int, eltSize uintptr, whySafe string) unsafe.Pointer {
-    // 以系统 64 位 为例
+    // 在 Go 中以系统 64 位 为例
     // 传的值分别是  s1.Data(0x10414020), 0*8, "i < len"
 	return add(p, uintptr(i)*eltSize, "i < len")
 }
