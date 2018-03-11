@@ -64,3 +64,7 @@ func main() {
 // =====
 // be178c0543eb17f5f3043021c9e5fcf30285e557a4fc309cce97ff9ca6182912
 ```
+
+## 参考
+
+<https://stackoverflow.com/questions/14230145/what-is-the-best-way-to-convert-byte-array-to-string>
