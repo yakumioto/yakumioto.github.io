@@ -8,8 +8,6 @@ Email: [yaku.mioto@gmail.com](mailto:yaku.mioto@gmail.com)
 
 # GPG Fingerprint
 
-GPG Fingerprint: `A70D E14A 28D9 3EF9 D2A4 89F1 4340 BB84 E0B5 1E66`
-
-Import GPG: `gpg --keyserver gpg.mit.edu --recv-key 4340BB84E0B51E66`
+GPG Fingerprint: `30FF B399 4266 270B B143  0618 7A03 2428 6C21 7A2E`
 
 Download GPG Public Key: [public-key.gpg](/public-key.gpg)
