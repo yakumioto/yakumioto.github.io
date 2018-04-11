@@ -1,5 +1,5 @@
 ---
-title: "openssl自签证书"
+title: "openssl 自签证书"
 date: 2018-01-29 21:38:31
 tags:
   - openssl
@@ -61,7 +61,7 @@ openssl req \
         -out rootCA.pem
 ```
 
-### 生成 证书请求 CSR 
+### 生成 证书请求 CSR
 
 server.csr.conf 同理. 减少工作量.
 
