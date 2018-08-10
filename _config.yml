@@ -80,4 +80,4 @@ theme: apollo
 deploy:
   type: git
   repo: git@git.mioto.me:yakumioto/mioto.me.git
-  branch: gh-pages
+  branch: m-pages
