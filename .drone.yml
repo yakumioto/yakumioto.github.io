@@ -3,7 +3,9 @@ pipeline:
   renders:
     image: node:latest
     commands:
-      - mkdir /root/.ssh && echo $SSH_KEY > /root/.ssh/id_rsa && echo $SSH_CONFIG > /root/.ssh/config && chmod 0600 /root/.ssh/id_rsa 
+      - mkdir /root/.ssh && echo $SSH_KEY > /root/.ssh/id_rsa && chmod 0600 /root/.ssh/id_rsa
+      - echo 'github.com
+          StrictHostKeyChecking no'
       - cat /root/.ssh/config
       - export TZ='Asia/Shanghai'
       - npm install hexo-cli -g
