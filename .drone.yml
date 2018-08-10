@@ -11,4 +11,3 @@ pipeline:
       # - hexo clean
       # - hexo d -g
     secrets: [ id_rsa ]
-    
