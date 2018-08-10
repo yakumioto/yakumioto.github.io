@@ -81,4 +81,3 @@ deploy:
   type: git
   repo: git@git.mioto.me:yakumioto/mioto.me.git
   branch: m-pages
-  
