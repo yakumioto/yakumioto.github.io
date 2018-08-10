@@ -79,5 +79,5 @@ theme: apollo
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: git@github.com:yakumioto/yakumioto.github.io.git
-  branch: master
+  repo: git@git.mioto.me:yakumioto/mioto.me.git
+  branch: gh-pages
