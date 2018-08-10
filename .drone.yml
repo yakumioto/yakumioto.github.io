@@ -12,4 +12,4 @@ pipeline:
       # - git config --global user.name "yakumioto"
       # - hexo clean
       # - hexo d -g
-    secrets: [ ssh_key, ssh_config ]
+    secrets: [ ssh_config ]
