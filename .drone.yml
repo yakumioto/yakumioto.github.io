@@ -3,13 +3,12 @@ pipeline:
   renders:
     image: node:latest
     commands:
-      - echo -n "$SSH_CONFIG"
-      # - mkdir /root/.ssh && echo -n $SSH_KEY > /root/.ssh/id_rsa && echo -n $SSH_CONFIG > /root/.ssh/config && chmod 0600 /root/.ssh/id_rsa
-      # - cat /root/.ssh/config
-      # - export TZ='Asia/Shanghai'
-      # - npm install hexo-cli -g
-      # - git config --global user.email "yaku.mioto@gmail.com"
-      # - git config --global user.name "yakumioto"
-      # - hexo clean
-      # - hexo d -g
+      - mkdir /root/.ssh && echo -n "$SSH_KEY" > /root/.ssh/id_rsa && echo -n "$SSH_CONFIG" > /root/.ssh/config && chmod 0600 /root/.ssh/id_rsa
+      - cat /root/.ssh/config
+      - export TZ='Asia/Shanghai'
+      - npm install hexo-cli -g
+      - git config --global user.email "yaku.mioto@gmail.com"
+      - git config --global user.name "yakumioto"
+      - hexo clean
+      - hexo d -g
     secrets: [ ssh_key, ssh_config ]
