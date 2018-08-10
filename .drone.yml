@@ -11,3 +11,4 @@ pipeline:
       - hexo clean
       - hexo d -g
     secrets: [ ssh_key, ssh_config ]
+    
