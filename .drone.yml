@@ -3,11 +3,11 @@ pipeline:
   renders:
     image: node:latest
     commands:
-      - echo ${ID_RSA}
+      - echo ${SSH_KEY} 
       # - export TZ='Asia/Shanghai'
       # - npm install hexo-cli -g
       # - git config --global user.email "yaku.mioto@gmail.com"
       # - git config --global user.name "yakumioto"
       # - hexo clean
       # - hexo d -g
-    secrets: [ id_rsa ]
+    secrets: [ ssh_key ]
