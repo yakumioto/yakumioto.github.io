@@ -4,7 +4,6 @@ pipeline:
     image: node:latest
     commands:
       - mkdir /root/.ssh && echo -n "$SSH_KEY" > /root/.ssh/id_rsa && echo -n "$SSH_CONFIG" > /root/.ssh/config && chmod 0600 /root/.ssh/id_rsa
-      - cat /root/.ssh/config
       - export TZ='Asia/Shanghai'
       - npm install hexo-cli -g
       - git config --global user.email "yaku.mioto@gmail.com"
