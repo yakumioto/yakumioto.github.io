@@ -3,7 +3,7 @@ pipeline:
   renders:
     image: node:latest
     commands:
-      - echo -n $SSH_CONFIG
+      - echo $SSH_KEY
       # - mkdir /root/.ssh && echo -n $SSH_KEY > /root/.ssh/id_rsa && echo -n $SSH_CONFIG > /root/.ssh/config && chmod 0600 /root/.ssh/id_rsa
       # - cat /root/.ssh/config
       # - export TZ='Asia/Shanghai'
@@ -12,4 +12,4 @@ pipeline:
       # - git config --global user.name "yakumioto"
       # - hexo clean
       # - hexo d -g
-    secrets: [ ssh_config ]
+    secrets: [ ssh_key, ssh_config ]
