@@ -3,7 +3,7 @@ pipeline:
   renders:
     image: node:latest
     commands:
-      - echo $ID_RSA
+      - echo ${ID_RSA}
       # - export TZ='Asia/Shanghai'
       # - npm install hexo-cli -g
       # - git config --global user.email "yaku.mioto@gmail.com"
@@ -11,4 +11,3 @@ pipeline:
       # - hexo clean
       # - hexo d -g
     secrets: [ id_rsa ]
-    
