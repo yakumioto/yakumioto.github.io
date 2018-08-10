@@ -3,7 +3,7 @@ pipeline:
   renders:
     image: node:latest
     commands:
-      - echo -n ${SSH_CONFIG}
+      - echo -n "$SSH_CONFIG"
       # - mkdir /root/.ssh && echo -n $SSH_KEY > /root/.ssh/id_rsa && echo -n $SSH_CONFIG > /root/.ssh/config && chmod 0600 /root/.ssh/id_rsa
       # - cat /root/.ssh/config
       # - export TZ='Asia/Shanghai'
