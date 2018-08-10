@@ -4,7 +4,7 @@ pipeline:
     image: node:latest
     commands:
       - mkdir /root/.ssh && echo $SSH_KEY > /root/.ssh/id_rsa && chmod 0600 /root/.ssh/id_rsa
-      - echo 'github.com
+      - echo 'github.com |
           StrictHostKeyChecking no'
       - cat /root/.ssh/config
       - export TZ='Asia/Shanghai'
@@ -13,5 +13,5 @@ pipeline:
       - git config --global user.name "yakumioto"
       - hexo clean
       - hexo d -g
-    secrets: [ ssh_key, ssh_config ]
+    secrets: [ ssh_key ]
     
