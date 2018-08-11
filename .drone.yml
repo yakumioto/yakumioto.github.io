@@ -12,5 +12,6 @@ pipeline:
       - git config --global user.name "yakumioto"
       - hexo clean
       - hexo d -g
-    branches: master
     secrets: [ ssh_key, ssh_config ]
+  
+  branches: master
