@@ -14,4 +14,4 @@ pipeline:
       - hexo d -g
     secrets: [ ssh_key, ssh_config ]
   
-  branches: master
+branches: master
