@@ -29,7 +29,7 @@ social_links:
   twitter: https://twitter.com/yakumioto
   facebook: https://www.facebook.com/yakumioto
   linkedin: https://www.linkedin.com/in/yakumioto/
-  mail: yaku.mioto@gmail.com
+  mail: mailto:yaku.mioto@gmail.com
 
 # Customize the overview with displaying a tagcloud on the index page.
 # Options: https://hexo.io/docs/helpers.html#tagcloud
