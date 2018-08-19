@@ -6,7 +6,7 @@ tags:
   - Caddy
 ---
 
-## 问题描述
+# 问题描述
 
 我使用的是 `gogs` 作为自己私有的 git server. 正常的将 `.ssh` 目录直接导入到了 `docker` 中. 然后启动 `docker` 报错如下
 
@@ -19,7 +19,7 @@ Warning: Permanently added the RSA host key for IP address
 
 <!-- more -->
 
-## 解决
+# 解决
 
 其实就是要跳过这个验证, 网上一搜基本就能找到. 将 `StrictHostKeyChecking` 直接配置到 `.ssh/config` 中 就可以了
 
@@ -31,4 +31,3 @@ Host github.com
 ```
 
 这样请求的时候就会跳过跳过验证直接 clone 代码了
-
