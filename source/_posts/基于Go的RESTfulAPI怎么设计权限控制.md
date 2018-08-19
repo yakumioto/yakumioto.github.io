@@ -16,7 +16,7 @@ tags:
 
 但是这些资源又有一些不一样的地方.
 
-栗子: 
+栗子:
 
 `GET /zoos` 想看动物园的列表, 所有人都可以看, 也不需要登录.
 `PATCH /zoos/ID` 更新某个动物园的信息, 只有员工才可以更改, 必须要登录.
@@ -47,7 +47,7 @@ tags:
 
 以下列出的字段只是权限控制中必须的字段, 可以在原先表结构中添加即可.
 
-#### Resource
+### Resource
 
 | Nmae | Type | Description |
 | :---: | :---: | :---: |
@@ -55,7 +55,7 @@ tags:
 | Description | string | 资源描述 |
 | Identity | string | 资源唯一标识符 (一般可直接使用URL作为唯一标识符后面细讲) |
 
-#### Permission
+### Permission
 
 | Nmae | Type | Description |
 | :---: | :---: | :---: |
@@ -65,7 +65,7 @@ tags:
 | Method | string | HTTP请求方法 |
 | Effect | string | 作用于自己还是全部 (Allow&Owner) |
 
-#### PermissionGroup
+### PermissionGroup
 
 | Nmae | Type | Description |
 | :---: | :---: | :---: |
@@ -73,7 +73,7 @@ tags:
 | Description | string | 权限组描述 |
 | PermissionsID | []string | 权限集合 |
 
-#### Role
+### Role
 
 | Nmae | Type | Description |
 | :---: | :---: | :---: |
@@ -82,8 +82,7 @@ tags:
 | PermissionsID | []string | 权限列表 |
 | PermissionGroupsID | []string | 权限组列表 |
 
-
-#### User
+### User
 
 | Nmae | Type | Description |
 | :---: | :---: | :---: |
@@ -92,7 +91,7 @@ tags:
 
 以上所有的表都设计完了, 如果你仔细看上面表的顺序你会发现一点, 他们都是一对多的每一个 `Resource` 都是根.
 
-**Resource 一对多 Permission 一对多 PermissionGroup 一对多 Role 一对多 Role**
+注: **Resource 一对多 Permission 一对多 PermissionGroup 一对多 Role 一对多 Role**
 
 ## 权限中间件
 
@@ -165,8 +164,6 @@ CDvalidUserPermission(no)->OPuserNoPermission
 CDvalidUserPermission(yes)->ed
 ```
 
-
-
 ## 资源唯一标识符
 
 这里讲一下为什么使用以及如何使用 `URL` 作为唯一标识符.
@@ -194,4 +191,3 @@ DELETE /users/{id} - 删除一个用户
 
 [RESTful API 设计指南](http://www.ruanyifeng.com/blog/2014/05/restful_api.html)
 [基于RESTful API 怎么设计用户权限控制？](https://www.jianshu.com/p/db65cf48c111)
-

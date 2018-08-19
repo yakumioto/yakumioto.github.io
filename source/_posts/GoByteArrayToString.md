@@ -11,8 +11,8 @@ tags:
 // https://play.golang.org/p/JkK_B5609GN
 
 func main() {
-	hs := sha256.Sum256([]byte("hahaha"))
-	fmt.Println(hs)
+    hs := sha256.Sum256([]byte("hahaha"))
+    fmt.Println(hs)
 }
 
 // =====
@@ -29,8 +29,8 @@ func main() {
 // https://play.golang.org/p/RH8_iHLuWeg
 
 func main() {
-	hs := sha256.Sum256([]byte("hahaha"))
-	fmt.Println(string(hs[:]))
+    hs := sha256.Sum256([]byte("hahaha"))
+    fmt.Println(string(hs[:]))
 }
 
 // =====
@@ -43,8 +43,8 @@ func main() {
 // https://play.golang.org/p/Z1-pU0mjX_B
 
 func main() {
-	hs := sha256.Sum256([]byte("hahaha"))
-	fmt.Println(fmt.Sprintf("%x", hs))
+    hs := sha256.Sum256([]byte("hahaha"))
+    fmt.Println(fmt.Sprintf("%x", hs))
 }
 
 // =====
@@ -57,8 +57,8 @@ func main() {
 // https://play.golang.org/p/x8ovK9CkRlG
 
 func main() {
-	hs := sha256.Sum256([]byte("hahaha"))
-	fmt.Println(hex.EncodeToString(hs[:]))
+    hs := sha256.Sum256([]byte("hahaha"))
+    fmt.Println(hex.EncodeToString(hs[:]))
 }
 
 // =====

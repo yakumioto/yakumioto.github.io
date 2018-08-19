@@ -27,8 +27,8 @@ if err := nil {
 
 ```go
 const (
-	StdPadding rune = '=' // Standard padding character
-	NoPadding  rune = -1  // No padding
+  StdPadding rune = '=' // Standard padding character
+  NoPadding  rune = -1  // No padding
 )
 
 const encodeStd = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
@@ -70,4 +70,3 @@ if err := nil {
 ```
 
 参考: <https://stackoverflow.com/a/42683706/9176562>
-

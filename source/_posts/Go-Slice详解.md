@@ -121,13 +121,13 @@ func (v Value) Slice(i, j int) Value {
 func arrayAt(p unsafe.Pointer, i int, eltSize uintptr, whySafe string) unsafe.Pointer {
     // 在 Go 中以系统 64 位 为例
     // 传的值分别是  s1.Data(0x10414020), 0*8, "i < len"
-	return add(p, uintptr(i)*eltSize, "i < len")
+    return add(p, uintptr(i)*eltSize, "i < len")
 }
 
 // https://github.com/golang/go/blob/master/src/reflect/type.go#1079
 func add(p unsafe.Pointer, x uintptr, whySafe string) unsafe.Pointer {
     // 所以这里就相当于 0x10414020+0
-	return unsafe.Pointer(uintptr(p) + x)
+    return unsafe.Pointer(uintptr(p) + x)
 }
 ```
 
@@ -136,10 +136,10 @@ func add(p unsafe.Pointer, x uintptr, whySafe string) unsafe.Pointer {
 
 // 验证代码
 func main() {
-  	s1 := []int{1, 2, 3}
-  	s2 := s1[:0]
-  	sliceHeader2 := (*reflect.SliceHeader)((unsafe.Pointer)(&s2))
-  	fmt.Printf("data address: %#0x, len: %d, cap: %d\n",
+    s1 := []int{1, 2, 3}
+    s2 := s1[:0]
+    sliceHeader2 := (*reflect.SliceHeader)((unsafe.Pointer)(&s2))
+    fmt.Printf("data address: %#0x, len: %d, cap: %d\n",
         sliceHeader2.Data, sliceHeader2.Len, sliceHeader2.Cap)
 }
 //=====

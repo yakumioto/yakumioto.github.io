@@ -5,7 +5,7 @@ tags:
   - Google
 ---
 
-![](/images/故障Google-Pixel退换流程-01.jpeg)
+![01](/images/故障Google-Pixel退换流程-01.jpeg)
 
 二话不说先上一张退回后所有的配件..., 没错就是这么点东西!!!, 所以只要给 `Google` 寄回坏手机就好了.
 
@@ -15,7 +15,7 @@ tags:
 
 咨询方法有两种, 打电话和在线聊天, 如果英文够好, 估计也不会来这里了, emmm...
 
- ## 联系 Google
+## 联系 Google
 
 <https://support.google.com/pixelphone>, 找到 `CONTACT US -> Pixel Device Support -> 对应的手机型号` 进行聊天.
 
