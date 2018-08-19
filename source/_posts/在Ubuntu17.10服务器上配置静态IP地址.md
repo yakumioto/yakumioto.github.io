@@ -5,7 +5,7 @@ tags:
   - Ubuntu
 ---
 
-原文: https://websiteforstudents.com/configuring-static-ips-ubuntu-17-10-servers/
+原文: <https://websiteforstudents.com/configuring-static-ips-ubuntu-17-10-servers/>
 
 `Ubuntu 17.10` 的时候网络配置方法完全改变了, 是否听说过 `NetPlan`?可能并没有吧~, `NetPlan` 是 `Ubuntu 17.10` 中引入的一种新的网络配置工具，用于管理网络设置.
 
