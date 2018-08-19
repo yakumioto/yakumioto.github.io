@@ -81,7 +81,7 @@ func (d *digest) Write(p []byte) (nn int, err error) {
             // 处理. '具体不知道怎么实现的.. 没研究过'
             block(d, d.x[:])
             // 但是这里处理完毕后会 清空 d.nx
-            // 所以这里的 Write 函数其实已经在处理 sha1 了 
+            // 所以这里的 Write 函数其实已经在处理 sha1 了
             // 并没有多少实际的内存占用
             d.nx = 0
         }
