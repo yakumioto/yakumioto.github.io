@@ -1,6 +1,6 @@
 ---
 title: "私有-docker-registry-搭建"
-date: 2018-08-19 18:14.15
+date: 2018-08-19 18:14:15
 tags:
   - Docker
 ---
