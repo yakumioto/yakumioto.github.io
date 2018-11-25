@@ -67,4 +67,4 @@ func main() {
 
 ## 参考
 
-<https://stackoverflow.com/questions/14230145/what-is-the-best-way-to-convert-byte-array-to-string>
+- <https://stackoverflow.com/questions/14230145/what-is-the-best-way-to-convert-byte-array-to-string>

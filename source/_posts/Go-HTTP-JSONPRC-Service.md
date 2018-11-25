@@ -1,6 +1,6 @@
 ---
-title: 'Go HTTP JSONRPC Service '
-date: 2018-03-06T11:13:31.000Z
+title: 'Go HTTP JSONRPC Service'
+date: 2018-03-06 11:13:31
 tags:
   - Go
 ---
@@ -94,5 +94,3 @@ func main() {
     log.Fatal(http.ListenAndServe(":8080", nil))
 }
 ```
-
-<!-- more -->

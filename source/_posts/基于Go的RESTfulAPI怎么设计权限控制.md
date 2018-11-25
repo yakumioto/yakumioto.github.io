@@ -189,5 +189,5 @@ DELETE /users/{id} - 删除一个用户
 
 ## 参考
 
-[RESTful API 设计指南](http://www.ruanyifeng.com/blog/2014/05/restful_api.html)
-[基于RESTful API 怎么设计用户权限控制？](https://www.jianshu.com/p/db65cf48c111)
+- [RESTful API 设计指南](http://www.ruanyifeng.com/blog/2014/05/restful_api.html)
+- [基于RESTful API 怎么设计用户权限控制？](https://www.jianshu.com/p/db65cf48c111)

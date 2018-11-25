@@ -99,7 +99,7 @@ static domain_name_servers=192.168.0.1
 
 ## 参考
 
-1. <https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md>
-2. <https://www.raspberrypi.org/learning/networking-lessons/rpi-static-ip-address/>
-3. <https://www.raspberrypi.org/documentation/remote-access/ssh/>
-4. <https://gist.github.com/gbaman/975e2db164b3ca2b51ae11e45e8fd40a>
+- <https://www.raspberrypi.org/documentation/configuration/wireless/wireless-cli.md>
+- <https://www.raspberrypi.org/learning/networking-lessons/rpi-static-ip-address/>
+- <https://www.raspberrypi.org/documentation/remote-access/ssh/>
+- <https://gist.github.com/gbaman/975e2db164b3ca2b51ae11e45e8fd40a>

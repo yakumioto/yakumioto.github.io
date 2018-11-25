@@ -127,5 +127,5 @@ openssl x509 \
 
 ## 参考
 
-[Chrome 58不允許沒有SAN的自簽憑證](https://medium.com/@klaycsy/chrome-58%E4%B8%8D%E5%85%81%E8%A8%B1%E6%B2%92%E6%9C%89san%E7%9A%84%E8%87%AA%E7%B0%BD%E6%86%91%E8%AD%89-12ca7029a933)
-[Chrome 58 - Not secure, certificates must have Subject Alternative Name](https://communities.ca.com/thread/241776307)
+- [Chrome 58不允許沒有SAN的自簽憑證](https://medium.com/@klaycsy/chrome-58%E4%B8%8D%E5%85%81%E8%A8%B1%E6%B2%92%E6%9C%89san%E7%9A%84%E8%87%AA%E7%B0%BD%E6%86%91%E8%AD%89-12ca7029a933)
+- [Chrome 58 - Not secure, certificates must have Subject Alternative Name](https://communities.ca.com/thread/241776307)

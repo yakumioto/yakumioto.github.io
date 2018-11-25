@@ -6,7 +6,6 @@ tags:
   - Hexo
 ---
 
-
 使用这种实现自动部署 `hexo` 必须有台自己的服务器, 如果没有的话我也没办法~~
 
 ## 原理
@@ -14,7 +13,6 @@ tags:
 我实现的原理其实很简单. 当 `source` 被提交后, 触发 `webhook` 然后通过执行 `bash script` 自动进行编译部署
 
 <!-- more -->
-
 
 ## 实现
 
@@ -43,13 +41,14 @@ hexo g -d
         repo git@git.mioto.me:yakumioto/mioto.me.git
         branch master
         key /root/.ssh/id_rsa
-	    hook /webhook miotoyaku
+        hook /webhook miotoyaku
         then bash ./deploy.sh
     }
 }
 ```
 
 `docker-compose.yaml`
+
 ```docker
 ci-blog:
     image: yakumioto/node-caddy:latest
@@ -64,4 +63,3 @@ ci-blog:
 ```
 
 到这里基本就算完成了
-
