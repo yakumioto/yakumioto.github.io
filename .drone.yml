@@ -6,11 +6,10 @@ pipeline:
       - mkdir /root/.ssh && echo -n "$SSH_KEY" > /root/.ssh/id_rsa && echo -n "$SSH_CONFIG" > /root/.ssh/config && chmod 0600 /root/.ssh/id_rsa
       - mkdir .deploy_git && git clone --single-branch -b master git@github.com:yakumioto/yakumioto.github.io.git .deploy_git
       - export TZ='Asia/Shanghai'
-      - npm install hexo-cli -g
       - git config --global user.email "yaku.mioto@gmail.com"
       - git config --global user.name "yakumioto"
-      - hexo clean
-      - hexo d -g
+      - ./node_modules/.bin/hexo clean
+      - ./node_modules/.bin/hexo d -g
     secrets: [ssh_key, ssh_config]
 
 branches: master
