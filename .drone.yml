@@ -1,7 +1,20 @@
 ---
-pipeline:
-  renders:
+kind: pipeline
+name: default
+
+steps:
+  - name: render
     image: node:latest
+    environment:
+      SSH_KEY:
+        from_secret: ssh_key
+      SSH_CONFIG:
+        from_secret: ssh_config
+    when:
+      branch:
+        - master
+      event:
+        - push
     commands:
       - mkdir /root/.ssh && echo -n "$SSH_KEY" > /root/.ssh/id_rsa && echo -n "$SSH_CONFIG" > /root/.ssh/config && chmod 0600 /root/.ssh/id_rsa
       - mkdir .deploy_git && git clone --single-branch -b master git@github.com:yakumioto/yakumioto.github.io.git .deploy_git
@@ -10,6 +23,3 @@ pipeline:
       - git config --global user.name "yakumioto"
       - ./node_modules/.bin/hexo clean
       - ./node_modules/.bin/hexo d -g
-    secrets: [ssh_key, ssh_config]
-
-branches: master
