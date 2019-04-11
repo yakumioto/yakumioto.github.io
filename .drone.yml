@@ -2,6 +2,9 @@
 kind: pipeline
 name: default
 
+clone:
+  depth: 1
+
 steps:
   - name: render
     image: node:latest
@@ -17,7 +20,7 @@ steps:
         - push
     commands:
       - mkdir /root/.ssh && echo -n "$SSH_KEY" > /root/.ssh/id_rsa && echo -n "$SSH_CONFIG" > /root/.ssh/config && chmod 0600 /root/.ssh/id_rsa
-      - mkdir .deploy_git && git clone --single-branch -b master git@github.com:yakumioto/yakumioto.github.io.git .deploy_git
+      - mkdir .deploy_git && git clone --depth 1 --single-branch -b master git@github.com:yakumioto/yakumioto.github.io.git .deploy_git
       - export TZ='Asia/Shanghai'
       - git config --global user.email "yaku.mioto@gmail.com"
       - git config --global user.name "yakumioto"
