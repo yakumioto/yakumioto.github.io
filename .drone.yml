@@ -21,6 +21,12 @@ steps:
       - git config --global user.name "yakumioto"
       - ./node_modules/.bin/hexo clean
       - ./node_modules/.bin/hexo d -g
+  - name: sendmsg
+    image: yakumioto/serverchan
+    settings:
+      key:
+        from_secret: serverchan_key
+      text: 网站更新成功
 
 trigger:
   branch:
