@@ -28,9 +28,3 @@ steps:
       key:
         from_secret: serverchan_key
       text: 网站更新成功
-
-trigger:
-  branch:
-    - master
-  event:
-    - push
