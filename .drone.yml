@@ -23,7 +23,7 @@ steps:
       - ./node_modules/.bin/hexo clean
       - ./node_modules/.bin/hexo d -g
   - name: sendmsg
-    image: yakumioto/serverchan
+    image: yakumioto/drone-serverchan
     settings:
       key:
         from_secret: serverchan_key
