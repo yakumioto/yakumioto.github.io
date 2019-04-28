@@ -30,4 +30,4 @@ ranger.desktop
 
 `~/.local/share/applications/mimeapps.list`, `~/.config/mimeapps.list` 选一个修改(没有添加) `inode/directory=ranger.desktop`
 
-但是我的系统 `Manjaro-I3` 使用的是 `mimeapps.list`, 所以有针对性的修改就行
+但是我的系统 `Manjaro-I3` 使用的是 `~/.config/mimeapps.list`, 所以有针对性的修改就行
