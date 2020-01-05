@@ -26,3 +26,8 @@ jobs:
           npm install
           ./node_modules/.bin/hexo clean
           ./node_modules/.bin/hexo d -g
+      - name: sending msg
+        uses: yakumioto/serverchan-action@v1
+        with:
+          key: SCU48558T164ff96a3316d8a22cacea21de21866b5caed80baa044
+          text: 网站部署成功!
