@@ -1,5 +1,5 @@
 ---
-title: "Fabric中etcdraft共识讲解(一)"
+title: "Fabric 中 etcdraft 共识讲解 (一)"
 date: 2020-01-15
 tags:
   - Hyperledger Fabric
