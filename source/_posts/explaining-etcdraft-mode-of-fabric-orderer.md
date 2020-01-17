@@ -1,11 +1,10 @@
 ---
-title: "Fabric 中 etcdraft 共识讲解 (一)"
+title: "Fabric 中 etcdraft 共识讲解"
 date: 2020-01-15
 tags:
   - Hyperledger Fabric
   - Go
 ---
-## 概述
 
 为什么要通过 `etcdraft` 来进行共识?
 
@@ -387,5 +386,233 @@ func (n *node) start(fresh, join bool) {
     }
 
     go n.run(campaign)
+}
+```
+
+## 一笔交易
+
+`Chain` 接口中的 `Order(...)` 方法, 用于接收普通交易消息
+
+当一个消息进入 Order 方法中后, 会将消息封装成 `orderer.SubmitRequest` 并发送
+
+在 `Chain.Submit(...)` 方法中, 会先消息在封装 `orderer.submit` 并存入 `chan Chain.submitC` 通道中
+
+在判断 `leader` 是否是当前节点, 如果不是, 就会把数据通过 `rpc` 发送给 `leader`
+
+`Chain.rpc` 是一个实现了 `ClusterClient` 可以用于将消息发送到其他的 orderer
+
+```flow
+st=>start
+e=>end
+opOrder=>operation: Order(...)
+condLeader=>condition: IsLeader
+opRPC=>operation: rpc.SendSubmit(...)
+
+st->opOrder->condLeader(no)->opRPC->e
+condLeader(yes)->e
+```
+
+```go
+// orderer/consensus/etcdraft/chain.go
+func (c *Chain) Order(env *common.Envelope, configSeq uint64) error {
+    c.Metrics.NormalProposalsReceived.Add(1)
+    // 这里将 env, configSeq 以及 channelID 封装成了 SubmitRequest 并发给了 Submit 方法
+    return c.Submit(&orderer.SubmitRequest{LastValidationSeq: configSeq, Payload: env, Channel: c.channelID}, 0)
+}
+
+// orderer/consensus/etcdraft/chain.go
+func (c *Chain) Submit(req *orderer.SubmitRequest, sender uint64) error {
+    ...
+    // 获取一个 chan 用于接收网络当前的 leader
+    leadC := make(chan uint64, 1)
+    select {
+    // 这个 case 就是将 req, 以及用于接收 leader 的 chan, 再次封装发给了 Chain 中的 chan submitC
+    case c.submitC <- &submit{req, leadC}:
+        // 等待 submitC 被处理, 并返回 leader 的 id
+        lead := <-leadC
+        // 如果没有 leader 就报错
+        if lead == raft.None {
+            c.Metrics.ProposalFailures.Add(1)
+            return errors.Errorf("no Raft leader")
+        }
+
+        // 如果自己不是 leader, 就会将消息发给 leader.
+        if lead != c.raftID {
+            if err := c.rpc.SendSubmit(lead, req); err != nil {
+                c.Metrics.ProposalFailures.Add(1)
+                return err
+            }
+        }
+    ...
+    return nil
+}
+```
+
+## 一个块的同步
+
+这个方法, 我认为算是 `etcdraft` 核心方法了, 有兴趣的小伙伴可以深究一下这个方法
+
+里面涉及到了 `Leader`, `Follower` 的角色切换, 共识等实现
+
+这里还是跟着上一步继续向下深究, 在交易消息到达 `Leader` 后就要开始共识了
+
+如果节点是 `Leader` 则会进行排序
+
+```go
+func (c *Chain) serveRequest() {
+    ...
+    // 下方会使用到里面的协程
+    becomeLeader := func() (chan<- *common.Block, context.CancelFunc) {
+        ...
+        ctx, cancel := context.WithCancel(context.Background())
+        go func(ctx context.Context, ch <-chan *common.Block) {
+            for {
+                select {
+                case b := <-ch:
+                    data := utils.MarshalOrPanic(b)
+                    // 这里会丢给 raft node 进行同步 block, 里面的处理非常复杂.., 属于 raft 中的东西了, 这里就不细追了.
+                    if err := c.Node.Propose(ctx, data); err != nil {
+                        c.logger.Errorf("Failed to propose block [%d] to raft and discard %d blocks in queue: %s", b.Header.Number, len(ch), err)
+                        return
+                    }
+                    c.logger.Debugf("Proposed block [%d] to raft consensus", b.Header.Number)
+
+                case <-ctx.Done():
+                    c.logger.Debugf("Quit proposing blocks, discarded %d blocks in the queue", len(ch))
+                    return
+                }
+            }
+        }(ctx, ch)
+        return ch, cancel
+    }
+    ...
+    for {
+        select {
+        case s := <-submitC:
+            // leader 进行出块操作, 如果未符合要求,比如大小不够, 就会 pending
+            batches, pending, err := c.ordered(s.req)
+            if err != nil {
+                c.logger.Errorf("Failed to order message: %s", err)
+                continue
+            }
+            if pending {
+                startTimer() // no-op if timer is already started
+            } else {
+                stopTimer()
+            }
+
+            // 生成生成 block 并将 block 传给 propC, propC 是一个 chan 结构, 所以会给上面的协程做处理
+            c.propose(propC, bc, batches...)
+
+            if c.configInflight {
+                c.logger.Info("Received config transaction, pause accepting transaction till it is committed")
+                submitC = nil
+            } else if c.blockInflight >= c.opts.MaxInflightBlocks {
+                c.logger.Debugf("Number of in-flight blocks (%d) reaches limit (%d), pause accepting transaction",
+                    c.blockInflight, c.opts.MaxInflightBlocks)
+                submitC = nil
+            }
+            ...
+        case <-timer.C():
+            ticking = false
+
+            batch := c.support.BlockCutter().Cut()
+            if len(batch) == 0 {
+                c.logger.Warningf("Batch timer expired with no pending requests, this might indicate a bug")
+                continue
+            }
+
+            c.logger.Debugf("Batch timer expired, creating block")
+            c.propose(propC, bc, batch) // we are certain this is normal block, no need to block
+        }
+    }
+}
+```
+
+## 一个块的存储
+
+根据 `raft` 共识同步消息的流程是  `uncommitted` -> `committed` 两个阶段, 都会在上面完成
+
+如果是 `committed` 就会去写块
+
+```go
+func (c *Chain) serveRequest() {
+    ...
+    // 下方会使用到里面的协程
+    becomeLeader := func() (chan<- *common.Block, context.CancelFunc) {
+        ...
+        ctx, cancel := context.WithCancel(context.Background())
+        go func(ctx context.Context, ch <-chan *common.Block) {
+            for {
+                select {
+                case b := <-ch:
+                    data := utils.MarshalOrPanic(b)
+                    // 这里会丢给 raft node 进行同步 block, 里面的处理非常复杂.., 属于 raft 中的东西了, 这里就不细追了.
+                    if err := c.Node.Propose(ctx, data); err != nil {
+                        c.logger.Errorf("Failed to propose block [%d] to raft and discard %d blocks in queue: %s", b.Header.Number, len(ch), err)
+                        return
+                    }
+                    c.logger.Debugf("Proposed block [%d] to raft consensus", b.Header.Number)
+
+                case <-ctx.Done():
+                    c.logger.Debugf("Quit proposing blocks, discarded %d blocks in the queue", len(ch))
+                    return
+                }
+            }
+        }(ctx, ch)
+        return ch, cancel
+    }
+    ...
+    for {
+        select {
+        ...
+        case app := <-c.applyC:
+            ...
+            // 这里面会讲 raftlog 中的 block 落地.
+            c.apply(app.entries)
+            ...
+        }
+    }
+}
+
+// orderer/consensus/etcdraft/chain.go
+func (c *Chain) apply(ents []raftpb.Entry) {
+    ...
+    for i := range ents {
+        // 只有两种类型 EntryNormal, EntryConfChange, block 消息是 EntryNormal
+        switch ents[i].Type {
+        case raftpb.EntryNormal:
+            ...
+            block := utils.UnmarshalBlockOrPanic(ents[i].Data)
+            // 这里就会写入 block 了
+            c.writeBlock(block, ents[i].Index)
+            c.Metrics.CommittedBlockNumber.Set(float64(block.Header.Number))
+        ...
+        case raftpb.EntryConfChange:
+            ...
+        }
+
+        if ents[i].Index > c.appliedIndex {
+            c.appliedIndex = ents[i].Index
+        }
+    }
+
+    if c.accDataSize >= c.sizeLimit {
+        b := utils.UnmarshalBlockOrPanic(ents[position].Data)
+
+        select {
+        case c.gcC <- &gc{index: c.appliedIndex, state: c.confState, data: ents[position].Data}:
+            c.logger.Infof("Accumulated %d bytes since last snapshot, exceeding size limit (%d bytes), "+
+                "taking snapshot at block [%d] (index: %d), last snapshotted block number is %d, current nodes: %+v",
+                c.accDataSize, c.sizeLimit, b.Header.Number, c.appliedIndex, c.lastSnapBlockNum, c.confState.Nodes)
+            c.accDataSize = 0
+            c.lastSnapBlockNum = b.Header.Number
+            c.Metrics.SnapshotBlockNumber.Set(float64(b.Header.Number))
+        default:
+            c.logger.Warnf("Snapshotting is in progress, it is very likely that SnapshotIntervalSize is too small")
+        }
+    }
+
+    return
 }
 ```
