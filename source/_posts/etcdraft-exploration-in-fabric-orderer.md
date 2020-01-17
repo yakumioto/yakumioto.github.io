@@ -153,7 +153,6 @@ Profiles:
 
     }
 }
-}
 ```
 
 在 `Orderer` 启动之处, 会去读取 `system channel` 最新的配置块, 如果没有则会读取 `genesis.blok`
