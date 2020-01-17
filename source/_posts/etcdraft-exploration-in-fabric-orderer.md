@@ -459,6 +459,7 @@ func (c *Chain) Submit(req *orderer.SubmitRequest, sender uint64) error {
 如果节点是 `Leader` 则会进行排序
 
 ```go
+// orderer/consensus/etcdraft/chain.go
 func (c *Chain) serveRequest() {
     ...
     // 下方会使用到里面的协程
@@ -536,6 +537,7 @@ func (c *Chain) serveRequest() {
 如果是 `committed` 就会去写块
 
 ```go
+// orderer/consensus/etcdraft/chain.go
 func (c *Chain) serveRequest() {
     ...
     // 下方会使用到里面的协程
