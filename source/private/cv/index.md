@@ -15,9 +15,7 @@ type: cv
 - 工作年限: 4年
 - 技术博客: <https://mioto.me>
 - Github: <https://github.com/yakumioto>
-- 期望职位: Go高级工程师
-- 期望薪资: 13k~15k
-- 期望城市: 北京
+- 期望职位: 区块链高级工程师
 
 ## 工作经历
 
