@@ -4,74 +4,142 @@ date: 2018-03-08 23:15:32
 type: cv
 ---
 
-# 联系方式
+## 联系方式
 
--   手机: 17610232333
--   邮箱: yaku.mioto@gmail.com
+- 手机: 17610232333
+- 邮箱: yaku.mioto@gmail.com
 
-# 个人信息
+## 个人信息
 
--   叶慧杰 / 男 / 1995
--   工作年限: 2年
--   技术博客: <https://mioto.me>
--   Github: <https://github.com/yakumioto>
--   期望职位: Go高级工程师
--   期望薪资: 13k~15k
--   期望城市: 北京
+- 叶慧杰 / 男 / 1995
+- 工作年限: 4年
+- 技术博客: <https://mioto.me>
+- Github: <https://github.com/yakumioto>
+- 期望职位: Go高级工程师
+- 期望薪资: 13k~15k
+- 期望城市: 北京
 
-# 工作经历
+## 工作经历
 
-## 北京量化健康科技有限公司 (2016/03 - 至今)
+### 北京量化健康科技有限公司 (2016/03 - 2018/03)
 
-## 公司OA系统 (2016/03 - 至今)
+#### 公司OA系统 (2016/03 - 2018/03)
 
--   运行环境: Kubernetes + MongoDB + Caddy
--   开发环境: Gland + Mac
+- 运行环境: Kubernetes + MongoDB + Caddy
+- 开发环境: Gland + Mac
 
-## 项目简介:
+**项目简介**:
 
-此项目主要用于连接公司各个部门工作, 涉及 权限管理模块, 人员管理模块, 登录模块, 销售模块, 订单模块, 样品模块, 实验室模块 以及 库存管理模块 等.
+此项目主要用于连接公司各个部门工作, 涉及 权限管理模块, 人员管理模块, 登录模块, 销售模块, 订单模块, 样品模块, 实验室模块 以及 库存管理模块等.
 
-## 项目描述:
+**项目描述**:
 
 以上模块在工作期间都有涉及, 项目以 RESTful API Service 形式来给前端提供数据, 对我感触最大的部分就是权限管理模块, 让我充分理解了 WEB Middleware 的工作原理, 以及如何在 RESTful API Service 中实现由前端管理的的权限管理.
 
-## 公司灯控门禁系统 (2017/06 - 2017/08)
+#### 公司灯控门禁系统 (2017/06 - 2017/08)
 
--   运行环境: Raspberry
--   开发环境: Gland + Mac
+- 运行环境: Raspberry
+- 开发环境: Gland + Mac
 
-## 项目简介:
+**项目简介**:
 
 此项目在我去公司前就已经完成, 但是由于开发了OA系统, 就要集成到OA系统中, 转移工作由我负责, 期间涉及了 GPIO, NFC, 以及 DALI(灯控协议)
 
-## 项目描述:
+**项目描述**:
 
 了解了如何 操作 GPIO, 以及 读取 NFC (主要用于读取公交卡中的ID, 作为员工唯一标识刷卡打开门禁), DALI 协议 将公司划分区域组来控制灯
 
-# 开源项目和作品
+### 蔷薇控股股份有限公司 (2018/03 - 至今)
 
-以下两个项目的技术含量都不大,  主要用于自己更方便的完成某些事情.
+#### 正反保理系统区块链化 (2018/03 - 2018/11)
 
-<https://github.com/yakumioto/mgen> - MongoDB 代码自动生成器, 主要用于了公司OA系统.
+- 运行环境: Docker + Fabric@v1.2
+- 开发环境: Gland + Linux
 
-<https://github.com/yakumioto/websvr> - Go WEB Server, 里面对 github.com/gorilla/mux, github.com/unrolled/render, github.com/urfave/negroni 三个包进行了封装, 方便自己快速开发 API Serivce
+**项目简介**:
 
-# 技术文章
+将公司原有的保理系统区块链化, 涉及项目设计, 合约编写, 以及部署
 
-[Go Slice 原理解析](https://mioto.me/2018/03/Go-Slice详解/)
-[基于 Go 的 RESTful API 怎么设计权限控制](https://mioto.me/2018/02/基于Go的RESTfulAPI怎么设计权限控制/)
+**项目描述**:
 
-# 技能清单
+项目包含多个合约模块: `项目方案`, `业务规则`, `额度管理`, `融资模块`, `应收模块`, `还款模块`等
+
+#### 招商银行行间对账区块链系统 (2018/11 -2019/01)
+
+**项目简介**:
+
+项目用于银行间实现快速对账功能, 实现在区块链上自动对账.
+
+**项目描述**:
+
+项目包含 `对账合约`, `区块链网关`, `前端`, `RESTful API` 其中 `智能合约` 和 `RESTful API` 是我负责实现的
+
+#### Fabric国密支持 (2019/02 - 2019/06)
+
+**项目简介**:
+
+修改 `Fabric` 源码, 实现支持国密
+
+**项目描述**:
+
+次项目我有参与, 但是不多, 同期我在做 `Fabric` TIDB 的支持工作
+
+#### Fabric TIDB 支持 (2019/03 - 2019/06)
+
+**项目简介**:
+
+修改 `Fabric` 源码, 以支持 `TIDB`
+
+#### 苏州银行农商贸溯源区块链系统 (2018/07 - 2018/09)
+
+**项目简介**:
+
+商品功能支持, 会员管理, 商品管理, 订单管理功能, 另外可以溯源商品
+
+**项目描述**:
+
+项目中我主要负责 智能合约部分, 有三个合约 `会员管理`, `商品管理`, `订单管理(包含溯源)` 功能
+
+## 开源项目和作品
+
+### fabric-sdk-go
+
+官方项目源码贡献, 贡献了 go sdk 支持 `java` `node` 合约安装
+
+### Alkaid
+
+**项目简介**:
+
+<https://github.com/yakumioto/alkaid>
+
+基于 `Hyperledger Fabric` 实现 BaaS 的系统, 目前处于开发中.
+
+**项目描述**:
+
+项目最开始只是一个快速部署工具, 由于实现的功能越来越多, 就觉得需要做一个 BaaS
+
+项目支持所有 `Fabric` 的操作, 有以下的优点:
+
+1. (无脚本) 动态 添加, 修改 删除 组织
+2. (无脚本) 动态切换共识算法
+
+## 技术文章
+
+[Fabric 中 etcdraft 共识讲解](https://mioto.me/2020/01/etcdraft-exploration-in-fabric-orderer/)
+[Go Slice 原理解析](https://mioto.me/2018/03/go-slice-analysis/)
+[基于 Go 的 RESTful API 怎么设计权限控制](https://mioto.me/2018/02/design-permission-control-based-on-restful/)
+
+## 技能清单
 
 以下均为我熟练使用的技能
 
--   WEB开发: Go
--   Web框架: Negroni/Beego/Gin (用的最多的是 Negroni)
--   数据库: MySQL/PgSQL/SQLite/MongoDB
--   版本管理: Git
--   云: Docker, kubernetes
+- WEB开发: Go
+- Web框架: Negroni/Beego/Gin (用的最多的是 Negroni)
+- 区块链: Hyperledger Fabric
+- 数据库: MySQL/PgSQL/SQLite/MongoDB
+- 版本管理: Git
+- 云: Docker, kubernetes
 
-# 致谢
+## 致谢
 
 感谢您花时间阅读我的简历, 期待能有机会和您共事.
