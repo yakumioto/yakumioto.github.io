@@ -1,6 +1,6 @@
 ---
 title: 简历
-date: 2018-03-08 23:15:32
+date: 2020-03-04
 type: cv
 ---
 
@@ -15,7 +15,7 @@ type: cv
 - 工作年限: 4年
 - 技术博客: <https://mioto.me>
 - Github: <https://github.com/yakumioto>
-- 期望职位: 区块链高级工程师
+- 期望职位: 区块链高级工程师, Go高级工程师
 
 ## 工作经历
 
@@ -98,9 +98,19 @@ type: cv
 
 项目中我主要负责 智能合约部分, 有三个合约 `会员管理`, `商品管理`, `订单管理(包含溯源)` 功能
 
+#### 日照港口区块链调度系统 (2018/10 - 2018-11)
+
+主要负责线上环境部署
+
+#### Fabric TendermintBFT 添加 (2020/01 - 至今)
+
+负责将 Tendermint 共识算法添加进 Fabric 中
+
 ## 开源项目和作品
 
 ### fabric-sdk-go
+
+<https://github.com/hyperledger/fabric-sdk-go>
 
 官方项目源码贡献, 贡献了 go sdk 支持 `java` `node` 合约安装
 
@@ -118,8 +128,8 @@ type: cv
 
 项目支持所有 `Fabric` 的操作, 有以下的优点:
 
-1. (无脚本) 动态 添加, 修改 删除 组织
-2. (无脚本) 动态切换共识算法
+1. 动态 添加, 修改 删除 组织
+2. 动态切换共识算法
 
 ## 技术文章
 
@@ -132,7 +142,7 @@ type: cv
 以下均为我熟练使用的技能
 
 - WEB开发: Go
-- Web框架: Negroni/Beego/Gin (用的最多的是 Negroni)
+- Web框架: Negroni/Beego/Gin
 - 区块链: Hyperledger Fabric
 - 数据库: MySQL/PgSQL/SQLite/MongoDB
 - 版本管理: Git
