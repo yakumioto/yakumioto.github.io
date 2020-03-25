@@ -87,7 +87,7 @@ choco install -y ccleaner `
 }
 ```
 
-[Terminal]("images/working-on-windows10/Terminal.png")
+[Terminal]("/images/working-on-windows10/Terminal.png")
 
 ## Goland & VSCode 终端配置
 
