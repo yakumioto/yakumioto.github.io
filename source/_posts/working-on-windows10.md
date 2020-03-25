@@ -1,6 +1,6 @@
 ---
 title: "基于 Windows 的开发环境"
-date: 2020-01-05
+date: 2020-03-25
 tags:
   - Go
   - Life
@@ -88,3 +88,57 @@ choco install -y ccleaner `
 ```
 
 [Terminal]("images/working-on-windows10/Terminal.png")
+
+## Goland & VSCode 终端配置
+
+Goland: `File -> Settings -> Tools -> Terminal -> Shell path`
+
+```text
+"cmd.exe" /k "wsl.exe"
+```
+
+VSCode: 开启一个新的 `Terminal` 在下方选择 `wsl` 既可
+
+## 个人的开发规范
+
+### GOSDK
+
+由于从事 `Go` 相关的开发, 这里只讲我关于Go语言的个人开发规范
+
+`GOSDK` 安装的路径规范: `C:\\Users\mioto\.sdk\gox.xx`
+
+这样的好处是, 我可以装很多个版本, 然后在 `Goland` 中自行选择, 有时候会用到低版本的情况
+
+`GOPATH` 设定目录: `C:\\Users\mioto\.golib`
+
+这个习惯是沿用了 `Linux` 遗留下来的, 这种目录结构的原因还要从 `go 1.11` 之前说起, 那时并没有 `go mod` 所以代码都写在`GOPATH` 下
+
+所以原先的 `GOPATH` 是: `/home/mioto/.golib:/home/mioto/workspace/go`, 这样的好处是 依赖和代码分离, 可以保证工作目录下的 `go/src` 干净
+
+但是在 `go 1.11` 以后这种多 `GOPATH` 就被撤销了, 所以就留只留下了 `/home/mioto/.golib`
+
+### Workspace
+
+工作目录: `C:\\Users\mioto\Workspace`
+
+```text
+.
+├── me (个人项目)
+│   ├── alkaid
+│   ├── dockerfiles
+│   ├── example-go
+│   ├── fabric
+│   ├── fabric-network
+│   ├── fabric-sdk-go
+│   └── glog
+├── mioto.me (博客)
+├── opensource (研究开源项目)
+│   ├── caliper
+│   ├── fabric
+│   ├── fabric-samples
+│   ├── fabric-sdk-go
+│   └── tendermint
+└── trustslink (公司)
+```
+
+我觉的已经比较清晰啦, 所以就不多做介绍了
