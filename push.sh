@@ -2,6 +2,6 @@
 
 git add --all
 
-git commit -m "UpdateAt: $(date "+%Y-%m-%d %H:%M:%S")"
+git commit -s -m "UpdateAt: `date '+%Y-%m-%d %H:%M:%S'`"
 
 git push origin --all
