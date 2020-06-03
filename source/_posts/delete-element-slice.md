@@ -49,3 +49,8 @@ Benchmark2-4    93140385            12.9 ns/op
 PASS
 ok      github.com/yakumioto/go-example/benchmark/delete-element-slice  4.169s
 ```
+
+## 参考
+
+[1] <https://yourbasic.org/golang/delete-element-slice>
+[2] <https://blog.golang.org/slices>
