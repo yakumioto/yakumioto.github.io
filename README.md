@@ -1,3 +1,3 @@
 # mioto.me
 
-[![Build Status](https://drone.mioto.me/api/badges/yakumioto/mioto.me/status.svg)](https://drone.mioto.me/yakumioto/mioto.me)
+![Deploy](https://github.com/yakumioto/mioto.me/workflows/Deploy/badge.svg)
