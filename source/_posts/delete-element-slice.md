@@ -52,5 +52,5 @@ ok      github.com/yakumioto/go-example/benchmark/delete-element-slice  4.169s
 
 ## 参考
 
-[1] <https://yourbasic.org/golang/delete-element-slice>
-[2] <https://blog.golang.org/slices>
+1. <https://yourbasic.org/golang/delete-element-slice>
+2. <https://blog.golang.org/slices>
