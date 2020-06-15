@@ -144,7 +144,7 @@ func (g *gossipServiceImpl) InitializeChannel(chainID string, oac OrdererAddress
 }
 ```
 
-## blocksprovider.blocksProviderImpl.DeliverBlocks
+### blocksprovider.blocksProviderImpl.DeliverBlocks
 
 文件: `core/deliverservice/blocksprovider/blocksprovider.go:110`
 
@@ -178,7 +178,7 @@ func (b *blocksProviderImpl) DeliverBlocks() {
 }
 ```
 
-## state.GossipStateProviderImpl.commitBlock
+### state.GossipStateProviderImpl.commitBlock
 
 文件: `gossip/state/state.go:805`
 
@@ -196,7 +196,7 @@ func (s *GossipStateProviderImpl) commitBlock(block *common.Block, pvtData util.
 }
 ```
 
-## privdata.coordinator.StoreBlock
+### privdata.coordinator.StoreBlock
 
 文件: `gossip/privdata/coordinator.go:163`
 
@@ -230,7 +230,7 @@ func (c *coordinator) StoreBlock(block *common.Block, privateDataSets util.PvtDa
 }
 ```
 
-## committer.LedgerCommitter.CommitWithPvtData
+### committer.LedgerCommitter.CommitWithPvtData
 
 文件: `core/committer/committer_impl.go:87`
 
