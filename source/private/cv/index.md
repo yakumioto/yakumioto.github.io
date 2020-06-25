@@ -60,7 +60,7 @@ type: cv
 
 **项目描述**:
 
-项目包含多个合约模块: `项目方案`, `业务规则`, `额度管理`, `融资模块`, `应收模块`, `还款模块`等
+项目包含多个合约模块: `项目方案`, `业务规则`, `额度管理`, `融资模块`, `应收模块`, `还款模块` 等
 
 #### 招商银行行间对账区块链系统 (2019/11 -2019/01)
 
@@ -71,16 +71,6 @@ type: cv
 **项目描述**:
 
 项目包含 `对账合约`, `区块链网关`, `前端`, `RESTful API` 其中 `智能合约` 和 `RESTful API` 是我负责实现的
-
-#### Fabric国密支持 (2019/02 - 2019/06)
-
-**项目简介**:
-
-修改 `Fabric` 源码, 实现支持国密
-
-**项目描述**:
-
-次项目我有参与, 但是不多, 同期我在做 `Fabric` TIDB 的支持工作
 
 #### Fabric TIDB 支持 (2019/03 - 2019/06)
 
@@ -102,9 +92,9 @@ type: cv
 
 主要负责线上环境部署
 
-#### Fabric TendermintBFT 添加 (2020/01 - 至今)
+#### Fabric TPS 提升优化工作 (2020/03 - 至今)
 
-负责将 Tendermint 共识算法添加进 Fabric 中
+负责研究 Fabric 源码, 并进行优化工作, 如 Orderer 的并行处理 Block, Peer 的 ` World State` 优化, Peer 的 Block 交付流程优化 等
 
 ## 开源项目和作品
 
@@ -114,11 +104,11 @@ type: cv
 
 官方项目源码贡献, 贡献了 go sdk 支持 `java` `node` 合约安装
 
-### Alkaid
+### hlf-deploy
 
 **项目简介**:
 
-<https://github.com/yakumioto/alkaid>
+<https://github.com/yakumioto/alkaid/tree/v0.2.0>
 
 基于 `Hyperledger Fabric` 实现 BaaS 的系统, 目前处于开发中.
 
@@ -130,13 +120,11 @@ type: cv
 2. 合约的 `安装`, `实例化`, `更新`, `调用`, `查询`
 3. 组织的动态 `加入`, `更新`, `删除`
 
-后期项目为 `alkaid` 思想是实现一个开源的基于 `Hyperledger Fabric` 的 BaaS 服务.
-
 ## 技术文章
 
+[Fabric Peer Block 的交付流程详解](https://mioto.me/2020/06/fab-peer-deliver-block/)
 [Fabric 中 etcdraft 共识讲解](https://mioto.me/2020/01/etcdraft-exploration-in-fabric-orderer/)
 [Go Slice 原理解析](https://mioto.me/2018/03/go-slice-analysis/)
-[基于 Go 的 RESTful API 怎么设计权限控制](https://mioto.me/2018/02/design-permission-control-based-on-restful/)
 
 ## 技能清单
 
