@@ -60,7 +60,7 @@ type: cv
 
 **项目描述**:
 
-项目包含多个合约模块: `项目方案`, `业务规则`, `额度管理`, `融资模块`, `应收模块`, `还款模块` 等
+项目包含多个合约模块: 项目方案, 业务规则, 额度管理, 融资模块, 应收模块, 还款模块 等
 
 #### 招商银行行间对账区块链系统 (2019/11 -2019/01)
 
@@ -70,13 +70,13 @@ type: cv
 
 **项目描述**:
 
-项目包含 `对账合约`, `区块链网关`, `前端`, `RESTful API` 其中 `智能合约` 和 `RESTful API` 是我负责实现的
+项目包含 对账合约, 区块链网关, 前端, RESTful API 其中 智能合约 和 RESTful API 是我负责实现的
 
 #### Fabric TIDB 支持 (2019/03 - 2019/06)
 
 **项目简介**:
 
-修改 `Fabric` 源码, 以支持 `TIDB`
+修改 Fabric 源码, 以支持 TIDB
 
 #### 苏州银行农商贸溯源区块链系统 (2019/07 - 2019/09)
 
@@ -86,7 +86,7 @@ type: cv
 
 **项目描述**:
 
-项目中我主要负责 智能合约部分, 有三个合约 `会员管理`, `商品管理`, `订单管理(包含溯源)` 功能
+项目中我主要负责 智能合约部分, 有三个合约 会员管理, 商品管理, 订单管理(包含溯源) 功能
 
 #### 日照港口区块链调度系统 (2019/10 - 2019-11)
 
@@ -94,7 +94,7 @@ type: cv
 
 #### Fabric TPS 提升优化工作 (2020/03 - 至今)
 
-负责研究 Fabric 源码, 并进行优化工作, 如 Orderer 的并行处理 Block, Peer 的 ` World State` 优化, Peer 的 Block 交付流程优化 等
+负责研究 Fabric 源码, 并进行优化工作, 如 Orderer 的并行处理 Block, Peer 的 World State 优化, Peer 的 Block 交付流程优化 等
 
 ## 开源项目和作品
 
@@ -102,7 +102,7 @@ type: cv
 
 <https://github.com/hyperledger/fabric-sdk-go>
 
-官方项目源码贡献, 贡献了 go sdk 支持 `java` `node` 合约安装
+官方项目源码贡献, 贡献了 go sdk 支持 java, node 合约安装
 
 ### hlf-deploy
 
@@ -110,21 +110,19 @@ type: cv
 
 <https://github.com/yakumioto/alkaid/tree/v0.2.0>
 
-基于 `Hyperledger Fabric` 实现 BaaS 的系统, 目前处于开发中.
-
 **项目描述**:
 
-项目最初为 `hlf-deploy` 用于快速部署网络的二进制工具, 项目的优点是操作简单, 一个二进制程序可以实现所有以下操作
+项目最初为 hlf-deploy 用于快速部署网络的二进制工具, 项目的优点是操作简单, 一个二进制程序可以实现所有以下操作
 
-1. 通道的 `创建`, `加入`, `更新`
-2. 合约的 `安装`, `实例化`, `更新`, `调用`, `查询`
-3. 组织的动态 `加入`, `更新`, `删除`
+1. 通道的 创建, 加入, 更新
+2. 合约的 安装, 实例化, 更新, 调用, 查询
+3. 组织的动态 加入, 更新, 删除
 
 ## 技术文章
 
-[Fabric Peer Block 的交付流程详解](https://mioto.me/2020/06/fab-peer-deliver-block/)
-[Fabric 中 etcdraft 共识讲解](https://mioto.me/2020/01/etcdraft-exploration-in-fabric-orderer/)
-[Go Slice 原理解析](https://mioto.me/2018/03/go-slice-analysis/)
+Fabric Peer Block 的交付流程详解: <https://mioto.me/2020/06/fab-peer-deliver-block/>
+Fabric 中 etcdraft 共识讲解: <https://mioto.me/2020/01/etcdraft-exploration-in-fabric-orderer/>
+Go Slice 原理解析: <https://mioto.me/2018/03/go-slice-analysis/>
 
 ## 技能清单
 
