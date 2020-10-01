@@ -17,6 +17,8 @@ server 端处理请求耗时 30s, 但是 http.Server 的 write timeout 设置的
 
 ## 抓包
 
+源码: <https://github.com/yakumioto/demo-response-write-timeout>
+
 由于测试环境太过复杂, 所以写了个 demo 复现了整个流程， 以下是 wireshark 导出的 svc 由此可以看出:
 
 1. 客户端通过三次握手和服务端建立了 TCP 连接
