@@ -202,3 +202,7 @@ func (b *Writer) Write(p []byte) (nn int, err error) {
     return nn, nil
 }
 ```
+
+## 参考
+
+1. <https://github.com/golang/go/issues/21389>
