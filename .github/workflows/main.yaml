@@ -1,6 +1,9 @@
 name: Deploy
 
-on: [push]
+on: 
+  push:
+    branches:
+      - source
 
 jobs:
   deploy:
@@ -11,23 +14,27 @@ jobs:
         node-version: [12.x]
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+          fetch-depth: 0
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: '0.79.1'
+      - name: Build
+        run: hugo --minify
+      
       - uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: npm install, build, and deploy
-        run: |
-          export TZ='Asia/Shanghai'
-          git config --global user.email "yaku.mioto@gmail.com"
-          git config --global user.name "yakumioto"
-          git submodule update --init
-          mkdir .deploy_git
-          git clone --depth 1 --single-branch -b master https://x-access-token:463b2dfcb9ae55fdd9a16b8aa502d1adee61bb34@github.com/yakumioto/yakumioto.github.io.git .deploy_git
-          npm install
-          ./node_modules/.bin/hexo clean
-          ./node_modules/.bin/hexo d -g
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: master
       - name: sending msg
         uses: yakumioto/serverchan-action@v1
         with:
-          key: SCU48558T164ff96a3316d8a22cacea21de21866b5caed80baa044
+          key: ${{ secrets.GITHUB_SERVERCHAN_KEY }}
           text: 网站部署成功!
