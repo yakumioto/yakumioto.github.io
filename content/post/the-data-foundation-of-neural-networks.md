@@ -1,6 +1,8 @@
 ---
 title: "神经网络的数据基础"
 date: 2020-09-06
+categories:
+- 学习
 tags:
   - DeepLearning
 ---

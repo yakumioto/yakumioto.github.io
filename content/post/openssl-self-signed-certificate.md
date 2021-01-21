@@ -1,8 +1,10 @@
 ---
 title: openssl 自签证书
 date: 2018-01-29 21:38:31
+categories:
+- 学习
 tags:
-  - openssl
+  - OpenSSL
 ---
 
 最开始主要是想玩玩 `Go http 2 Push` 的, 但是发现以前那种最简单的自签 `Chrome58+` 后就不认了...

@@ -1,10 +1,11 @@
 ---
 title: 'i3wm 更换默认打开的文件管理器'
 date: 2019-04-28 11:00:00
+categories:
+- 学习
 tags:
   - Linux
-  - i3wm
-  - i3
+  - I3WM
 ---
 
 可以通过 `xdg-mime` 来查询当前默认的文件管理器 `xdg-mime query default inode/directory`

@@ -1,6 +1,8 @@
 ---
 title: "私有-docker-registry-搭建"
 date: 2018-08-19 18:14:15
+categories:
+- 学习
 tags:
   - Docker
 ---
@@ -44,7 +46,7 @@ volumes:
 
 效果图如下:
 
-![01](/images/私有-docker-registry-搭建-01.png)
+![01](/images/private-docker-registry-deploy-01.png)
 
 ```yaml
 ---

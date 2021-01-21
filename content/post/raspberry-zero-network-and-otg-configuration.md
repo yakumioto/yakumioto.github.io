@@ -1,6 +1,8 @@
 ---
 title: "RaspberryZero网络与OTG配置.md"
 date: 2018-11-01 19:08:00
+categories:
+- 学习
 tags:
   - Raspberry
 ---

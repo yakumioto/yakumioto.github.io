@@ -1,6 +1,8 @@
 ---
 title: 部署 Kubernetes 遇到的问题
 date: 2019-05-29
+categories:
+- 学习
 tags:
   - Kubernetes
   - K8S

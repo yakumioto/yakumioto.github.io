@@ -1,6 +1,8 @@
 ---
 title: Go HTTP POST 附件
 date: 2019-05-16
+categories:
+- 学习
 tags:
   - Go
 ---

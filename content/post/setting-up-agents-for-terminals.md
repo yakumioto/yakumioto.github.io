@@ -1,6 +1,8 @@
 ---
 title: "为终端设置代理"
 date: 2018-10-05 16:21:00
+categories:
+- 学习
 tags:
   - Linux 
 ---

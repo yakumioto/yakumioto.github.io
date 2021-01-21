@@ -1,6 +1,8 @@
 ---
 title: "使用docker自动部署hexo"
 date: 2017-11-26 22:16:29
+categories:
+- 学习
 tags:
   - Docker
   - Hexo

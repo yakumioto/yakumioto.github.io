@@ -1,11 +1,13 @@
 ---
 title: 故障Google Pixel退换流程
 date: 2018-01-07 16:10:35
+categories:
+- 生活
 tags: 
-  - Google
+  - Diary
 ---
 
-![01](/images/故障Google-Pixel退换流程-01.jpeg)
+![01](/images/failure-google-pixel-return-process-01.jpeg)
 
 二话不说先上一张退回后所有的配件..., 没错就是这么点东西!!!, 所以只要给 `Google` 寄回坏手机就好了.
 

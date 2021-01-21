@@ -1,6 +1,8 @@
 ---
 title: "破解某Wi-Fi探针魔盒的过程"
 date: 2019-06-07
+categories:
+- 学习
 tags:
   - Crack
 ---

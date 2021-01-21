@@ -1,6 +1,8 @@
 ---
 title: "安装 Manjaro I3 记录"
 date: 2018-10-05 02:16:00
+categories:
+- 生活
 tags:
   - Linux
 ---

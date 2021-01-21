@@ -1,9 +1,10 @@
 ---
 title: "基于 Windows 的开发环境"
 date: 2020-03-25
+categories:
+- 生活
 tags:
-  - Go
-  - Life
+  - Diary
 ---
 
 换电脑啦！！！退役了用了 6 年的笔记本！！！由于未知错误原因导致无法安装 `Manjaro Linux`，所以决定尝试使用 `Windows` 进行开发。
@@ -87,7 +88,7 @@ choco install -y ccleaner `
 }
 ```
 
-![Terminal](/images/working-on-windows10/Terminal.png)
+![Terminal](/images/working-on-windows10-01.png)
 
 ## Goland & VSCode 终端配置
 

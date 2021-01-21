@@ -1,6 +1,8 @@
 ---
 title: "基于 Go 的 RESTful API 怎么设计权限控制"
 date: 2018-02-22 13:53:59
+categories:
+- 学习
 tags:
   - Go
 ---

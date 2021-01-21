@@ -1,6 +1,8 @@
 ---
 title: 'Go HTTP JSONRPC Service'
 date: 2018-03-06 11:13:31
+categories:
+- 学习
 tags:
   - Go
 ---

@@ -1,6 +1,8 @@
 ---
 title: 'Go反序列化JSON格式化时间'
 date: 2018-11-25 19:46:00
+categories:
+- 学习
 tags:
   - Go
 ---

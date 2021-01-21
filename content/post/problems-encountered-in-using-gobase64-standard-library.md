@@ -1,6 +1,8 @@
 ---
 title: "使用GoBase64标准包遇到的问题"
 date: 2018-01-29 15:53:07
+categories:
+- 学习
 tags:
   - Go
 ---

@@ -1,6 +1,8 @@
 ---
 title: Go 解析 ECPrivate Key 遇到的问题
 date: 2019-05-07 08:45:00
+categories:
+- 学习
 tags:
   - Go
 ---

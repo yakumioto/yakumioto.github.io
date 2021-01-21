@@ -1,6 +1,8 @@
 ---
 title: "回顾 2019"
 date: 2020-01-02
+categories:
+- 生活
 tags:
   - Diary
 ---

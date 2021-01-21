@@ -1,6 +1,8 @@
 ---
 title: "Go 删除 Slice 中的某一个值"
 date: 2020-06-03
+categories:
+- 学习
 tags:
   - Go
 ---

@@ -1,6 +1,8 @@
 ---
 title: "Go HTTP Response 写超时导致的 EOF 错误"
 date: 2020-10-01
+categories:
+- 学习
 tags:
   - Go
 ---

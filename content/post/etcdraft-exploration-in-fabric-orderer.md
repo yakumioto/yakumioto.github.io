@@ -1,7 +1,8 @@
 ---
 title: "Fabric 中 etcdraft 共识讲解"
 date: 2020-01-15
-updated: 2020-01-17
+categories:
+- 学习
 tags:
   - Hyperledger Fabric
   - Go

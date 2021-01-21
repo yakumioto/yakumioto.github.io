@@ -1,6 +1,8 @@
 ---
 title: "Hyperledger Fabric 加入通道时遇到 channel doesn't exist 问题"
 date: 2020-06-27
+categories:
+- 学习
 tags:
   - Go
   - Hyperledger Fabric

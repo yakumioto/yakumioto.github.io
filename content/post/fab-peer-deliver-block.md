@@ -1,6 +1,8 @@
 ---
 title: "Hyperledger Fabric peer block 的交付流程详解"
 date: 2020-06-15
+categories:
+- 学习
 tags:
   - Go
   - Hyperledger Fabric

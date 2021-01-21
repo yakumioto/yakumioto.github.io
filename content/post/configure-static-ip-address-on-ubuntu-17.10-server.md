@@ -1,6 +1,8 @@
 ---
 title: "[译] 在Ubuntu 17.10服务器上配置静态IP地址"
 date: 2017-12-05 15:54:50
+categories:
+- 学习
 tags:
   - Ubuntu
 ---
