@@ -5,7 +5,6 @@ categories:
 - 学习
 tags:
   - Kubernetes
-  - K8S
 ---
 
 ## Unable to update cni config: No networks found in /etc/cni/net.d
