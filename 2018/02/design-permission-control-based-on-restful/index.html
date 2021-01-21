@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>基于 Go 的 RESTful API 怎么设计权限控制 - Mioto&#39;s Blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Mioto" /><meta name="description" content="其实 RESTful API 实现权限控制的方法很多很多, 比如在每个 Handler 中进行判断, 但是这种写法会导致工作量无限增加, 万一增加了其他的角色还要不停的更改源码, 所以要以尽量优雅的方式来实现这个部分. 比如 Middleware 的方式.
+" /><meta name="keywords" content="Mioto&#39;s Blog, Mioto, Yaku Mioto, Mioto Yaku" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.79.1 with theme even" />
+
+
+<link rel="canonical" href="http://localhost:1313/2018/02/design-permission-control-based-on-restful/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="基于 Go 的 RESTful API 怎么设计权限控制" />
+<meta property="og:description" content="其实 RESTful API 实现权限控制的方法很多很多, 比如在每个 Handler 中进行判断, 但是这种写法会导致工作量无限增加, 万一增加了其他的角色还要不停的更改源码, 所以要以尽量优雅的方式来实现这个部分. 比如 Middleware 的方式." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/2018/02/design-permission-control-based-on-restful/" />
+<meta property="article:published_time" content="2018-02-22T13:53:59+00:00" />
+<meta property="article:modified_time" content="2018-02-22T13:53:59+00:00" />
+<meta itemprop="name" content="基于 Go 的 RESTful API 怎么设计权限控制">
+<meta itemprop="description" content="其实 RESTful API 实现权限控制的方法很多很多, 比如在每个 Handler 中进行判断, 但是这种写法会导致工作量无限增加, 万一增加了其他的角色还要不停的更改源码, 所以要以尽量优雅的方式来实现这个部分. 比如 Middleware 的方式.">
+<meta itemprop="datePublished" content="2018-02-22T13:53:59+00:00" />
+<meta itemprop="dateModified" content="2018-02-22T13:53:59+00:00" />
+<meta itemprop="wordCount" content="1402">
+
+
+
+<meta itemprop="keywords" content="Go," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="基于 Go 的 RESTful API 怎么设计权限控制"/>
+<meta name="twitter:description" content="其实 RESTful API 实现权限控制的方法很多很多, 比如在每个 Handler 中进行判断, 但是这种写法会导致工作量无限增加, 万一增加了其他的角色还要不停的更改源码, 所以要以尽量优雅的方式来实现这个部分. 比如 Middleware 的方式."/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Mioto&#39;s Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Mioto&#39;s Blog</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">基于 Go 的 RESTful API 怎么设计权限控制</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-02-22 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#资源的分类">资源的分类</a></li>
+        <li><a href="#角色-用户-权限-权限组之间的关系">角色 用户 权限 权限组之间的关系</a></li>
+        <li><a href="#表的设计">表的设计</a>
+          <ul>
+            <li><a href="#resource">Resource</a></li>
+            <li><a href="#permission">Permission</a></li>
+            <li><a href="#permissiongroup">PermissionGroup</a></li>
+            <li><a href="#role">Role</a></li>
+            <li><a href="#user">User</a></li>
+          </ul>
+        </li>
+        <li><a href="#权限中间件">权限中间件</a></li>
+        <li><a href="#资源唯一标识符">资源唯一标识符</a></li>
+        <li><a href="#参考">参考</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+  <div class="post-outdated">
+    <div class="warn">
+      <p>【注意】最后更新于 <span class="timeago" datetime="2018-02-22T13:53:59" title="February 22, 2018">February 22, 2018</span>，文中内容可能已过时，请谨慎使用。</p>
+    </div>
+  </div>
+    <div class="post-content">
+      <p>其实 <code>RESTful API</code> 实现权限控制的方法很多很多, 比如在每个 <code>Handler</code> 中进行判断, 但是这种写法会导致工作量无限增加, 万一增加了其他的角色还要不停的更改源码, 所以要以尽量优雅的方式来实现这个部分. 比如 <code>Middleware</code> 的方式.</p>
+<h2 id="资源的分类">资源的分类</h2>
+<p><code>/zoos</code>  算一个资源
+<code>/employees</code> 也是一个资源</p>
+<p>但是这些资源又有一些不一样的地方.</p>
+<p>栗子:</p>
+<p><code>GET /zoos</code> 想看动物园的列表, 所有人都可以看, 也不需要登录.
+<code>PATCH /zoos/ID</code> 更新某个动物园的信息, 只有员工才可以更改, 必须要登录.
+<code>GET /employees</code> 想看员工列表, 只有是员工, 且还是管理员的人才能看, 必须要登录.</p>
+<p>所以资源是有分类的:</p>
+<p>我归为以下两类.</p>
+<ol>
+<li>角色资源 (Role Resources)</li>
+<li>公共资源 (Public Resources)</li>
+</ol>
+<p><strong>角色资源</strong>: 属于某个角色所有, 只有访问的人属于这个角色才能进行访问. 例: 人事部门 才能对 <code>/employees</code> 资源进行增删改查.
+<strong>公共资源</strong>: 游客,工作人员, 管理人员 都可以进行操作的资源.</p>
+<h2 id="角色-用户-权限-权限组之间的关系">角色 用户 权限 权限组之间的关系</h2>
+<p>用户: 有哪些角色.
+角色: 有哪些权限组 权限.
+权限组: 一部分权限的集合(可有可无的一部分, 如果前端每次操作都需要一个一个的去添加权限,为何不把权限打包成一个权限组呢?)
+权限: 可以控制访问的资源.</p>
+<p>用户与角色的关系: <code>一对多</code> 一个用户可以拥有多个权限. 例如:一个用户既是动物园的员工, 也是动物园的管理者.
+角色与权限权限组的关系: <code>一对多</code> 一个角色可以有多个权限组 权限. 例如:管理员 拥有 employees权限组 zoos部分权限.
+用户与权限权限组的关系: <code>一对多</code> 一个用户也可以拥有角色之外的权限权限组. (毕竟有些人就是这么特殊,不考虑不行啊!!)</p>
+<h2 id="表的设计">表的设计</h2>
+<p>以下列出的字段只是权限控制中必须的字段, 可以在原先表结构中添加即可.</p>
+<h3 id="resource">Resource</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Nmae</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Name</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">资源名称</td>
+</tr>
+<tr>
+<td style="text-align:center">Description</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">资源描述</td>
+</tr>
+<tr>
+<td style="text-align:center">Identity</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">资源唯一标识符 (一般可直接使用URL作为唯一标识符后面细讲)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="permission">Permission</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Nmae</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">ResourceID</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">资源ID</td>
+</tr>
+<tr>
+<td style="text-align:center">Name</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">权限名称</td>
+</tr>
+<tr>
+<td style="text-align:center">Description</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">权限描述</td>
+</tr>
+<tr>
+<td style="text-align:center">Method</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">HTTP请求方法</td>
+</tr>
+<tr>
+<td style="text-align:center">Effect</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">作用于自己还是全部 (Allow&amp;Owner)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="permissiongroup">PermissionGroup</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Nmae</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Name</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">权限组名称</td>
+</tr>
+<tr>
+<td style="text-align:center">Description</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">权限组描述</td>
+</tr>
+<tr>
+<td style="text-align:center">PermissionsID</td>
+<td style="text-align:center">[]string</td>
+<td style="text-align:center">权限集合</td>
+</tr>
+</tbody>
+</table>
+<h3 id="role">Role</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Nmae</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Name</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">角色名称</td>
+</tr>
+<tr>
+<td style="text-align:center">Description</td>
+<td style="text-align:center">string</td>
+<td style="text-align:center">角色描述</td>
+</tr>
+<tr>
+<td style="text-align:center">PermissionsID</td>
+<td style="text-align:center">[]string</td>
+<td style="text-align:center">权限列表</td>
+</tr>
+<tr>
+<td style="text-align:center">PermissionGroupsID</td>
+<td style="text-align:center">[]string</td>
+<td style="text-align:center">权限组列表</td>
+</tr>
+</tbody>
+</table>
+<h3 id="user">User</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Nmae</th>
+<th style="text-align:center">Type</th>
+<th style="text-align:center">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">RolesID</td>
+<td style="text-align:center">[]string</td>
+<td style="text-align:center">角色列表</td>
+</tr>
+<tr>
+<td style="text-align:center">PermissionsID</td>
+<td style="text-align:center">[]string</td>
+<td style="text-align:center">权限列表</td>
+</tr>
+</tbody>
+</table>
+<p>以上所有的表都设计完了, 如果你仔细看上面表的顺序你会发现一点, 他们都是一对多的每一个 <code>Resource</code> 都是根.</p>
+<p>注: <strong>Resource 一对多 Permission 一对多 PermissionGroup 一对多 Role 一对多 Role</strong></p>
+<h2 id="权限中间件">权限中间件</h2>
+<p>以 <a href="https://github.com/urfave/negroni">negroni</a> 为例中间件执行是有顺序的, 根据加载的先后分别执行.</p>
+<p>权限中间件一般位于验证中间件之后, 以下的流程图是以我当前项目为例画出的流程图.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">st=&gt;start: Start
+ed=&gt;end: End
+OPmiddlewareBefore=&gt;operation: Before Middleware
+OPmiddlewareAuth=&gt;operation: Auth Middleware
+1. QueryTokenAuth
+2. HeaderTokenAuth
+3. JWTTokenAuth
+CDauth=&gt;condition: Logined?
+OPnoLolin=&gt;operation: Redirect /login
+OPmiddlewarePermission=&gt;operation: Permission Middleware
+CDpermission=&gt;condition: Yes or No
+OPnoPermission=&gt;operation: Return HTTP Code 401
+OPmiddlewareAfter=&gt;operation: After Middleware
+
+st-&gt;OPmiddlewareBefore-&gt;OPmiddlewareAuth-&gt;CDauth
+CDauth(no)-&gt;OPnoLolin-&gt;OPmiddlewareBefore
+CDauth(yes)-&gt;OPmiddlewarePermission-&gt;CDpermission
+CDpermission(no)-&gt;OPnoPermission
+CDpermission(yes)-&gt;OPmiddlewareAfter-&gt;ed
+</code></pre></td></tr></table>
+</div>
+</div><p>以下流程图是 <code>Permission Middleware</code> 内部的具体流程</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">st=&gt;start: Start
+ed=&gt;end: End
+OPgetResource=&gt;operation: Get Resource
+conditions:
+1. url
+OPgetPermission=&gt;operation: Get Permission
+conditions:
+1. resourceID
+2. http method
+OPgetPermissionGroup=&gt;operation: Get PermissionGroup
+conditions:
+1. permissionID
+OPgetRole=&gt;operation: Get Role
+conditions:
+1. permissionID || PermissionGroupID
+CDResource=&gt;condition: Yes or No
+OPnoResource=&gt;operation: Return HTTP Code 404
+CDpermission=&gt;condition: Yes or No
+OPnoPermission=&gt;operation: Return HTTP Code 500
+CDpermissionGroup=&gt;condition: Yes or No
+OPnoPermissionGroup=&gt;operation: Return HTTP Code 500
+CDrole=&gt;condition: Yes or No
+OPnoRole=&gt;operation: Return HTTP Code 500
+OPvalidUserPermission=&gt;operation: Valid User Permission
+CDvalidUserPermission=&gt;condition: Yes or No
+OPuserNoPermission=&gt;operation: Return HTTP Code 401
+
+st-&gt;OPgetResource-&gt;CDResource
+CDResource(no)-&gt;OPnoResource
+CDResource(yes)-&gt;OPgetPermission-&gt;CDpermission
+CDpermission(no)-&gt;OPnoPermission
+CDpermission(yes)-&gt;OPgetPermissionGroup-&gt;CDpermissionGroup
+CDpermissionGroup(no)-&gt;OPnoPermissionGroup
+CDpermissionGroup(yes)-&gt;OPgetRole-&gt;CDrole
+CDrole(no)-&gt;OPnoRole
+CDrole(yes)-&gt;OPvalidUserPermission-&gt;CDvalidUserPermission
+CDvalidUserPermission(no)-&gt;OPuserNoPermission
+CDvalidUserPermission(yes)-&gt;ed
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="资源唯一标识符">资源唯一标识符</h2>
+<p>这里讲一下为什么使用以及如何使用 <code>URL</code> 作为唯一标识符.</p>
+<p>这里以 <code>/users</code> API 为例. 分别对应他的操作有</p>
+<p>GET /users - 获取用户列表
+GET /users/{id} - 获取具体用户的信息.
+POST /users - 创建一个用户
+PATCH /users/{id} - 更新一个用户的信息
+PATCH /users/{id}/password - 更新用户密码
+DELETE /users/{id} - 删除一个用户</p>
+<p>假设现在有两个角色分别是 <code>普通用户</code>, <code>管理员</code></p>
+<p>资源表其实有两个 <code>/users</code>, <code>/users/</code></p>
+<p><code>/users/</code> 普通用户有权限 <code>/users</code> 普通用户没有权限</p>
+<p>所以 <code>URL</code> 作为资源唯一标识符到 第一层就可以了. 后面的可变的值如 <code>/users/{id}</code> 的 <code>id</code> 部分并不需要考虑.</p>
+<p>以上, 如有疑问欢迎提出, 如果大神看出了缺陷也请告知哈~~</p>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="http://www.ruanyifeng.com/blog/2014/05/restful_api.html">RESTful API 设计指南</a></li>
+<li><a href="https://www.jianshu.com/p/db65cf48c111">基于RESTful API 怎么设计用户权限控制？</a></li>
+</ul>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Mioto</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2018-02-22
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/go/">Go</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/2018/03/go-http-jsonrpc-service/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Go HTTP JSONRPC Service</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/2018/01/openssl-self-signed-certificate/">
+            <span class="next-text nav-default">openssl 自签证书</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'yakumioto';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:yaku.mioto@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/9176562" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/yakumioto" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/yakumioto" class="iconfont icon-github" title="github"></a>
+      <a href="https://space.bilibili.com/16846820" class="iconfont icon-bilibili" title="bilibili"></a>
+      <a href="https://www.zhihu.com/people/yakumioto" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.linkedin.com/in/yakumioto" class="iconfont icon-linkedin" title="linkedin"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2021<span class="heart"><i class="iconfont icon-heart"></i></span><span>Mioto</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.min.js" integrity="sha256-jwCP0NAdCBloaIWTWHmW4i3snUNMHUNO+jr9rYd2iOI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.locales.min.js" integrity="sha256-ZwofwC1Lf/faQCzN7nZtfijVV6hSwxjQMwXL4gn9qU8=" crossorigin="anonymous"></script>
+  <script><!-- NOTE: timeago.js uses the language code format like "zh_CN" (underscore and case sensitive) -->
+    var languageCode = "zh-cn".replace(/-/g, '_').replace(/_(.*)/, function ($0, $1) {return $0.replace($1, $1.toUpperCase());});
+    timeago().render(document.querySelectorAll('.timeago'), languageCode);
+    timeago.cancel();  
+  </script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-102233768-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Go32位系统计算大于4GB文件sha1遇到的问题 - Mioto&#39;s Blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Mioto" /><meta name="description" content="文件大于 4GB 以下方法一定行不通, 32位操作系统 最大的寻址空间就是 4GB 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 package main import ( &amp;#34;crypto/sha1&amp;#34; &amp;#34;fmt&amp;#34; &amp;#34;io/ioutil&amp;#34; &amp;#34;log&amp;#34; ) func main() { bytes, err := ioutil.ReadFile(&amp;#34;file.txt&amp;#34;) if err" /><meta name="keywords" content="Mioto&#39;s Blog, Mioto, Yaku Mioto, Mioto Yaku" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.79.1 with theme even" />
+
+
+<link rel="canonical" href="http://localhost:1313/2017/11/go-the-problem-of-finding-hash-in-32-bit-system/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Go32位系统计算大于4GB文件sha1遇到的问题" />
+<meta property="og:description" content="文件大于 4GB 以下方法一定行不通, 32位操作系统 最大的寻址空间就是 4GB 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 package main import ( &#34;crypto/sha1&#34; &#34;fmt&#34; &#34;io/ioutil&#34; &#34;log&#34; ) func main() { bytes, err := ioutil.ReadFile(&#34;file.txt&#34;) if err" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/2017/11/go-the-problem-of-finding-hash-in-32-bit-system/" />
+<meta property="article:published_time" content="2017-11-25T23:11:39+00:00" />
+<meta property="article:modified_time" content="2017-11-25T23:11:39+00:00" />
+<meta itemprop="name" content="Go32位系统计算大于4GB文件sha1遇到的问题">
+<meta itemprop="description" content="文件大于 4GB 以下方法一定行不通, 32位操作系统 最大的寻址空间就是 4GB 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 package main import ( &#34;crypto/sha1&#34; &#34;fmt&#34; &#34;io/ioutil&#34; &#34;log&#34; ) func main() { bytes, err := ioutil.ReadFile(&#34;file.txt&#34;) if err">
+<meta itemprop="datePublished" content="2017-11-25T23:11:39+00:00" />
+<meta itemprop="dateModified" content="2017-11-25T23:11:39+00:00" />
+<meta itemprop="wordCount" content="466">
+
+
+
+<meta itemprop="keywords" content="Go," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Go32位系统计算大于4GB文件sha1遇到的问题"/>
+<meta name="twitter:description" content="文件大于 4GB 以下方法一定行不通, 32位操作系统 最大的寻址空间就是 4GB 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 package main import ( &#34;crypto/sha1&#34; &#34;fmt&#34; &#34;io/ioutil&#34; &#34;log&#34; ) func main() { bytes, err := ioutil.ReadFile(&#34;file.txt&#34;) if err"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Mioto&#39;s Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Mioto&#39;s Blog</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Go32位系统计算大于4GB文件sha1遇到的问题</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2017-11-25 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#详解">详解</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+  <div class="post-outdated">
+    <div class="warn">
+      <p>【注意】最后更新于 <span class="timeago" datetime="2017-11-25T23:11:39" title="November 25, 2017">November 25, 2017</span>，文中内容可能已过时，请谨慎使用。</p>
+    </div>
+  </div>
+    <div class="post-content">
+      <p>文件大于 <code>4GB</code> 以下方法一定行不通, 32位操作系统 最大的寻址空间就是 <code>4GB</code></p>
+<!-- more -->
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+    <span class="s">&#34;crypto/sha1&#34;</span>
+    <span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;io/ioutil&#34;</span>
+    <span class="s">&#34;log&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">bytes</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ioutil</span><span class="p">.</span><span class="nf">ReadFile</span><span class="p">(</span><span class="s">&#34;file.txt&#34;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="nx">log</span><span class="p">.</span><span class="nf">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="nx">h</span> <span class="o">:=</span> <span class="nx">sha1</span><span class="p">.</span><span class="nf">New</span><span class="p">()</span>
+    <span class="nx">h</span><span class="p">.</span><span class="nf">Write</span><span class="p">(</span><span class="nx">bytes</span><span class="p">)</span>
+
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;% x&#34;</span><span class="p">,</span> <span class="nx">h</span><span class="p">.</span><span class="nf">Sum</span><span class="p">(</span><span class="kc">nil</span><span class="p">))</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>以下方法可以算出大于 <code>4GB</code> 文件的 sha1, 但是如果直接表面理解代码, 给人的感觉是无法运行的</p>
+<p><code>io.Copy(h, f)</code> 这里给人的感觉也是一次性读取文件到 <code>h</code> 变量中, &ldquo;给人一种把 整个文件读取到内存的感觉&rdquo;</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+
+<span class="kn">import</span> <span class="p">(</span>
+    <span class="s">&#34;crypto/sha1&#34;</span>
+    <span class="s">&#34;fmt&#34;</span>
+    <span class="s">&#34;io&#34;</span>
+    <span class="s">&#34;log&#34;</span>
+    <span class="s">&#34;os&#34;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">f</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">os</span><span class="p">.</span><span class="nf">Open</span><span class="p">(</span><span class="s">&#34;file.txt&#34;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="nx">log</span><span class="p">.</span><span class="nf">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">defer</span> <span class="nx">f</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
+
+    <span class="nx">h</span> <span class="o">:=</span> <span class="nx">sha1</span><span class="p">.</span><span class="nf">New</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">io</span><span class="p">.</span><span class="nf">Copy</span><span class="p">(</span><span class="nx">h</span><span class="p">,</span> <span class="nx">f</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="nx">log</span><span class="p">.</span><span class="nf">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;% x&#34;</span><span class="p">,</span> <span class="nx">h</span><span class="p">.</span><span class="nf">Sum</span><span class="p">(</span><span class="kc">nil</span><span class="p">))</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="详解">详解</h2>
+<p>跟踪代码 <code>sha1.New()</code> 找到  <code>sha1</code> 的 <code>Write</code> 方法实现</p>
+<p><code>io.Copy(h, f)</code> 会使用这个  <code>Write</code> 方法</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">d</span> <span class="o">*</span><span class="nx">digest</span><span class="p">)</span> <span class="nf">Write</span><span class="p">(</span><span class="nx">p</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">)</span> <span class="p">(</span><span class="nx">nn</span> <span class="kt">int</span><span class="p">,</span> <span class="nx">err</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">nn</span> <span class="p">=</span> <span class="nb">len</span><span class="p">(</span><span class="nx">p</span><span class="p">)</span>
+    <span class="nx">d</span><span class="p">.</span><span class="nx">len</span> <span class="o">+=</span> <span class="nb">uint64</span><span class="p">(</span><span class="nx">nn</span><span class="p">)</span>
+    <span class="c1">// 这里 d.nx 大于 0 的时候 进入进行处理数据
+</span><span class="c1"></span>    <span class="k">if</span> <span class="nx">d</span><span class="p">.</span><span class="nx">nx</span> <span class="p">&gt;</span> <span class="mi">0</span> <span class="p">{</span>
+        <span class="nx">n</span> <span class="o">:=</span> <span class="nb">copy</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">x</span><span class="p">[</span><span class="nx">d</span><span class="p">.</span><span class="nx">nx</span><span class="p">:],</span> <span class="nx">p</span><span class="p">)</span>
+        <span class="nx">d</span><span class="p">.</span><span class="nx">nx</span> <span class="o">+=</span> <span class="nx">n</span>
+        <span class="k">if</span> <span class="nx">d</span><span class="p">.</span><span class="nx">nx</span> <span class="o">==</span> <span class="nx">chunk</span> <span class="p">{</span>
+            <span class="c1">// 处理. &#39;具体不知道怎么实现的.. 没研究过&#39;
+</span><span class="c1"></span>            <span class="nf">block</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="nx">d</span><span class="p">.</span><span class="nx">x</span><span class="p">[:])</span>
+            <span class="c1">// 但是这里处理完毕后会 清空 d.nx
+</span><span class="c1"></span>            <span class="c1">// 所以这里的 Write 函数其实已经在处理 sha1 了
+</span><span class="c1"></span>            <span class="c1">// 并没有多少实际的内存占用
+</span><span class="c1"></span>            <span class="nx">d</span><span class="p">.</span><span class="nx">nx</span> <span class="p">=</span> <span class="mi">0</span>
+        <span class="p">}</span>
+        <span class="nx">p</span> <span class="p">=</span> <span class="nx">p</span><span class="p">[</span><span class="nx">n</span><span class="p">:]</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nx">p</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="nx">chunk</span> <span class="p">{</span>
+        <span class="nx">n</span> <span class="o">:=</span> <span class="nb">len</span><span class="p">(</span><span class="nx">p</span><span class="p">)</span> <span class="o">&amp;^</span> <span class="p">(</span><span class="nx">chunk</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="nf">block</span><span class="p">(</span><span class="nx">d</span><span class="p">,</span> <span class="nx">p</span><span class="p">[:</span><span class="nx">n</span><span class="p">])</span>
+        <span class="nx">p</span> <span class="p">=</span> <span class="nx">p</span><span class="p">[</span><span class="nx">n</span><span class="p">:]</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nx">p</span><span class="p">)</span> <span class="p">&gt;</span> <span class="mi">0</span> <span class="p">{</span>
+        <span class="nx">d</span><span class="p">.</span><span class="nx">nx</span> <span class="p">=</span> <span class="nb">copy</span><span class="p">(</span><span class="nx">d</span><span class="p">.</span><span class="nx">x</span><span class="p">[:],</span> <span class="nx">p</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="k">return</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Mioto</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2017-11-25
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/go/">Go</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/2017/11/automated-deployment-of-hexo-using-docker/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">使用docker自动部署hexo</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/2017/11/docker-caddy-git-clone-private-repo-problem/">
+            <span class="next-text nav-default">docker caddy 克隆私有仓库遇到的问题</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'yakumioto';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:yaku.mioto@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/9176562" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/yakumioto" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/yakumioto" class="iconfont icon-github" title="github"></a>
+      <a href="https://space.bilibili.com/16846820" class="iconfont icon-bilibili" title="bilibili"></a>
+      <a href="https://www.zhihu.com/people/yakumioto" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.linkedin.com/in/yakumioto" class="iconfont icon-linkedin" title="linkedin"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2021<span class="heart"><i class="iconfont icon-heart"></i></span><span>Mioto</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.min.js" integrity="sha256-jwCP0NAdCBloaIWTWHmW4i3snUNMHUNO+jr9rYd2iOI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.locales.min.js" integrity="sha256-ZwofwC1Lf/faQCzN7nZtfijVV6hSwxjQMwXL4gn9qU8=" crossorigin="anonymous"></script>
+  <script><!-- NOTE: timeago.js uses the language code format like "zh_CN" (underscore and case sensitive) -->
+    var languageCode = "zh-cn".replace(/-/g, '_').replace(/_(.*)/, function ($0, $1) {return $0.replace($1, $1.toUpperCase());});
+    timeago().render(document.querySelectorAll('.timeago'), languageCode);
+    timeago.cancel();  
+  </script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-102233768-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

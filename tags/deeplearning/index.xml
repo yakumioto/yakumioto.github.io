@@ -9,10 +9,10 @@
     <lastBuildDate>Sun, 06 Sep 2020 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/deeplearning/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>神经网络的数据基础</title>
-      <link>http://localhost:1313/2020/09/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%9A%84%E6%95%B0%E6%8D%AE%E5%9F%BA%E7%A1%80/</link>
+      <link>http://localhost:1313/2020/09/the-data-foundation-of-neural-networks/</link>
       <pubDate>Sun, 06 Sep 2020 00:00:00 +0000</pubDate>
       
-      <guid>http://localhost:1313/2020/09/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E7%9A%84%E6%95%B0%E6%8D%AE%E5%9F%BA%E7%A1%80/</guid>
+      <guid>http://localhost:1313/2020/09/the-data-foundation-of-neural-networks/</guid>
       <description>神经网络的数据表示 张量(tensor) 是一个数据容器, 它包含的数据几乎总是数值数据, 因此它的数字容器, 张量是矩阵向任意维度的推广, 维度(di</description>
     </item>
     

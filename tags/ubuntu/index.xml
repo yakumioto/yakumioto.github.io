@@ -9,10 +9,10 @@
     <lastBuildDate>Tue, 05 Dec 2017 15:54:50 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/ubuntu/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>[译] 在Ubuntu 17.10服务器上配置静态IP地址</title>
-      <link>http://localhost:1313/2017/12/%E8%AF%91-%E5%9C%A8ubuntu-17.10%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E9%85%8D%E7%BD%AE%E9%9D%99%E6%80%81ip%E5%9C%B0%E5%9D%80/</link>
+      <link>http://localhost:1313/2017/12/configure-static-ip-address-on-ubuntu-17.10-server/</link>
       <pubDate>Tue, 05 Dec 2017 15:54:50 +0000</pubDate>
       
-      <guid>http://localhost:1313/2017/12/%E8%AF%91-%E5%9C%A8ubuntu-17.10%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%8A%E9%85%8D%E7%BD%AE%E9%9D%99%E6%80%81ip%E5%9C%B0%E5%9D%80/</guid>
+      <guid>http://localhost:1313/2017/12/configure-static-ip-address-on-ubuntu-17.10-server/</guid>
       <description>原文: https://websiteforstudents.com/configuring-static-ips-ubuntu-17-10-servers/ Ubuntu 17.10 的时候网络配置方法完全改变了, 是否听说过 NetPlan?可能并没有吧~, NetPlan 是 Ubuntu 17.10 中引入的一种新的网络配置工具，用于管理网络设置.</description>
     </item>
     

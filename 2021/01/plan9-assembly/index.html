@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Plan9 汇编入门讲解 - Mioto&#39;s Blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Mioto" /><meta name="description" content="为什么要看 Plan9 汇编？如果你是 Go 开发者，去学习和理解一下 Plan9 是很有必要的，因为它可以解决你对一段代码的理解（为什么这样不行？那样却可以？）。 Plan9 不同" /><meta name="keywords" content="Mioto&#39;s Blog, Mioto, Yaku Mioto, Mioto Yaku" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.79.1 with theme even" />
+
+
+<link rel="canonical" href="http://localhost:1313/2021/01/plan9-assembly/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Plan9 汇编入门讲解" />
+<meta property="og:description" content="为什么要看 Plan9 汇编？如果你是 Go 开发者，去学习和理解一下 Plan9 是很有必要的，因为它可以解决你对一段代码的理解（为什么这样不行？那样却可以？）。 Plan9 不同" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/2021/01/plan9-assembly/" />
+<meta property="article:published_time" content="2021-01-19T17:23:23+08:00" />
+<meta property="article:modified_time" content="2021-01-19T17:23:23+08:00" />
+<meta itemprop="name" content="Plan9 汇编入门讲解">
+<meta itemprop="description" content="为什么要看 Plan9 汇编？如果你是 Go 开发者，去学习和理解一下 Plan9 是很有必要的，因为它可以解决你对一段代码的理解（为什么这样不行？那样却可以？）。 Plan9 不同">
+<meta itemprop="datePublished" content="2021-01-19T17:23:23+08:00" />
+<meta itemprop="dateModified" content="2021-01-19T17:23:23+08:00" />
+<meta itemprop="wordCount" content="2937">
+
+
+
+<meta itemprop="keywords" content="Go,Assembly," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Plan9 汇编入门讲解"/>
+<meta name="twitter:description" content="为什么要看 Plan9 汇编？如果你是 Go 开发者，去学习和理解一下 Plan9 是很有必要的，因为它可以解决你对一段代码的理解（为什么这样不行？那样却可以？）。 Plan9 不同"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Mioto&#39;s Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Mioto&#39;s Blog</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Plan9 汇编入门讲解</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2021-01-19 </span>
+        <div class="post-category">
+            <a href="/categories/%E5%AD%A6%E4%B9%A0/"> 学习 </a>
+            </div>
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#疑惑">疑惑</a></li>
+        <li><a href="#基础">基础</a>
+          <ul>
+            <li><a href="#通用寄存器">通用寄存器</a></li>
+            <li><a href="#伪寄存器">伪寄存器</a></li>
+            <li><a href="#变量声明">变量声明</a></li>
+            <li><a href="#函数声明">函数声明</a></li>
+          </ul>
+        </li>
+        <li><a href="#分析">分析</a>
+          <ul>
+            <li><a href="#编译--反编译">编译 / 反编译</a></li>
+          </ul>
+        </li>
+        <li><a href="#参考">参考</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>为什么要看 Plan9 汇编？如果你是 Go 开发者，去学习和理解一下 Plan9 是很有必要的，因为它可以解决你对一段代码的理解（为什么这样不行？那样却可以？）。</p>
+<p>Plan9 不同于 AT&amp;T 和 Intel 汇编器，但是懂这两个汇编语法的话对理解 Plan9 还是有很大帮助的。</p>
+<h2 id="疑惑">疑惑</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 为什么这个函数的返回值会是 -1
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">demo1</span><span class="p">()</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="nx">ret</span> <span class="o">:=</span> <span class="o">-</span><span class="mi">1</span>
+	<span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+		<span class="nx">ret</span> <span class="p">=</span> <span class="mi">1</span>
+	<span class="p">}()</span>
+	<span class="k">return</span> <span class="nx">ret</span>
+<span class="p">}</span>
+<span class="c1">// output: -1
+</span><span class="c1"></span>
+
+<span class="c1">// 为什么这个函数的返回值会是 1
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">demo2</span><span class="p">()</span> <span class="p">(</span><span class="nx">ret</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+		<span class="nx">ret</span> <span class="p">=</span> <span class="mi">1</span>
+	<span class="p">}()</span>
+	<span class="k">return</span> <span class="nx">ret</span>
+<span class="p">}</span>
+<span class="c1">// output: 1
+</span></code></pre></td></tr></table>
+</div>
+</div><p>相信大部分人都看过类似的解答，demo1 中是临时变量导致的，而 demo2 中没有临时变量，这是最终结果。</p>
+<p>在汇编层面到底做了什么？本文将会探讨这个问题。（本文所使用的平台是 MacOS AMD64）不同的平台指令集和寄存器都不一样。</p>
+<h2 id="基础">基础</h2>
+<h3 id="通用寄存器">通用寄存器</h3>
+<p>下面是通用通用寄存器的名字在 IA64 和 plan9 中的对应关系：</p>
+<table>
+<thead>
+<tr>
+<th>IA64</th>
+<th>RAX</th>
+<th>RBX</th>
+<th>RCX</th>
+<th>RDX</th>
+<th>RDI</th>
+<th>RSI</th>
+<th>RBP</th>
+<th>RSP</th>
+<th>R8</th>
+<th>R9</th>
+<th>R10</th>
+<th>R11</th>
+<th>R12</th>
+<th>R13</th>
+<th>R14</th>
+<th>RIP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Plan9</td>
+<td>AX</td>
+<td>BX</td>
+<td>CX</td>
+<td>DX</td>
+<td>DI</td>
+<td>SI</td>
+<td>BP</td>
+<td>SP</td>
+<td>R8</td>
+<td>R9</td>
+<td>R10</td>
+<td>R11</td>
+<td>R12</td>
+<td>R13</td>
+<td>R14</td>
+<td>PC</td>
+</tr>
+</tbody>
+</table>
+<p>应用代码层面会用到的通用寄存器主要是： AX, BX, CX, DX, DI, SI, R8~R15 这 14 个寄存器，虽然 BP 和 SP 也可以用，不过 BP 和 SP 会被用来管理栈顶和栈底，最好不要拿来进行运算。</p>
+<p>Plan9 汇编的操作数方向和 Intel 汇编相反的，与 AT&amp;T 类似。</p>
+<h3 id="伪寄存器">伪寄存器</h3>
+<p>Go 汇编引入了 4 个伪寄存器，官方定义如下：</p>
+<ul>
+<li>FP: Frame pointer: arguments and locals.</li>
+<li>PC: Program counter: jumps and branches.</li>
+<li>SB: Static base pointer: global symbols.</li>
+<li>SP: Stack pointer: top of stack.</li>
+</ul>
+<p>以下针对 FP，SP 做一些描述：</p>
+<ul>
+<li>FP：使用形式如 <code>symbol+offset(FP)</code> 的方式，引用函数的输入参数。eg：<code>first_arg+0(FP)</code>，<code>second_arg+8(FP)</code></li>
+<li>SP：SP 是有对应的寄存器的，所以区分 SP 到底是指硬件 SP 还是指虚拟寄存器，需要以特定的格式来区分。eg：<code>symbol+offset(SP)</code> 则表示伪寄存器 SP。eg：<code>offset(SP)</code> 则表示硬件 SP。</li>
+</ul>
+<h3 id="变量声明">变量声明</h3>
+<p>使用 DATA 结合 GLOBL 来定义一个变量。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">DATA</span>	<span class="nx">symbol</span><span class="o">+</span><span class="nf">offset</span><span class="p">(</span><span class="nx">SB</span><span class="p">)</span><span class="o">/</span><span class="nx">width</span><span class="p">,</span> <span class="nx">value</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>使用 GLOBL 指令将变量声明为 global，额外接收两个参数，一个是 flag，另一个是变量的总大小。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">GLOBL</span> <span class="nf">divtab</span><span class="p">(</span><span class="nx">SB</span><span class="p">),</span> <span class="nx">RODATA</span><span class="p">,</span> <span class="err">$</span><span class="mi">8</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>GLOBL 必须跟在 DATA 指令之后，下面是一个定义了多个 readonly 的全局变量的完整例子：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">DATA</span> <span class="nx">pi</span><span class="o">+</span><span class="mi">0</span><span class="p">(</span><span class="nx">SB</span><span class="p">)</span><span class="o">/</span><span class="mi">8</span><span class="p">,</span> <span class="err">$</span><span class="mf">3.1415926</span>
+<span class="nx">GLOBL</span> <span class="nf">pi</span><span class="p">(</span><span class="nx">SB</span><span class="p">),</span> <span class="nx">RODATA</span><span class="p">,</span> <span class="err">$</span><span class="mi">8</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>在全局变量中定义数组，字符串，这时候就需要添加 <code>&lt;&gt;</code> ，<code>&lt;&gt;</code> 符号可以使变量使用偏移量操作。例子：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="nx">DATA</span> <span class="nx">array</span><span class="p">&lt;&gt;</span><span class="o">+</span><span class="mi">0</span><span class="p">(</span><span class="nx">SB</span><span class="p">)</span><span class="o">/</span><span class="mi">8</span><span class="p">,</span> <span class="err">$</span><span class="mi">1</span>
+<span class="nx">DATA</span> <span class="nx">array</span><span class="p">&lt;&gt;</span><span class="o">+</span><span class="mi">8</span><span class="p">(</span><span class="nx">SB</span><span class="p">)</span><span class="o">/</span><span class="mi">8</span><span class="p">,</span> <span class="err">$</span><span class="mi">2</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>通常建议直接使用 <code>&lt;&gt;</code> 进行变量声明</strong>。</p>
+<h3 id="函数声明">函数声明</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 函数声明
+</span><span class="c1">// 该声明一般写在任意一个 .go 文件中，例如：add.go
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">add</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span> <span class="kt">int</span><span class="p">)</span> <span class="kt">int</span>
+
+<span class="c1">// 函数实现
+</span><span class="c1">// 该实现一般写在与声明同名的 _{Arch}.s 文件中，例如：add_amd64.s
+</span><span class="c1"></span><span class="nx">TEXT</span> <span class="nx">pkgname</span><span class="err">·</span><span class="nf">add</span><span class="p">(</span><span class="nx">SB</span><span class="p">),</span> <span class="nx">NOSPLIT</span><span class="p">,</span> <span class="err">$</span><span class="mi">0</span><span class="o">-</span><span class="mi">16</span>
+    <span class="nx">MOVQ</span> <span class="nx">a</span><span class="o">+</span><span class="mi">0</span><span class="p">(</span><span class="nx">FP</span><span class="p">),</span> <span class="nx">AX</span>
+    <span class="nx">MOVQ</span> <span class="nx">a</span><span class="o">+</span><span class="mi">8</span><span class="p">(</span><span class="nx">FP</span><span class="p">),</span> <span class="nx">BX</span>
+    <span class="nx">ADDQ</span> <span class="nx">AX</span><span class="p">,</span> <span class="nx">BX</span>
+    <span class="nx">MOVQ</span> <span class="nx">BX</span><span class="p">,</span> <span class="nx">ret</span><span class="o">+</span><span class="mi">16</span><span class="p">(</span><span class="nx">FP</span><span class="p">)</span>
+    <span class="nx">RET</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>pkgname</code> 可以不写，一般都是不写的，可以参考 go 的源码， 另外 add 前的 <code>·</code> 不是 <code>.</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">                            参数及返回值大小
+                                 | 
+ TEXT pkgname·add(SB),NOSPLIT,$0-16
+         |     |               |
+        包名  函数名    栈帧大小(局部变量+可能需要的额外调用函数的参数空间的总大小，
+                               但不包括调用其它函数时的 ret address 的大小)
+</code></pre></td></tr></table>
+</div>
+</div><p>以上使用的 <code>RODATA</code>，<code>NOSPLIT</code>  flag，还有其他的值，可以参考：<a href="https://golang.org/doc/asm#directives">https://golang.org/doc/asm#directives</a>，</p>
+<p><strong>务必注意</strong>：对于编译输出 go tool compile -S / go tool objdump 的代码来讲，目前所有的 SP 都是硬件寄存器 SP，无论是否带 symbol。</p>
+<p>以下为上图的栈结构示意图，由于没有临时变量，所以伪 SP 和 硬件 SP 在同一个位置。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-text" data-lang="text">+------------------+
+| return parameter |
++------------------+
+|   parameter b    | 
++------------------+
+|   parameter a    | &lt;-- pseudo FP addr
++------------------+
+| caller ret addr  | &lt;-- pseudo SP addr and hardware SP addr
++------------------+
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="分析">分析</h2>
+<h3 id="编译--反编译">编译 / 反编译</h3>
+<p>很多时候我们无法确定一块代码是如何执行的，需要通过生成汇编、反汇编来研究</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// 编译
+</span><span class="c1"></span><span class="k">go</span> <span class="nx">build</span> <span class="o">-</span><span class="nx">gcflags</span><span class="p">=</span><span class="s">&#34;-S&#34;</span>
+<span class="k">go</span> <span class="nx">tool</span> <span class="nx">compile</span> <span class="o">-</span><span class="nx">S</span> <span class="nx">hello</span><span class="p">.</span><span class="k">go</span>
+<span class="k">go</span> <span class="nx">tool</span> <span class="nx">compile</span> <span class="o">-</span><span class="nx">N</span> <span class="o">-</span><span class="nx">S</span> <span class="nx">hello</span><span class="p">.</span><span class="k">go</span> <span class="c1">// 禁止优化
+</span><span class="c1">// 反编译
+</span><span class="c1"></span><span class="k">go</span> <span class="nx">tool</span> <span class="nx">objdump</span> <span class="p">&lt;</span><span class="nx">binary</span><span class="p">&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>基础已经介绍的差不多了，接下来就是深究这两段代码的区别。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span><span class="lnt">77
+</span><span class="lnt">78
+</span><span class="lnt">79
+</span><span class="lnt">80
+</span><span class="lnt">81
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// go tool compile -S demo1.go
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">demo1</span><span class="p">()</span> <span class="kt">int</span> <span class="p">{</span>
+	<span class="nx">ret</span> <span class="o">:=</span> <span class="o">-</span><span class="mi">1</span>
+	<span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+		<span class="nx">ret</span> <span class="p">=</span> <span class="mi">1</span>
+	<span class="p">}()</span>
+	<span class="k">return</span> <span class="nx">ret</span>
+<span class="p">}</span>
+
+<span class="c1">// 编译的汇编 demo1 部分代码 
+</span><span class="c1"></span><span class="s">&#34;&#34;</span><span class="p">.</span><span class="nx">demo1</span> <span class="nx">STEXT</span> <span class="nx">size</span><span class="p">=</span><span class="mi">158</span> <span class="nx">args</span><span class="p">=</span><span class="mh">0x8</span> <span class="nx">locals</span><span class="p">=</span><span class="mh">0x30</span>
+        <span class="mh">0x0000</span> <span class="mo">00000</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">5</span><span class="p">)</span>   <span class="nx">TEXT</span>    <span class="s">&#34;&#34;</span><span class="p">.</span><span class="nf">demo1</span><span class="p">(</span><span class="nx">SB</span><span class="p">),</span> <span class="nx">ABIInternal</span><span class="p">,</span> <span class="err">$</span><span class="mi">48</span><span class="o">-</span><span class="mi">8</span>
+
+        <span class="c1">// 栈的初始化操作，以及 GC相关的标记等等操作，有兴趣的可以自己研究以下。
+</span><span class="c1"></span>        <span class="o">...</span>
+        
+        <span class="c1">// 15(SP) 不知道为什么要操作这个，望大佬解释，本人猜测可能跟 deferreturn 有关。
+</span><span class="c1"></span>        <span class="mh">0x002c</span> <span class="mo">00044</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">5</span><span class="p">)</span>   <span class="nx">MOVB</span>    <span class="err">$</span><span class="mi">0</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">..</span><span class="nx">autotmp_3</span><span class="o">+</span><span class="mi">15</span><span class="p">(</span><span class="nx">SP</span><span class="p">)</span>
+        
+        <span class="c1">// 这里对 56(SP) 地址进行了赋值操作写了个 0，这个位置其实是返回值地址
+</span><span class="c1"></span>        <span class="mh">0x0031</span> <span class="mo">0004</span><span class="mi">9</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">5</span><span class="p">)</span>   <span class="nx">MOVQ</span>    <span class="err">$</span><span class="mi">0</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">.</span><span class="err">~</span><span class="nx">r0</span><span class="o">+</span><span class="mi">56</span><span class="p">(</span><span class="nx">SP</span><span class="p">)</span>
+        
+        <span class="c1">// 16(SP) 临时变量 ret，将 -1 写入到了栈中。
+</span><span class="c1"></span>        <span class="mh">0x003a</span> <span class="mo">0005</span><span class="mi">8</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">6</span><span class="p">)</span>   <span class="nx">MOVQ</span>    <span class="err">$</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">.</span><span class="nx">ret</span><span class="o">+</span><span class="mi">16</span><span class="p">(</span><span class="nx">SP</span><span class="p">)</span>
+
+        <span class="c1">// 猜测与 deferreturn 有关。
+</span><span class="c1"></span>        <span class="mh">0x0043</span> <span class="mo">00067</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">7</span><span class="p">)</span>   <span class="nx">LEAQ</span>    <span class="s">&#34;&#34;</span><span class="p">.</span><span class="nx">demo1</span><span class="p">.</span><span class="nx">func1</span><span class="err">·</span><span class="nf">f</span><span class="p">(</span><span class="nx">SB</span><span class="p">),</span> <span class="nx">AX</span>
+        <span class="mh">0x004a</span> <span class="mo">00074</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">7</span><span class="p">)</span>   <span class="nx">MOVQ</span>    <span class="nx">AX</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">..</span><span class="nx">autotmp_4</span><span class="o">+</span><span class="mi">32</span><span class="p">(</span><span class="nx">SP</span><span class="p">)</span>
+
+        <span class="c1">// 将 16(SP) 的地址给了 AX 寄存器，这个地址里存的是 -1
+</span><span class="c1"></span>        <span class="mh">0x004f</span> <span class="mo">0007</span><span class="mi">9</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">7</span><span class="p">)</span>   <span class="nx">LEAQ</span>    <span class="s">&#34;&#34;</span><span class="p">.</span><span class="nx">ret</span><span class="o">+</span><span class="mi">16</span><span class="p">(</span><span class="nx">SP</span><span class="p">),</span> <span class="nx">AX</span>
+
+        <span class="c1">// 将 AX 寄存器里的 16(SP) 的地址给了 24(SP)
+</span><span class="c1"></span>        <span class="mh">0x0054</span> <span class="mo">000</span><span class="mi">84</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">7</span><span class="p">)</span>   <span class="nx">MOVQ</span>    <span class="nx">AX</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">..</span><span class="nx">autotmp_5</span><span class="o">+</span><span class="mi">24</span><span class="p">(</span><span class="nx">SP</span><span class="p">)</span>
+        <span class="mh">0x0059</span> <span class="mo">000</span><span class="mi">89</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">7</span><span class="p">)</span>   <span class="nx">MOVB</span>    <span class="err">$</span><span class="mi">1</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">..</span><span class="nx">autotmp_3</span><span class="o">+</span><span class="mi">15</span><span class="p">(</span><span class="nx">SP</span><span class="p">)</span>
+
+        <span class="c1">// 将 16(SP) 的值给了 AX 寄存器，这个地址里存的是 -1
+</span><span class="c1"></span>        <span class="mh">0x005e</span> <span class="mo">000</span><span class="mi">94</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">10</span><span class="p">)</span>  <span class="nx">MOVQ</span>    <span class="s">&#34;&#34;</span><span class="p">.</span><span class="nx">ret</span><span class="o">+</span><span class="mi">16</span><span class="p">(</span><span class="nx">SP</span><span class="p">),</span> <span class="nx">AX</span>
+        
+        <span class="c1">// 将 AX 的值给了 56(SP), 56(SP) 上面说过了是返回值地址， 所以当前的返回值是 -1
+</span><span class="c1"></span>        <span class="c1">// 这里也是最后一次操作 56(SP)，所以最终的返回值是 -1
+</span><span class="c1"></span>        <span class="mh">0x0063</span> <span class="mo">000</span><span class="mi">99</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">10</span><span class="p">)</span>  <span class="nx">MOVQ</span>    <span class="nx">AX</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">.</span><span class="err">~</span><span class="nx">r0</span><span class="o">+</span><span class="mi">56</span><span class="p">(</span><span class="nx">SP</span><span class="p">)</span>
+        <span class="mh">0x0068</span> <span class="mo">00104</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">10</span><span class="p">)</span>  <span class="nx">MOVB</span>    <span class="err">$</span><span class="mi">0</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">..</span><span class="nx">autotmp_3</span><span class="o">+</span><span class="mi">15</span><span class="p">(</span><span class="nx">SP</span><span class="p">)</span>
+
+        <span class="c1">// 24(SP) 的值给了 AX，24(SP) 存储的是 16(SP) 的地址， 也就是临时变量的地址
+</span><span class="c1"></span>        <span class="mh">0x006d</span> <span class="mo">0010</span><span class="mi">9</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">10</span><span class="p">)</span>  <span class="nx">MOVQ</span>    <span class="s">&#34;&#34;</span><span class="p">..</span><span class="nx">autotmp_5</span><span class="o">+</span><span class="mi">24</span><span class="p">(</span><span class="nx">SP</span><span class="p">),</span> <span class="nx">AX</span>
+
+        <span class="c1">// 将 AX 的值给了  0(SP)， 也就是将 16(SP) 的地址给了 0(SP)
+</span><span class="c1"></span>        <span class="c1">// 这里可以 0(SP) 为调用 demo1.func1 的入参
+</span><span class="c1"></span>        <span class="mh">0x0072</span> <span class="mo">00114</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">10</span><span class="p">)</span>  <span class="nx">MOVQ</span>    <span class="nx">AX</span><span class="p">,</span> <span class="p">(</span><span class="nx">SP</span><span class="p">)</span>
+        <span class="mh">0x0076</span> <span class="mo">0011</span><span class="mi">8</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">10</span><span class="p">)</span>  <span class="nx">PCDATA</span>  <span class="err">$</span><span class="mi">1</span><span class="p">,</span> <span class="err">$</span><span class="mi">1</span>
+
+        <span class="c1">// 调用 demo1.func1
+</span><span class="c1"></span>        <span class="mh">0x0076</span> <span class="mo">0011</span><span class="mi">8</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">10</span><span class="p">)</span>  <span class="nx">CALL</span>    <span class="s">&#34;&#34;</span><span class="p">.</span><span class="nx">demo1</span><span class="p">.</span><span class="nf">func1</span><span class="p">(</span><span class="nx">SB</span><span class="p">)</span>
+        <span class="mh">0x007b</span> <span class="mo">00123</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">10</span><span class="p">)</span>  <span class="nx">MOVQ</span>    <span class="mi">40</span><span class="p">(</span><span class="nx">SP</span><span class="p">),</span> <span class="nx">BP</span>
+        <span class="mh">0x0080</span> <span class="mo">0012</span><span class="mi">8</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">10</span><span class="p">)</span>  <span class="nx">ADDQ</span>    <span class="err">$</span><span class="mi">48</span><span class="p">,</span> <span class="nx">SP</span>
+        <span class="mh">0x0084</span> <span class="mo">00132</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">10</span><span class="p">)</span>  <span class="nx">RET</span>
+        <span class="mh">0x0085</span> <span class="mo">00133</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">10</span><span class="p">)</span>  <span class="nx">CALL</span>    <span class="nx">runtime</span><span class="p">.</span><span class="nf">deferreturn</span><span class="p">(</span><span class="nx">SB</span><span class="p">)</span>
+        <span class="mh">0x008a</span> <span class="mo">0013</span><span class="mi">8</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">10</span><span class="p">)</span>  <span class="nx">MOVQ</span>    <span class="mi">40</span><span class="p">(</span><span class="nx">SP</span><span class="p">),</span> <span class="nx">BP</span>
+        <span class="mh">0x008f</span> <span class="mo">00143</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">10</span><span class="p">)</span>  <span class="nx">ADDQ</span>    <span class="err">$</span><span class="mi">48</span><span class="p">,</span> <span class="nx">SP</span>
+        <span class="mh">0x0093</span> <span class="mo">00147</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">10</span><span class="p">)</span>  <span class="nx">RET</span>
+        <span class="mh">0x0094</span> <span class="mo">0014</span><span class="mi">8</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">10</span><span class="p">)</span>  <span class="nx">NOP</span>
+        <span class="mh">0x0094</span> <span class="mo">0014</span><span class="mi">8</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">5</span><span class="p">)</span>   <span class="nx">PCDATA</span>  <span class="err">$</span><span class="mi">1</span><span class="p">,</span> <span class="err">$</span><span class="o">-</span><span class="mi">1</span>
+        <span class="mh">0x0094</span> <span class="mo">0014</span><span class="mi">8</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">5</span><span class="p">)</span>   <span class="nx">PCDATA</span>  <span class="err">$</span><span class="mi">0</span><span class="p">,</span> <span class="err">$</span><span class="o">-</span><span class="mi">2</span>
+        <span class="mh">0x0094</span> <span class="mo">0014</span><span class="mi">8</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">5</span><span class="p">)</span>   <span class="nx">CALL</span>    <span class="nx">runtime</span><span class="p">.</span><span class="nf">morestack_noctxt</span><span class="p">(</span><span class="nx">SB</span><span class="p">)</span>
+        <span class="mh">0x0099</span> <span class="mo">00153</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">5</span><span class="p">)</span>   <span class="nx">PCDATA</span>  <span class="err">$</span><span class="mi">0</span><span class="p">,</span> <span class="err">$</span><span class="o">-</span><span class="mi">1</span>
+        <span class="mh">0x0099</span> <span class="mo">00153</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">5</span><span class="p">)</span>   <span class="nx">JMP</span>     <span class="mi">0</span>
+
+<span class="s">&#34;&#34;</span><span class="p">.</span><span class="nx">demo1</span><span class="p">.</span><span class="nx">func1</span> <span class="nx">STEXT</span> <span class="nx">nosplit</span> <span class="nx">size</span><span class="p">=</span><span class="mi">13</span> <span class="nx">args</span><span class="p">=</span><span class="mh">0x8</span> <span class="nx">locals</span><span class="p">=</span><span class="mh">0x0</span>
+        <span class="c1">// 这里的 $0-8 就是只有一个参数没有返回值， go 代码中 defer 后面的函数
+</span><span class="c1"></span>        <span class="mh">0x0000</span> <span class="mo">00000</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">8</span><span class="p">)</span>   <span class="nx">TEXT</span>    <span class="s">&#34;&#34;</span><span class="p">.</span><span class="nx">demo1</span><span class="p">.</span><span class="nf">func1</span><span class="p">(</span><span class="nx">SB</span><span class="p">),</span> <span class="nx">NOSPLIT</span><span class="p">|</span><span class="nx">ABIInternal</span><span class="p">,</span> <span class="err">$</span><span class="mi">0</span><span class="o">-</span><span class="mi">8</span>
+        <span class="mh">0x0000</span> <span class="mo">00000</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">8</span><span class="p">)</span>   <span class="nx">FUNCDATA</span>        <span class="err">$</span><span class="mi">0</span><span class="p">,</span> <span class="nx">gclocals</span><span class="err">·</span><span class="mi">1</span><span class="nf">a65e721a2ccc325b382662e7ffee780</span><span class="p">(</span><span class="nx">SB</span><span class="p">)</span>
+        <span class="mh">0x0000</span> <span class="mo">00000</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">8</span><span class="p">)</span>   <span class="nx">FUNCDATA</span>        <span class="err">$</span><span class="mi">1</span><span class="p">,</span> <span class="nx">gclocals</span><span class="err">·</span><span class="mi">69</span><span class="nf">c1753bd5f81501d95132d08af04464</span><span class="p">(</span><span class="nx">SB</span><span class="p">)</span>
+
+        <span class="c1">// 将 8(SP) 的值给了 AX 寄存器，也就是将 16(SP) 的地址给了 AX
+</span><span class="c1"></span>        <span class="mh">0x0000</span> <span class="mo">00000</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">9</span><span class="p">)</span>   <span class="nx">MOVQ</span>    <span class="s">&#34;&#34;</span><span class="p">.</span><span class="o">&amp;</span><span class="nx">ret</span><span class="o">+</span><span class="mi">8</span><span class="p">(</span><span class="nx">SP</span><span class="p">),</span> <span class="nx">AX</span>
+
+        <span class="c1">// 将 1 给了 AX 寄存器保存的地址的位置上。这个操作像 *a = 1
+</span><span class="c1"></span>        <span class="mh">0x0005</span> <span class="mo">00005</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">9</span><span class="p">)</span>   <span class="nx">MOVQ</span>    <span class="err">$</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="nx">AX</span><span class="p">)</span>
+        <span class="mh">0x000c</span> <span class="mo">00012</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">10</span><span class="p">)</span>  <span class="nx">RET</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p>这里有了第一段汇编的讲解就不做特别具体的描述了，只标注重点关注的地方。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// go tool compile -S demo2.go
+</span><span class="c1"></span><span class="kd">func</span> <span class="nf">demo2</span><span class="p">()</span> <span class="p">(</span><span class="nx">ret</span> <span class="kt">int</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">defer</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+		<span class="nx">ret</span> <span class="p">=</span> <span class="mi">1</span>
+	<span class="p">}()</span>
+	<span class="k">return</span> <span class="nx">ret</span>
+<span class="p">}</span>
+
+<span class="c1">// 编译的汇编 demo2 部分代码 
+</span><span class="c1"></span><span class="s">&#34;&#34;</span><span class="p">.</span><span class="nx">demo2</span> <span class="nx">STEXT</span> <span class="nx">size</span><span class="p">=</span><span class="mi">138</span> <span class="nx">args</span><span class="p">=</span><span class="mh">0x8</span> <span class="nx">locals</span><span class="p">=</span><span class="mh">0x28</span>
+        <span class="mh">0x0000</span> <span class="mo">00000</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">6</span><span class="p">)</span>   <span class="nx">TEXT</span>    <span class="s">&#34;&#34;</span><span class="p">.</span><span class="nf">demo2</span><span class="p">(</span><span class="nx">SB</span><span class="p">),</span> <span class="nx">ABIInternal</span><span class="p">,</span> <span class="err">$</span><span class="mi">40</span><span class="o">-</span><span class="mi">8</span>
+        <span class="o">...</span>
+        <span class="mh">0x002c</span> <span class="mo">00044</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">6</span><span class="p">)</span>   <span class="nx">MOVB</span>    <span class="err">$</span><span class="mi">0</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">..</span><span class="nx">autotmp_2</span><span class="o">+</span><span class="mi">15</span><span class="p">(</span><span class="nx">SP</span><span class="p">)</span>
+        <span class="mh">0x0031</span> <span class="mo">0004</span><span class="mi">9</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">6</span><span class="p">)</span>   <span class="nx">MOVQ</span>    <span class="err">$</span><span class="mi">0</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">.</span><span class="nx">ret</span><span class="o">+</span><span class="mi">48</span><span class="p">(</span><span class="nx">SP</span><span class="p">)</span>
+        <span class="mh">0x003a</span> <span class="mo">0005</span><span class="mi">8</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">7</span><span class="p">)</span>   <span class="nx">LEAQ</span>    <span class="s">&#34;&#34;</span><span class="p">.</span><span class="nx">demo2</span><span class="p">.</span><span class="nx">func1</span><span class="err">·</span><span class="nf">f</span><span class="p">(</span><span class="nx">SB</span><span class="p">),</span> <span class="nx">AX</span>
+        <span class="mh">0x0041</span> <span class="mo">00065</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">7</span><span class="p">)</span>   <span class="nx">MOVQ</span>    <span class="nx">AX</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">..</span><span class="nx">autotmp_3</span><span class="o">+</span><span class="mi">24</span><span class="p">(</span><span class="nx">SP</span><span class="p">)</span>
+        
+        <span class="c1">// 将返回值地址给了 AX 寄存器
+</span><span class="c1"></span>        <span class="mh">0x0046</span> <span class="mo">00070</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">7</span><span class="p">)</span>   <span class="nx">LEAQ</span>    <span class="s">&#34;&#34;</span><span class="p">.</span><span class="nx">ret</span><span class="o">+</span><span class="mi">48</span><span class="p">(</span><span class="nx">SP</span><span class="p">),</span> <span class="nx">AX</span>
+        
+        <span class="c1">// 返回值地址给了 16(SP)
+</span><span class="c1"></span>        <span class="mh">0x004b</span> <span class="mo">00075</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">7</span><span class="p">)</span>   <span class="nx">MOVQ</span>    <span class="nx">AX</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">..</span><span class="nx">autotmp_4</span><span class="o">+</span><span class="mi">16</span><span class="p">(</span><span class="nx">SP</span><span class="p">)</span>
+        <span class="mh">0x0050</span> <span class="mo">000</span><span class="mi">80</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">10</span><span class="p">)</span>  <span class="nx">MOVB</span>    <span class="err">$</span><span class="mi">0</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">..</span><span class="nx">autotmp_2</span><span class="o">+</span><span class="mi">15</span><span class="p">(</span><span class="nx">SP</span><span class="p">)</span>
+
+        <span class="c1">// 又将 返回值地址给了 AX 寄存器
+</span><span class="c1"></span>        <span class="mh">0x0055</span> <span class="mo">000</span><span class="mi">85</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">10</span><span class="p">)</span>  <span class="nx">MOVQ</span>    <span class="s">&#34;&#34;</span><span class="p">..</span><span class="nx">autotmp_4</span><span class="o">+</span><span class="mi">16</span><span class="p">(</span><span class="nx">SP</span><span class="p">),</span> <span class="nx">AX</span>
+
+        <span class="c1">// 将返回值地址给了 0(SP)
+</span><span class="c1"></span>        <span class="c1">// 这里可以 0(SP) 为调用 demo2.func1 的入参
+</span><span class="c1"></span>        <span class="mh">0x005a</span> <span class="mo">000</span><span class="mi">90</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">10</span><span class="p">)</span>  <span class="nx">MOVQ</span>    <span class="nx">AX</span><span class="p">,</span> <span class="p">(</span><span class="nx">SP</span><span class="p">)</span>
+        <span class="mh">0x005e</span> <span class="mo">000</span><span class="mi">94</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">10</span><span class="p">)</span>  <span class="nx">PCDATA</span>  <span class="err">$</span><span class="mi">1</span><span class="p">,</span> <span class="err">$</span><span class="mi">1</span>
+        <span class="mh">0x005e</span> <span class="mo">000</span><span class="mi">94</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">10</span><span class="p">)</span>  <span class="nx">NOP</span>
+
+        <span class="c1">// 调用了 demo2.func1
+</span><span class="c1"></span>        <span class="mh">0x0060</span> <span class="mo">000</span><span class="mi">96</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">10</span><span class="p">)</span>  <span class="nx">CALL</span>    <span class="s">&#34;&#34;</span><span class="p">.</span><span class="nx">demo2</span><span class="p">.</span><span class="nf">func1</span><span class="p">(</span><span class="nx">SB</span><span class="p">)</span>
+        <span class="mh">0x0065</span> <span class="mo">00101</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">10</span><span class="p">)</span>  <span class="nx">MOVQ</span>    <span class="mi">32</span><span class="p">(</span><span class="nx">SP</span><span class="p">),</span> <span class="nx">BP</span>
+        <span class="mh">0x006a</span> <span class="mo">00106</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">10</span><span class="p">)</span>  <span class="nx">ADDQ</span>    <span class="err">$</span><span class="mi">40</span><span class="p">,</span> <span class="nx">SP</span>
+        <span class="mh">0x006e</span> <span class="mo">00110</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">10</span><span class="p">)</span>  <span class="nx">RET</span>
+        <span class="mh">0x006f</span> <span class="mo">00111</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">10</span><span class="p">)</span>  <span class="nx">CALL</span>    <span class="nx">runtime</span><span class="p">.</span><span class="nf">deferreturn</span><span class="p">(</span><span class="nx">SB</span><span class="p">)</span>
+        <span class="mh">0x0074</span> <span class="mo">00116</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">10</span><span class="p">)</span>  <span class="nx">MOVQ</span>    <span class="mi">32</span><span class="p">(</span><span class="nx">SP</span><span class="p">),</span> <span class="nx">BP</span>
+        <span class="mh">0x0079</span> <span class="mo">00121</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">10</span><span class="p">)</span>  <span class="nx">ADDQ</span>    <span class="err">$</span><span class="mi">40</span><span class="p">,</span> <span class="nx">SP</span>
+        <span class="mh">0x007d</span> <span class="mo">00125</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">10</span><span class="p">)</span>  <span class="nx">RET</span>
+        <span class="mh">0x007e</span> <span class="mo">00126</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">10</span><span class="p">)</span>  <span class="nx">NOP</span>
+        <span class="mh">0x007e</span> <span class="mo">00126</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">6</span><span class="p">)</span>   <span class="nx">PCDATA</span>  <span class="err">$</span><span class="mi">1</span><span class="p">,</span> <span class="err">$</span><span class="o">-</span><span class="mi">1</span>
+        <span class="mh">0x007e</span> <span class="mo">00126</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">6</span><span class="p">)</span>   <span class="nx">PCDATA</span>  <span class="err">$</span><span class="mi">0</span><span class="p">,</span> <span class="err">$</span><span class="o">-</span><span class="mi">2</span>
+        <span class="mh">0x007e</span> <span class="mo">00126</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">6</span><span class="p">)</span>   <span class="nx">NOP</span>
+        <span class="mh">0x0080</span> <span class="mo">0012</span><span class="mi">8</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">6</span><span class="p">)</span>   <span class="nx">CALL</span>    <span class="nx">runtime</span><span class="p">.</span><span class="nf">morestack_noctxt</span><span class="p">(</span><span class="nx">SB</span><span class="p">)</span>
+        <span class="mh">0x0085</span> <span class="mo">00133</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">6</span><span class="p">)</span>   <span class="nx">PCDATA</span>  <span class="err">$</span><span class="mi">0</span><span class="p">,</span> <span class="err">$</span><span class="o">-</span><span class="mi">1</span>
+        <span class="mh">0x0085</span> <span class="mo">00133</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">6</span><span class="p">)</span>   <span class="nx">JMP</span>     <span class="mi">0</span>
+
+<span class="s">&#34;&#34;</span><span class="p">.</span><span class="nx">demo2</span><span class="p">.</span><span class="nx">func1</span> <span class="nx">STEXT</span> <span class="nx">nosplit</span> <span class="nx">size</span><span class="p">=</span><span class="mi">13</span> <span class="nx">args</span><span class="p">=</span><span class="mh">0x8</span> <span class="nx">locals</span><span class="p">=</span><span class="mh">0x0</span>
+        <span class="mh">0x0000</span> <span class="mo">00000</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">7</span><span class="p">)</span>   <span class="nx">TEXT</span>    <span class="s">&#34;&#34;</span><span class="p">.</span><span class="nx">demo2</span><span class="p">.</span><span class="nf">func1</span><span class="p">(</span><span class="nx">SB</span><span class="p">),</span> <span class="nx">NOSPLIT</span><span class="p">|</span><span class="nx">ABIInternal</span><span class="p">,</span> <span class="err">$</span><span class="mi">0</span><span class="o">-</span><span class="mi">8</span>
+        <span class="mh">0x0000</span> <span class="mo">00000</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">7</span><span class="p">)</span>   <span class="nx">FUNCDATA</span>        <span class="err">$</span><span class="mi">0</span><span class="p">,</span> <span class="nx">gclocals</span><span class="err">·</span><span class="mi">1</span><span class="nf">a65e721a2ccc325b382662e7ffee780</span><span class="p">(</span><span class="nx">SB</span><span class="p">)</span>
+        <span class="mh">0x0000</span> <span class="mo">00000</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">7</span><span class="p">)</span>   <span class="nx">FUNCDATA</span>        <span class="err">$</span><span class="mi">1</span><span class="p">,</span> <span class="nx">gclocals</span><span class="err">·</span><span class="mi">69</span><span class="nf">c1753bd5f81501d95132d08af04464</span><span class="p">(</span><span class="nx">SB</span><span class="p">)</span>
+        <span class="mh">0x0000</span> <span class="mo">00000</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">8</span><span class="p">)</span>   <span class="nx">MOVQ</span>    <span class="s">&#34;&#34;</span><span class="p">.</span><span class="o">&amp;</span><span class="nx">ret</span><span class="o">+</span><span class="mi">8</span><span class="p">(</span><span class="nx">SP</span><span class="p">),</span> <span class="nx">AX</span>
+        <span class="c1">// 这里将返回值的值修改成了 1
+</span><span class="c1"></span>        <span class="mh">0x0005</span> <span class="mo">00005</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">8</span><span class="p">)</span>   <span class="nx">MOVQ</span>    <span class="err">$</span><span class="mi">1</span><span class="p">,</span> <span class="p">(</span><span class="nx">AX</span><span class="p">)</span>
+        <span class="mh">0x000c</span> <span class="mo">00012</span> <span class="p">(.</span><span class="err">\</span><span class="nx">scratch</span><span class="p">.</span><span class="k">go</span><span class="p">:</span><span class="mi">9</span><span class="p">)</span>   <span class="nx">RET</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p>以上就是两个方法的汇编源码解析，从两个栗子中可以得到结果。</p>
+<p>demo1 中的 ret 是临时变量，虽然 defer 确实改了 ret 的值，但这个值跟返回值没一毛钱关系，而且在汇编中 demo1 的返回值在还没调用 demo1.func1 的时候就已经确定了，所以 demo1 返回了 -1。</p>
+<p>demo2 中的 ret 则直接指向了返回值的地址，defer 也改了返回值的值， 所以 demo2 就返回了 1。</p>
+<h2 id="参考">参考</h2>
+<ol>
+<li><a href="https://golang.org/doc/asm#directives">https://golang.org/doc/asm#directives</a></li>
+<li><a href="https://xargin.com/plan9-assembly/">https://xargin.com/plan9-assembly/</a></li>
+<li><a href="https://www.doxsey.net/blog/go-and-assembly">https://www.doxsey.net/blog/go-and-assembly</a></li>
+<li><a href="https://davidwong.fr/goasm/">https://davidwong.fr/goasm/</a></li>
+</ol>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Mioto</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2021-01-19
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/go/">Go</a>
+          <a href="/tags/assembly/">Assembly</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/2020/10/http-response-write-timeout/">
+            <span class="next-text nav-default">Go HTTP Response 写超时导致的 EOF 错误</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'yakumioto';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:yaku.mioto@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/9176562" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/yakumioto" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/yakumioto" class="iconfont icon-github" title="github"></a>
+      <a href="https://space.bilibili.com/16846820" class="iconfont icon-bilibili" title="bilibili"></a>
+      <a href="https://www.zhihu.com/people/yakumioto" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.linkedin.com/in/yakumioto" class="iconfont icon-linkedin" title="linkedin"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2021<span class="heart"><i class="iconfont icon-heart"></i></span><span>Mioto</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.min.js" integrity="sha256-jwCP0NAdCBloaIWTWHmW4i3snUNMHUNO+jr9rYd2iOI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.locales.min.js" integrity="sha256-ZwofwC1Lf/faQCzN7nZtfijVV6hSwxjQMwXL4gn9qU8=" crossorigin="anonymous"></script>
+  <script><!-- NOTE: timeago.js uses the language code format like "zh_CN" (underscore and case sensitive) -->
+    var languageCode = "zh-cn".replace(/-/g, '_').replace(/_(.*)/, function ($0, $1) {return $0.replace($1, $1.toUpperCase());});
+    timeago().render(document.querySelectorAll('.timeago'), languageCode);
+    timeago.cancel();  
+  </script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-102233768-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

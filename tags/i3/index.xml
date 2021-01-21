@@ -9,10 +9,10 @@
     <lastBuildDate>Sun, 28 Apr 2019 11:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/i3/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>i3wm 更换默认打开的文件管理器</title>
-      <link>http://localhost:1313/2019/04/i3wm-%E6%9B%B4%E6%8D%A2%E9%BB%98%E8%AE%A4%E6%89%93%E5%BC%80%E7%9A%84%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86%E5%99%A8/</link>
+      <link>http://localhost:1313/2019/04/i3-change-default-file-manager/</link>
       <pubDate>Sun, 28 Apr 2019 11:00:00 +0000</pubDate>
       
-      <guid>http://localhost:1313/2019/04/i3wm-%E6%9B%B4%E6%8D%A2%E9%BB%98%E8%AE%A4%E6%89%93%E5%BC%80%E7%9A%84%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86%E5%99%A8/</guid>
+      <guid>http://localhost:1313/2019/04/i3-change-default-file-manager/</guid>
       <description>可以通过 xdg-mime 来查询当前默认的文件管理器 xdg-mime query default inode/directory 1 2 mioto:~/ $ xdg-mime query default inode/directory visual-studio-code.desktop 方法一 还是可以通过 xdg-mime 来设置默认文件管理器 xdg-mime default {file manager}.desktop inode/directory 1 2 3 mioto:~/ $ xdg-mime default ranger.desktop inode/directory mioto:~/ $ xdg-mime query default</description>
     </item>
     
