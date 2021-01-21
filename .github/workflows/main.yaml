@@ -29,8 +29,3 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: master
-      - name: sending msg
-        uses: yakumioto/serverchan-action@v1
-        with:
-          key: ${{ secrets.GITHUB_SERVERCHAN_KEY }}
-          text: 网站部署成功!
