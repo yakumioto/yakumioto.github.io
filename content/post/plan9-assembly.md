@@ -3,8 +3,8 @@ title: "Plan9 汇编入门讲解"
 categories:
 - 学习
 tags:
-- golang
-- assembly
+- Go
+- Assembly
 date: 2021-01-19T17:23:23+08:00
 ---
 
