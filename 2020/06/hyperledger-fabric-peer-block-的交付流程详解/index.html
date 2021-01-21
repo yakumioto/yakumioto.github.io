@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Hyperledger Fabric peer block 的交付流程详解 - Mioto&#39;s Blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="Mioto" /><meta name="description" content="本文基于 hyperldeger fabric 1.4.7 进行代码追踪讲解 假设场景描述: peer 重启场景 peer 有 user channel peer 使用的是 goleveldb peer 的 core.peer.gossip.orgLeader 为 true 流程简介 初始化账本根据账本中保存的 channel id 创建通道实例, 并初" /><meta name="keywords" content="Mioto&#39;s Blog, Mioto, Yaku Mioto, Mioto Yaku" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.79.1 with theme even" />
+
+
+<link rel="canonical" href="http://localhost:1313/2020/06/hyperledger-fabric-peer-block-%E7%9A%84%E4%BA%A4%E4%BB%98%E6%B5%81%E7%A8%8B%E8%AF%A6%E8%A7%A3/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.2e81bbed97b8b282c1aeb57488cc71c8d8c8ec559f3931531bd396bf31e0d4dd.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Hyperledger Fabric peer block 的交付流程详解" />
+<meta property="og:description" content="本文基于 hyperldeger fabric 1.4.7 进行代码追踪讲解 假设场景描述: peer 重启场景 peer 有 user channel peer 使用的是 goleveldb peer 的 core.peer.gossip.orgLeader 为 true 流程简介 初始化账本根据账本中保存的 channel id 创建通道实例, 并初" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://localhost:1313/2020/06/hyperledger-fabric-peer-block-%E7%9A%84%E4%BA%A4%E4%BB%98%E6%B5%81%E7%A8%8B%E8%AF%A6%E8%A7%A3/" />
+<meta property="article:published_time" content="2020-06-15T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-06-15T00:00:00+00:00" />
+<meta itemprop="name" content="Hyperledger Fabric peer block 的交付流程详解">
+<meta itemprop="description" content="本文基于 hyperldeger fabric 1.4.7 进行代码追踪讲解 假设场景描述: peer 重启场景 peer 有 user channel peer 使用的是 goleveldb peer 的 core.peer.gossip.orgLeader 为 true 流程简介 初始化账本根据账本中保存的 channel id 创建通道实例, 并初">
+<meta itemprop="datePublished" content="2020-06-15T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2020-06-15T00:00:00+00:00" />
+<meta itemprop="wordCount" content="1495">
+
+
+
+<meta itemprop="keywords" content="Go,Hyperledger Fabric," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Hyperledger Fabric peer block 的交付流程详解"/>
+<meta name="twitter:description" content="本文基于 hyperldeger fabric 1.4.7 进行代码追踪讲解 假设场景描述: peer 重启场景 peer 有 user channel peer 使用的是 goleveldb peer 的 core.peer.gossip.orgLeader 为 true 流程简介 初始化账本根据账本中保存的 channel id 创建通道实例, 并初"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Mioto&#39;s Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+
+  
+
+
+</nav>
+
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Mioto&#39;s Blog</a>
+</div>
+
+
+
+
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Hyperledger Fabric peer block 的交付流程详解</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-06-15 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#流程简介">流程简介</a></li>
+        <li><a href="#源码追踪">源码追踪</a>
+          <ul>
+            <li><a href="#peerinitialize">peer.Initialize</a></li>
+            <li><a href="#servicegossipserviceimplinitializechannel">service.gossipServiceImpl.InitializeChannel</a></li>
+            <li><a href="#blocksproviderblocksproviderimpldeliverblocks">blocksprovider.blocksProviderImpl.DeliverBlocks</a></li>
+            <li><a href="#stategossipstateproviderimplcommitblock">state.GossipStateProviderImpl.commitBlock</a></li>
+            <li><a href="#privdatacoordinatorstoreblock">privdata.coordinator.StoreBlock</a></li>
+            <li><a href="#committerledgercommittercommitwithpvtdata">committer.LedgerCommitter.CommitWithPvtData</a></li>
+          </ul>
+        </li>
+        <li><a href="#额外收获">额外收获</a>
+          <ul>
+            <li><a href="#filelock">fileLock</a></li>
+            <li><a href="#参考">参考</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</div>
+  <div class="post-outdated">
+    <div class="hint">
+      <p>【注意】最后更新于 <span class="timeago" datetime="2020-06-15T00:00:00" title="June 15, 2020">June 15, 2020</span>，文中内容可能已过时，请谨慎使用。</p>
+    </div>
+  </div>
+    <div class="post-content">
+      <p>本文基于 <code>hyperldeger fabric 1.4.7</code> 进行代码追踪讲解</p>
+<p>假设场景描述:</p>
+<ol>
+<li>peer 重启场景</li>
+<li>peer 有 user channel</li>
+<li>peer 使用的是 goleveldb</li>
+<li>peer 的 <code>core.peer.gossip.orgLeader</code> 为 <code>true</code></li>
+</ol>
+<h2 id="流程简介">流程简介</h2>
+<p>初始化账本根据账本中保存的 <code>channel id</code> 创建通道实例, 并初始化与之对等的 <code>gossip</code> 服务, 用
+来接收对应通道的最新的 配置或交易 <code>block</code>, 接收到 <code>block</code> 后, 经过 <code>Verify</code>, <code>Validate</code>,
+<code>Validate RW sets</code> 三个验证步骤, 提交给 <code>Ledger Commiter</code> 进行写入文件, 并将当前通道的
+<code>blkMgrInfo</code> 更新到最新状态</p>
+<h2 id="源码追踪">源码追踪</h2>
+<p>伊始: main -&gt; node.Cmd -&gt; startCmd -&gt; nodeStartCmd -&gt; serve</p>
+<h3 id="peerinitialize">peer.Initialize</h3>
+<p>文件: <code>core/peer/peer.go:241</code></p>
+<p>初始化 ledgermgmt, 里面做的事情太多了, 要讲清楚有点困难建议大家自己去看看, 里面主要做的就是
+各种初始化工作</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="c1">// /var/hyperledger/production/ledgersData 下有这些东西, 这里面的工作跟此目录有关
+</span><span class="c1">// chains/index goleveldb: 保存了所有通道的最新状态信息
+</span><span class="c1">// fileLock goleveldb: 用于锁程序的,文章最末尾有介绍
+</span><span class="c1">// historyLeveldb goleveldb: 保存历史交易的
+</span><span class="c1">// ledgerProvider goleveldb: 保存的是 chain ids, 也就是通道id
+</span><span class="c1">// pvtdataStore goleveldb: 存储私有数据库
+</span><span class="c1">// stateLeveldb goleveldb: 世界状态数据库, 可以替换为 couchdb
+</span><span class="c1"></span>
+<span class="c1">// 这两个我不确定没有细追
+</span><span class="c1">// configHistory 看名字应该是保存了 config block 相关的东西.
+</span><span class="c1">// bookkeeper 不知道.
+</span><span class="c1"></span><span class="nx">ledgermgmt</span><span class="p">.</span><span class="nf">Initialize</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">ledgermgmt</span><span class="p">.</span><span class="nx">Initializer</span><span class="p">{</span>
+    <span class="nx">CustomTxProcessors</span><span class="p">:</span>            <span class="nx">ConfigTxProcessors</span><span class="p">,</span>
+    <span class="nx">PlatformRegistry</span><span class="p">:</span>              <span class="nx">pr</span><span class="p">,</span>
+    <span class="nx">DeployedChaincodeInfoProvider</span><span class="p">:</span> <span class="nx">deployedCCInfoProvider</span><span class="p">,</span>
+    <span class="nx">MembershipInfoProvider</span><span class="p">:</span>        <span class="nx">membershipProvider</span><span class="p">,</span>
+    <span class="nx">MetricsProvider</span><span class="p">:</span>               <span class="nx">metricsProvider</span><span class="p">,</span>
+<span class="p">})</span>
+
+<span class="c1">// 就是通过 /var/hyperledger/production/ledgersData/ledgerProvider 获取的 id 列表
+</span><span class="c1"></span><span class="nx">ledgerIds</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ledgermgmt</span><span class="p">.</span><span class="nf">GetLedgerIDs</span><span class="p">()</span>
+<span class="o">...</span>
+<span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">cid</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">ledgerIds</span> <span class="p">{</span>
+
+    <span class="c1">// 打开对应通道的账本, 例如打开 block 的最新文件, 加载最新的账本信息等
+</span><span class="c1"></span>    <span class="k">if</span> <span class="nx">ledger</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">ledgermgmt</span><span class="p">.</span><span class="nf">OpenLedger</span><span class="p">(</span><span class="nx">cid</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="o">...</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 获取最新的交易块, 通过交易块获取最新的配置块的 number, 在通过 number 查询到最新的配置块
+</span><span class="c1"></span>    <span class="c1">// 有兴趣可以往下追一追看看
+</span><span class="c1"></span>    <span class="k">if</span> <span class="nx">cb</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nf">getCurrConfigBlockFromLedger</span><span class="p">(</span><span class="nx">ledger</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="o">...</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 创建通道实例, 传了 通道id, 账本实例, 最新的配置块等.
+</span><span class="c1"></span>    <span class="k">if</span> <span class="nx">err</span> <span class="p">=</span> <span class="nf">createChain</span><span class="p">(</span><span class="nx">cid</span><span class="p">,</span> <span class="nx">ledger</span><span class="p">,</span> <span class="nx">cb</span><span class="p">,</span> <span class="nx">ccp</span><span class="p">,</span> <span class="nx">sccp</span><span class="p">,</span> <span class="nx">pm</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="o">...</span>
+    <span class="p">}</span>
+
+    <span class="nf">InitChain</span><span class="p">(</span><span class="nx">cid</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">createChain</span><span class="p">(</span>
+    <span class="nx">cid</span> <span class="kt">string</span><span class="p">,</span>
+    <span class="nx">ledger</span> <span class="nx">ledger</span><span class="p">.</span><span class="nx">PeerLedger</span><span class="p">,</span>
+    <span class="nx">cb</span> <span class="o">*</span><span class="nx">common</span><span class="p">.</span><span class="nx">Block</span><span class="p">,</span>
+    <span class="nx">ccp</span> <span class="nx">ccprovider</span><span class="p">.</span><span class="nx">ChaincodeProvider</span><span class="p">,</span>
+    <span class="nx">sccp</span> <span class="nx">sysccprovider</span><span class="p">.</span><span class="nx">SystemChaincodeProvider</span><span class="p">,</span>
+    <span class="nx">pm</span> <span class="nx">txvalidator</span><span class="p">.</span><span class="nx">PluginMapper</span><span class="p">,</span>
+<span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+    <span class="c1">// 初始化 gossip 服务用到的配置, vscc, 等相关资源初始化, 有兴趣的可以看看这个函数,
+</span><span class="c1"></span>    <span class="c1">// 这里就不做介绍了
+</span><span class="c1"></span>    <span class="o">...</span>
+    <span class="c1">// 初始化 gossip service 方法
+</span><span class="c1"></span>    <span class="nx">service</span><span class="p">.</span><span class="nf">GetGossipService</span><span class="p">().</span><span class="nf">InitializeChannel</span><span class="p">(</span><span class="nx">bundle</span><span class="p">.</span><span class="nf">ConfigtxValidator</span><span class="p">().</span><span class="nf">ChainID</span><span class="p">(),</span> <span class="nx">oac</span><span class="p">,</span> <span class="nx">service</span><span class="p">.</span><span class="nx">Support</span><span class="p">{</span>
+        <span class="nx">Validator</span><span class="p">:</span>            <span class="nx">validator</span><span class="p">,</span>
+        <span class="nx">Committer</span><span class="p">:</span>            <span class="nx">c</span><span class="p">,</span>
+        <span class="nx">Store</span><span class="p">:</span>                <span class="nx">store</span><span class="p">,</span>
+        <span class="nx">Cs</span><span class="p">:</span>                   <span class="nx">simpleCollectionStore</span><span class="p">,</span>
+        <span class="nx">IdDeserializeFactory</span><span class="p">:</span> <span class="nx">csStoreSupport</span><span class="p">,</span>
+        <span class="nx">CapabilityProvider</span><span class="p">:</span>   <span class="nx">cp</span><span class="p">,</span>
+    <span class="p">})</span>
+    <span class="o">...</span>
+    <span class="k">return</span> <span class="kc">nil</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="servicegossipserviceimplinitializechannel">service.gossipServiceImpl.InitializeChannel</h3>
+<p>文件: <code>gossip/service/gossip_service.go:273</code></p>
+<p><code>gossip service</code> 的作用是管理 <code>gossip client</code>, 每个 <code>channel</code> 会启动一个 <code>gossip client</code>
+每个 <code>gossip client</code> 会启动一个 <code>deliver block</code></p>
+<p>在 <code>InitializeChannel</code> 主要是初始化工作的</p>
+<ol>
+<li>初始化 <code>private data fetcher</code></li>
+<li>初始化 <code>coordinator</code></li>
+<li>初始化 <code>gossip</code> 参数</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">g</span> <span class="o">*</span><span class="nx">gossipServiceImpl</span><span class="p">)</span> <span class="nf">InitializeChannel</span><span class="p">(</span><span class="nx">chainID</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">oac</span> <span class="nx">OrdererAddressConfig</span><span class="p">,</span> <span class="nx">support</span> <span class="nx">Support</span><span class="p">)</span> <span class="p">{</span>
+    <span class="o">...</span>
+    <span class="c1">// Delivery service might be nil only if it was not able to get connected
+</span><span class="c1"></span>    <span class="c1">// to the ordering service
+</span><span class="c1"></span>    <span class="k">if</span> <span class="nx">g</span><span class="p">.</span><span class="nx">deliveryService</span><span class="p">[</span><span class="nx">chainID</span><span class="p">]</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="c1">// 根据 core.yaml 或者 环境变量设置的两个个值在下方有不同的启动方式
+</span><span class="c1"></span>        <span class="nx">leaderElection</span> <span class="o">:=</span> <span class="nx">viper</span><span class="p">.</span><span class="nf">GetBool</span><span class="p">(</span><span class="s">&#34;peer.gossip.useLeaderElection&#34;</span><span class="p">)</span>
+        <span class="nx">isStaticOrgLeader</span> <span class="o">:=</span> <span class="nx">viper</span><span class="p">.</span><span class="nf">GetBool</span><span class="p">(</span><span class="s">&#34;peer.gossip.orgLeader&#34;</span><span class="p">)</span>
+
+        <span class="o">...</span>
+
+        <span class="k">if</span> <span class="nx">leaderElection</span> <span class="p">{</span>
+            <span class="nx">logger</span><span class="p">.</span><span class="nf">Debug</span><span class="p">(</span><span class="s">&#34;Delivery uses dynamic leader election mechanism, channel&#34;</span><span class="p">,</span> <span class="nx">chainID</span><span class="p">)</span>
+            <span class="nx">g</span><span class="p">.</span><span class="nx">leaderElection</span><span class="p">[</span><span class="nx">chainID</span><span class="p">]</span> <span class="p">=</span> <span class="nx">g</span><span class="p">.</span><span class="nf">newLeaderElectionComponent</span><span class="p">(</span><span class="nx">chainID</span><span class="p">,</span> <span class="nx">g</span><span class="p">.</span><span class="nf">onStatusChangeFactory</span><span class="p">(</span><span class="nx">chainID</span><span class="p">,</span>
+                <span class="nx">support</span><span class="p">.</span><span class="nx">Committer</span><span class="p">),</span> <span class="nx">g</span><span class="p">.</span><span class="nx">metrics</span><span class="p">.</span><span class="nx">ElectionMetrics</span><span class="p">)</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="nx">isStaticOrgLeader</span> <span class="p">{</span>
+            <span class="nx">logger</span><span class="p">.</span><span class="nf">Debug</span><span class="p">(</span><span class="s">&#34;This peer is configured to connect to ordering service for blocks delivery, channel&#34;</span><span class="p">,</span> <span class="nx">chainID</span><span class="p">)</span>
+            <span class="nx">g</span><span class="p">.</span><span class="nx">deliveryService</span><span class="p">[</span><span class="nx">chainID</span><span class="p">].</span><span class="nf">StartDeliverForChannel</span><span class="p">(</span><span class="nx">chainID</span><span class="p">,</span> <span class="nx">support</span><span class="p">.</span><span class="nx">Committer</span><span class="p">,</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{})</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="nx">logger</span><span class="p">.</span><span class="nf">Debug</span><span class="p">(</span><span class="s">&#34;This peer is not configured to connect to ordering service for blocks delivery, channel&#34;</span><span class="p">,</span> <span class="nx">chainID</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">logger</span><span class="p">.</span><span class="nf">Warning</span><span class="p">(</span><span class="s">&#34;Delivery client is down won&#39;t be able to pull blocks for chain&#34;</span><span class="p">,</span> <span class="nx">chainID</span><span class="p">)</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="blocksproviderblocksproviderimpldeliverblocks">blocksprovider.blocksProviderImpl.DeliverBlocks</h3>
+<p>文件: <code>core/deliverservice/blocksprovider/blocksprovider.go:110</code></p>
+<p>获取到最新的 <code>gossip message</code>, 根据类型判断是否是区块, 然后调用 <code>VerifyBlock</code> 进行验, 最后在添加到账本中</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">b</span> <span class="o">*</span><span class="nx">blocksProviderImpl</span><span class="p">)</span> <span class="nf">DeliverBlocks</span><span class="p">()</span> <span class="p">{</span>
+    <span class="o">...</span>
+    <span class="k">for</span> <span class="p">!</span><span class="nx">b</span><span class="p">.</span><span class="nf">isDone</span><span class="p">()</span> <span class="p">{</span>
+        <span class="o">...</span>
+        <span class="k">switch</span> <span class="nx">t</span> <span class="o">:=</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">Type</span><span class="p">.(</span><span class="kd">type</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">case</span> <span class="o">*</span><span class="nx">orderer</span><span class="p">.</span><span class="nx">DeliverResponse_Status</span><span class="p">:</span>
+            <span class="o">...</span>
+        <span class="k">case</span> <span class="o">*</span><span class="nx">orderer</span><span class="p">.</span><span class="nx">DeliverResponse_Block</span><span class="p">:</span>
+            <span class="o">...</span>
+            <span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">b</span><span class="p">.</span><span class="nx">mcs</span><span class="p">.</span><span class="nf">VerifyBlock</span><span class="p">(</span><span class="nx">gossipcommon</span><span class="p">.</span><span class="nf">ChainID</span><span class="p">(</span><span class="nx">b</span><span class="p">.</span><span class="nx">chainID</span><span class="p">),</span> <span class="nx">blockNum</span><span class="p">,</span> <span class="nx">marshaledBlock</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+                <span class="nx">logger</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;[%s] Error verifying block with sequence number %d, due to %s&#34;</span><span class="p">,</span> <span class="nx">b</span><span class="p">.</span><span class="nx">chainID</span><span class="p">,</span> <span class="nx">blockNum</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+                <span class="k">continue</span>
+            <span class="p">}</span>
+
+            <span class="o">...</span>
+            <span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">b</span><span class="p">.</span><span class="nx">gossip</span><span class="p">.</span><span class="nf">AddPayload</span><span class="p">(</span><span class="nx">b</span><span class="p">.</span><span class="nx">chainID</span><span class="p">,</span> <span class="nx">payload</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+                <span class="nx">logger</span><span class="p">.</span><span class="nf">Warningf</span><span class="p">(</span><span class="s">&#34;Block [%d] received from ordering service wasn&#39;t added to payload buffer: %v&#34;</span><span class="p">,</span> <span class="nx">blockNum</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+            <span class="p">}</span>
+            <span class="o">...</span>
+        <span class="k">default</span><span class="p">:</span>
+            <span class="nx">logger</span><span class="p">.</span><span class="nf">Warningf</span><span class="p">(</span><span class="s">&#34;[%s] Received unknown: %v&#34;</span><span class="p">,</span> <span class="nx">b</span><span class="p">.</span><span class="nx">chainID</span><span class="p">,</span> <span class="nx">t</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="stategossipstateproviderimplcommitblock">state.GossipStateProviderImpl.commitBlock</h3>
+<p>文件: <code>gossip/state/state.go:805</code></p>
+<p><code>block</code> 经过一层层的传递, 最终到了 <code>gossip state</code> 中, 这也是 <code>block</code> 在 <code>gossip</code> 中的最后一环</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">s</span> <span class="o">*</span><span class="nx">GossipStateProviderImpl</span><span class="p">)</span> <span class="nf">commitBlock</span><span class="p">(</span><span class="nx">block</span> <span class="o">*</span><span class="nx">common</span><span class="p">.</span><span class="nx">Block</span><span class="p">,</span> <span class="nx">pvtData</span> <span class="nx">util</span><span class="p">.</span><span class="nx">PvtDataCollections</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+    <span class="o">...</span>
+    <span class="c1">// 将 block 和 pvtdata 交给 ledger 进行存储
+</span><span class="c1"></span>    <span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">s</span><span class="p">.</span><span class="nx">ledger</span><span class="p">.</span><span class="nf">StoreBlock</span><span class="p">(</span><span class="nx">block</span><span class="p">,</span> <span class="nx">pvtData</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="nx">logger</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;Got error while committing(%+v)&#34;</span><span class="p">,</span> <span class="nx">errors</span><span class="p">.</span><span class="nf">WithStack</span><span class="p">(</span><span class="nx">err</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nx">err</span>
+    <span class="p">}</span>
+    <span class="o">...</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="privdatacoordinatorstoreblock">privdata.coordinator.StoreBlock</h3>
+<p>文件: <code>gossip/privdata/coordinator.go:163</code></p>
+<p>在这里面会校验 <code>block</code> 的签名, 读写集等, 然后传给 <code>CommitWithPvtData</code> 方法</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-go" data-lang="go"><span class="kd">func</span> <span class="p">(</span><span class="nx">c</span> <span class="o">*</span><span class="nx">coordinator</span><span class="p">)</span> <span class="nf">StoreBlock</span><span class="p">(</span><span class="nx">block</span> <span class="o">*</span><span class="nx">common</span><span class="p">.</span><span class="nx">Block</span><span class="p">,</span> <span class="nx">privateDataSets</span> <span class="nx">util</span><span class="p">.</span><span class="nx">PvtDataCollections</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+    <span class="o">...</span>
+
+    <span class="nx">validationStart</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">()</span>
+    <span class="nx">err</span> <span class="o">:=</span> <span class="nx">c</span><span class="p">.</span><span class="nx">Validator</span><span class="p">.</span><span class="nf">Validate</span><span class="p">(</span><span class="nx">block</span><span class="p">)</span>
+    <span class="nx">c</span><span class="p">.</span><span class="nf">reportValidationDuration</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nf">Since</span><span class="p">(</span><span class="nx">validationStart</span><span class="p">))</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="nx">logger</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;Validation failed: %+v&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nx">err</span>
+    <span class="p">}</span>
+
+    <span class="o">...</span>
+
+    <span class="c1">// commit block and private data
+</span><span class="c1"></span>    <span class="nx">commitStart</span> <span class="o">:=</span> <span class="nx">time</span><span class="p">.</span><span class="nf">Now</span><span class="p">()</span>
+    <span class="nx">err</span> <span class="p">=</span> <span class="nx">c</span><span class="p">.</span><span class="nf">CommitWithPvtData</span><span class="p">(</span><span class="nx">blockAndPvtData</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">ledger</span><span class="p">.</span><span class="nx">CommitOptions</span><span class="p">{})</span>
+    <span class="nx">c</span><span class="p">.</span><span class="nf">reportCommitDuration</span><span class="p">(</span><span class="nx">time</span><span class="p">.</span><span class="nf">Since</span><span class="p">(</span><span class="nx">commitStart</span><span class="p">))</span>
+    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">errors</span><span class="p">.</span><span class="nf">Wrap</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="s">&#34;commit failed&#34;</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="o">...</span>
+
+    <span class="k">return</span> <span class="kc">nil</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="committerledgercommittercommitwithpvtdata">committer.LedgerCommitter.CommitWithPvtData</h3>
+<p>文件: <code>core/committer/committer_impl.go:87</code></p>
+<p>块会交给 <code>kvledger</code> 进行存储, 以下追踪就跟主题无关了, 我把方法列到下面, 有需求可以自己看</p>
+<p>kvledger.kvLedger.CommitWithPvtData: <code>core/ledger/ledgerstorage/store.go:113</code></p>
+<p>fsblkstorage.fsBlockStore.AddBlock: <code>common/ledger/blkstorage/fsblkstorage/fs_blockstore.go:51</code></p>
+<p>fsblkstorage.blockfileMgr.addBlock: <code>common/ledger/blkstorage/fsblkstorage/blockfile_mgr.go:240</code></p>
+<h2 id="额外收获">额外收获</h2>
+<h3 id="filelock">fileLock</h3>
+<p><code>Fabric</code> 中的 <code>ledger management</code> 有一个数据库叫做 <code>fileLock</code>, 最开始不理解为什么要这
+么实现,后来读这部分 <code>UnLock</code> 的代码发现, 这是类似于一个君子协议的东西, <code>peer reset</code> 命令里
+会打开该数据库, 如果失败就证明有其他程序在使用.</p>
+<p>栗子:</p>
+<p><code>peer node start</code> 启动时会打开 <code>fileLock</code> 的数据库连接, 这时如果你想执行<code>peer reset</code>
+这个进程启动是也会去对 <code>fileLock</code> 创建连接, 但是会失败, <code>peer reset</code> 会终止.</p>
+<h3 id="参考">参考</h3>
+<p><a href="https://github.com/hyperledger/fabric/tree/v1.4.7">https://github.com/hyperledger/fabric/tree/v1.4.7</a></p>
+
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">Mioto</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-06-15
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/go/">Go</a>
+          <a href="/tags/hyperledger-fabric/">Hyperledger Fabric</a>
+          </div>
+      <nav class="post-nav">
+        <a class="prev" href="/2020/06/hyperledger-fabric-%E5%8A%A0%E5%85%A5%E9%80%9A%E9%81%93%E6%97%B6%E9%81%87%E5%88%B0-channel-doesnt-exist-%E9%97%AE%E9%A2%98/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">Hyperledger Fabric 加入通道时遇到 channel doesn&#39;t exist 问题</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/2020/06/go-%E5%88%A0%E9%99%A4-slice-%E4%B8%AD%E7%9A%84%E6%9F%90%E4%B8%80%E4%B8%AA%E5%80%BC/">
+            <span class="next-text nav-default">Go 删除 Slice 中的某一个值</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'yakumioto';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:yaku.mioto@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://stackoverflow.com/users/9176562" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="https://twitter.com/yakumioto" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="https://github.com/yakumioto" class="iconfont icon-github" title="github"></a>
+      <a href="https://space.bilibili.com/16846820" class="iconfont icon-bilibili" title="bilibili"></a>
+      <a href="https://www.zhihu.com/people/yakumioto" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="https://www.linkedin.com/in/yakumioto" class="iconfont icon-linkedin" title="linkedin"></a>
+  <a href="http://localhost:1313/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2021<span class="heart"><i class="iconfont icon-heart"></i></span><span>Mioto</span>
+  </span>
+</div>
+
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.min.js" integrity="sha256-jwCP0NAdCBloaIWTWHmW4i3snUNMHUNO+jr9rYd2iOI=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/timeago.js@3.0.2/dist/timeago.locales.min.js" integrity="sha256-ZwofwC1Lf/faQCzN7nZtfijVV6hSwxjQMwXL4gn9qU8=" crossorigin="anonymous"></script>
+  <script><!-- NOTE: timeago.js uses the language code format like "zh_CN" (underscore and case sensitive) -->
+    var languageCode = "zh-cn".replace(/-/g, '_').replace(/_(.*)/, function ($0, $1) {return $0.replace($1, $1.toUpperCase());});
+    timeago().render(document.querySelectorAll('.timeago'), languageCode);
+    timeago.cancel();  
+  </script>
+
+
+
+<script type="text/javascript" src="/js/main.min.c12618f9a600c40bd024996677e951e64d3487006775aeb22e200c990006c5c7.js"></script>
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', 'UA-102233768-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
+
+
+
+
+
+
+
+</body>
+</html>

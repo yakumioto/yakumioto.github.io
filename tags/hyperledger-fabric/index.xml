@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Hyperledger Fabric on Mioto&#39;s Blog</title>
+    <link>http://localhost:1313/tags/hyperledger-fabric/</link>
+    <description>Recent content in Hyperledger Fabric on Mioto&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sat, 27 Jun 2020 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/hyperledger-fabric/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Hyperledger Fabric 加入通道时遇到 channel doesn&#39;t exist 问题</title>
+      <link>http://localhost:1313/2020/06/hyperledger-fabric-%E5%8A%A0%E5%85%A5%E9%80%9A%E9%81%93%E6%97%B6%E9%81%87%E5%88%B0-channel-doesnt-exist-%E9%97%AE%E9%A2%98/</link>
+      <pubDate>Sat, 27 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/2020/06/hyperledger-fabric-%E5%8A%A0%E5%85%A5%E9%80%9A%E9%81%93%E6%97%B6%E9%81%87%E5%88%B0-channel-doesnt-exist-%E9%97%AE%E9%A2%98/</guid>
+      <description>据同事说 node sdk@v2.x.x 版本中没有对网络操作相关的 API 实现, 所以只能自己照着 v1.4.x 版本的 手撸底层代码, 但是在实现 JoinChain 这个功能时出现了 channel doesn&#39;t exist 错误 原因 1 2 3 4 5 6 7</description>
+    </item>
+    
+    <item>
+      <title>Hyperledger Fabric peer block 的交付流程详解</title>
+      <link>http://localhost:1313/2020/06/hyperledger-fabric-peer-block-%E7%9A%84%E4%BA%A4%E4%BB%98%E6%B5%81%E7%A8%8B%E8%AF%A6%E8%A7%A3/</link>
+      <pubDate>Mon, 15 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/2020/06/hyperledger-fabric-peer-block-%E7%9A%84%E4%BA%A4%E4%BB%98%E6%B5%81%E7%A8%8B%E8%AF%A6%E8%A7%A3/</guid>
+      <description>本文基于 hyperldeger fabric 1.4.7 进行代码追踪讲解 假设场景描述: peer 重启场景 peer 有 user channel peer 使用的是 goleveldb peer 的 core.peer.gossip.orgLeader 为 true 流程简介 初始化账本根据账本中保存的 channel id 创建通道实例, 并初</description>
+    </item>
+    
+    <item>
+      <title>Fabric 中 etcdraft 共识讲解</title>
+      <link>http://localhost:1313/2020/01/fabric-%E4%B8%AD-etcdraft-%E5%85%B1%E8%AF%86%E8%AE%B2%E8%A7%A3/</link>
+      <pubDate>Wed, 15 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/2020/01/fabric-%E4%B8%AD-etcdraft-%E5%85%B1%E8%AF%86%E8%AE%B2%E8%A7%A3/</guid>
+      <description>为什么要通过 etcdraft 来进行共识? 我觉得有以下原因 solo 并不适合大多数场景, 例如: 组织A, 组织B, 都想在自己放置共识节点 kafka 虽然能满足以上需求, 但是 kafka 加上</description>
+    </item>
+    
+  </channel>
+</rss>

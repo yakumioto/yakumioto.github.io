@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Linux on Mioto&#39;s Blog</title>
+    <link>http://localhost:1313/tags/linux/</link>
+    <description>Recent content in Linux on Mioto&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sun, 28 Apr 2019 11:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>i3wm 更换默认打开的文件管理器</title>
+      <link>http://localhost:1313/2019/04/i3wm-%E6%9B%B4%E6%8D%A2%E9%BB%98%E8%AE%A4%E6%89%93%E5%BC%80%E7%9A%84%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86%E5%99%A8/</link>
+      <pubDate>Sun, 28 Apr 2019 11:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/2019/04/i3wm-%E6%9B%B4%E6%8D%A2%E9%BB%98%E8%AE%A4%E6%89%93%E5%BC%80%E7%9A%84%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86%E5%99%A8/</guid>
+      <description>可以通过 xdg-mime 来查询当前默认的文件管理器 xdg-mime query default inode/directory 1 2 mioto:~/ $ xdg-mime query default inode/directory visual-studio-code.desktop 方法一 还是可以通过 xdg-mime 来设置默认文件管理器 xdg-mime default {file manager}.desktop inode/directory 1 2 3 mioto:~/ $ xdg-mime default ranger.desktop inode/directory mioto:~/ $ xdg-mime query default</description>
+    </item>
+    
+    <item>
+      <title>为终端设置代理</title>
+      <link>http://localhost:1313/2018/10/%E4%B8%BA%E7%BB%88%E7%AB%AF%E8%AE%BE%E7%BD%AE%E4%BB%A3%E7%90%86/</link>
+      <pubDate>Fri, 05 Oct 2018 16:21:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/2018/10/%E4%B8%BA%E7%BB%88%E7%AB%AF%E8%AE%BE%E7%BD%AE%E4%BB%A3%E7%90%86/</guid>
+      <description>现在一般都是使用 SS FQ 了吧, 所以都是 SOCKS5 代理, 但是在终端有些程序是不支持 SOCKS5 的, 比如 go get 方法一 如果你的 SS 目前 Cow 支持的加密算法有: aes-128-cfb, aes-192-cfb, aes-256-cfb, bf-cfb, cast5-cfb, des-cfb, rc4-md5, chacha20, salsa20,</description>
+    </item>
+    
+    <item>
+      <title>安装 Manjaro I3 记录</title>
+      <link>http://localhost:1313/2018/10/%E5%AE%89%E8%A3%85-manjaro-i3-%E8%AE%B0%E5%BD%95/</link>
+      <pubDate>Fri, 05 Oct 2018 02:16:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/2018/10/%E5%AE%89%E8%A3%85-manjaro-i3-%E8%AE%B0%E5%BD%95/</guid>
+      <description>用 Manjaro I3 差不多快半年了, 重装了两三次, 记录一下自己的安装记录, 避免以后遇到一些坑 配置文件 配置文件使用 [Mackup](https://github.com/lra/mackup) 进行备份, 备份至 Dropbox 中 输入法 搜狗输入法&amp;h</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Diary on Mioto&#39;s Blog</title>
+    <link>http://localhost:1313/tags/diary/</link>
+    <description>Recent content in Diary on Mioto&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 02 Jan 2020 00:00:00 +0000</lastBuildDate><atom:link href="http://localhost:1313/tags/diary/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>回顾 2019</title>
+      <link>http://localhost:1313/2020/01/%E5%9B%9E%E9%A1%BE-2019/</link>
+      <pubDate>Thu, 02 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/2020/01/%E5%9B%9E%E9%A1%BE-2019/</guid>
+      <description>第一次写年终总结, 每次准备写脑海里都飘过 &amp;ldquo;你比上一年又重了N公斤&amp;rdquo;, 今年可以写的感觉也并不多, 但是总结一下总是好的.</description>
+    </item>
+    
+  </channel>
+</rss>

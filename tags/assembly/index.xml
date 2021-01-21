@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Assembly on Mioto&#39;s Blog</title>
+    <link>http://localhost:1313/tags/assembly/</link>
+    <description>Recent content in Assembly on Mioto&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Tue, 19 Jan 2021 17:23:23 +0800</lastBuildDate><atom:link href="http://localhost:1313/tags/assembly/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Plan9 汇编入门讲解</title>
+      <link>http://localhost:1313/2021/01/plan9-%E6%B1%87%E7%BC%96%E5%85%A5%E9%97%A8%E8%AE%B2%E8%A7%A3/</link>
+      <pubDate>Tue, 19 Jan 2021 17:23:23 +0800</pubDate>
+      
+      <guid>http://localhost:1313/2021/01/plan9-%E6%B1%87%E7%BC%96%E5%85%A5%E9%97%A8%E8%AE%B2%E8%A7%A3/</guid>
+      <description>为什么要看 Plan9 汇编？如果你是 Go 开发者，去学习和理解一下 Plan9 是很有必要的，因为它可以解决你对一段代码的理解（为什么这样不行？那样却可以？）。 Plan9 不同</description>
+    </item>
+    
+  </channel>
+</rss>
