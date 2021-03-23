@@ -397,7 +397,7 @@
 </code></pre></td></tr></table></div></div><p>以上就是两个方法的汇编源码解析，从两个栗子中可以得到结果。</p><p>demo1 中的 ret 是临时变量，虽然 defer 确实改了 ret 的值，但这个值跟返回值没一毛钱关系，而且在汇编中 demo1 的返回值在还没调用 demo1.func1 的时候就已经确定了，所以 demo1 返回了 -1。</p><p>demo2 中的 ret 则直接指向了返回值的地址，defer 也改了返回值的值， 所以 demo2 就返回了 1。</p><h2 id=参考>参考</h2><ol><li><a href=https://golang.org/doc/asm#directives>https://golang.org/doc/asm#directives</a></li><li><a href=https://xargin.com/plan9-assembly/>https://xargin.com/plan9-assembly/</a></li><li><a href=https://www.doxsey.net/blog/go-and-assembly>https://www.doxsey.net/blog/go-and-assembly</a></li><li><a href=https://davidwong.fr/goasm/>https://davidwong.fr/goasm/</a></li></ol></div><div class=post-copyright><p class=copyright-item><span class=item-title>文章作者</span>
 <span class=item-content>Mioto</span></p><p class=copyright-item><span class=item-title>上次更新</span>
 <span class=item-content>2021-01-19</span></p></div><footer class=post-footer><div class=post-tags><a href=/tags/go/>Go</a>
-<a href=/tags/assembly/>Assembly</a></div><nav class=post-nav><a class=prev href=/2021/02/iteration-of-the-project/><i class="iconfont icon-left"></i><span class="prev-text nav-default">项目的迭代升级</span>
+<a href=/tags/assembly/>Assembly</a></div><nav class=post-nav><a class=prev href=/2021/02/2020review/><i class="iconfont icon-left"></i><span class="prev-text nav-default">回顾 2020</span>
 <span class="prev-text nav-mobile">上一篇</span></a>
 <a class=next href=/2020/10/http-response-write-timeout/><span class="next-text nav-default">Go HTTP Response 写超时导致的 EOF 错误</span>
 <span class="next-text nav-mobile">下一篇</span>
