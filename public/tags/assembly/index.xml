@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Assembly on 一只麻酱</title>
+    <link>https://mioto.me/tags/assembly/</link>
+    <description>Recent content in Assembly on 一只麻酱</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Tue, 19 Jan 2021 17:23:23 +0800</lastBuildDate><atom:link href="https://mioto.me/tags/assembly/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Plan9 汇编入门讲解</title>
+      <link>https://mioto.me/2021/01/plan9-assembly/</link>
+      <pubDate>Tue, 19 Jan 2021 17:23:23 +0800</pubDate>
+      
+      <guid>https://mioto.me/2021/01/plan9-assembly/</guid>
+      <description>为什么要看 Plan9 汇编？如果你是 Go 开发者，去学习和理解一下 Plan9 是很有必要的，因为它可以解决你对一段代码的理解（为什么这样不行？那样却可以？）。
+Plan9 不同于 AT&amp;amp;T 和 Intel 汇编器，但是懂这两个汇编语法的话对理解 Plan9 还是有很大帮助的。
+疑惑 // 为什么这个函数的返回值会是 -1 func demo1() int { ret := -1 defer func() { ret = 1 }() return ret } // output: -1 // 为什么这个函数的返回值会是 1 func demo2() (ret int) { defer func() { ret = 1 }() return ret } // output: 1 相信大部分人都看过类似的解答，demo1 中是临时变量导致的，而 demo2 中没有临时变量，这是最终结果。
+在汇编层面到底做了什么？本文将会探讨这个问题。（本文所使用的平台是 MacOS AMD64）不同的平台指令集和寄存器都不一样。
+基础 通用寄存器 下面是通用通用寄存器的名字在 IA64 和 plan9 中的对应关系：</description>
+    </item>
+    
+  </channel>
+</rss>
