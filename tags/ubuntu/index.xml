@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Ubuntu on Mioto's Blog</title><link>https://mioto.me/tags/ubuntu/</link><description>Recent content in Ubuntu on Mioto's Blog</description><generator>Hugo -- gohugo.io</generator><language>zh</language><lastBuildDate>Tue, 05 Dec 2017 15:54:50 +0000</lastBuildDate><atom:link href="https://mioto.me/tags/ubuntu/index.xml" rel="self" type="application/rss+xml"/><item><title>[译] 在Ubuntu 17.10服务器上配置静态IP地址</title><link>https://mioto.me/2017/12/configure-static-ip-address-on-ubuntu-17.10-server/</link><pubDate>Tue, 05 Dec 2017 15:54:50 +0000</pubDate><guid>https://mioto.me/2017/12/configure-static-ip-address-on-ubuntu-17.10-server/</guid><description>原文: https://websiteforstudents.com/configuring-static-ips-ubuntu-17-10-servers/
+Ubuntu 17.10 的时候网络配置方法完全改变了, 是否听说过 NetPlan?可能并没有吧~, NetPlan 是 Ubuntu 17.10 中引入的一种新的网络配置工具，用于管理网络设置.
+NetPlan 的配置文件是 YAML 格式的, 所以配置起来也不算麻烦~
+NetPlan 取代了以前在 /etc/network/interfaces 以前用来配置Ubuntu网络接口的文件. 现在你必须使用 /etc/netplan/*.yaml 来配置
+以下是简短的例子教你使用 NetPlan 来配置 Ubuntu 的静态网络.
+新的配置文件目录在 /etc/netplan 文件夹中, 使用名为 01-netcfg.yaml 的文件作为第一的配置文件. 一下是 DHCP 的默认配置.
+# This file describes the network interfaces available on your system # For more information, see netplan(5). network: version: 2 renderer: networkd ethernets: ens33: dhcp4: yes dhcp6: yes 如果需要应用, 就执行以下命令.
+sudo netplan apply 配置静态IP # This file describes the network interfaces available on your system # For more information, see netplan(5).</description></item></channel></rss>
