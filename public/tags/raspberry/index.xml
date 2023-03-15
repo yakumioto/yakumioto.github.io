@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Raspberry on 一只麻酱</title>
+    <link>https://mioto.me/tags/raspberry/</link>
+    <description>Recent content in Raspberry on 一只麻酱</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Thu, 01 Nov 2018 19:08:00 +0000</lastBuildDate><atom:link href="https://mioto.me/tags/raspberry/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>RaspberryZero网络与OTG配置.md</title>
+      <link>https://mioto.me/2018/11/raspberry-zero-network-and-otg-configuration/</link>
+      <pubDate>Thu, 01 Nov 2018 19:08:00 +0000</pubDate>
+      
+      <guid>https://mioto.me/2018/11/raspberry-zero-network-and-otg-configuration/</guid>
+      <description>买 Raspberry Zero 的原因呢, 是因为钉钉打卡, 每次可能晚了那么几分钟, 但我就是起不来啊&amp;hellip;
+这篇文章主要讲三个点 无屏幕 SSH, Static IP, 开启OTG模式
+SSH 当然在 ssh 的时候要保证 Raspberry Zero 是有网的状态, 编辑第二个分区 wpa-supplicant 的配置文件 /etc/wpa_supplicant/wpa_supplicant.conf
+基本网络配置 network={ ssid=&amp;#34;testing&amp;#34; psk=&amp;#34;testingPassword&amp;#34; } ssid 无线网络名称, psk 无线网络密码
+隐藏网络配置 network={ ssid=&amp;#34;testing&amp;#34; scan_ssid=1 psk=&amp;#34;testingPassword&amp;#34; } 多个网络配置 network={ ssid=&amp;#34;HomeOneSSID&amp;#34; psk=&amp;#34;passwordOne&amp;#34; priority=1 id_str=&amp;#34;homeOne&amp;#34; } network={ ssid=&amp;#34;HomeTwoSSID&amp;#34; psk=&amp;#34;passwordTwo&amp;#34; priority=2 id_str=&amp;#34;homeTwo&amp;#34; } priority 网络优先级
+连接 SSH 如果网络配置没问题的话,现在应该已经连接上了无线网络了, 接下来就是在无屏幕状态下如何 ssh 到 Raspberry Zero
+挂载第一分区在 / 目录创建 SSH 文件就可以了, 然后插电启动 Raspberry Zero 等待自动连接到网络后进行后续操作</description>
+    </item>
+    
+  </channel>
+</rss>

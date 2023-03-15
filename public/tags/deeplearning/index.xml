@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>DeepLearning on 一只麻酱</title>
+    <link>https://mioto.me/tags/deeplearning/</link>
+    <description>Recent content in DeepLearning on 一只麻酱</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Sun, 06 Sep 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://mioto.me/tags/deeplearning/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>神经网络的数据基础</title>
+      <link>https://mioto.me/2020/09/the-data-foundation-of-neural-networks/</link>
+      <pubDate>Sun, 06 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://mioto.me/2020/09/the-data-foundation-of-neural-networks/</guid>
+      <description>神经网络的数据表示 张量(tensor) 是一个数据容器, 它包含的数据几乎总是数值数据, 因此它的数字容器, 张量是矩阵向任意维度的推广, 维度(dimension) 通常也叫作 轴(axis).
+标量(scalar): 仅包含一个数字的张量叫作 标量(标量张量, 零维张量, 0D 张量), 一个 float32 或 float64 的数字就是一个标量张量.
+x = numpy.array(12) 向量(vector): 数字组成的数组叫作 向量(一维张量, 1D 张量), 张量有一个轴.
+x = numpy.array([12, 3, 6, 14, 7]) 矩阵(matrix): 向量组成的数组叫作 矩阵(二维张量, 2D 张量), 矩阵有两个轴(行, 列).
+x = numpy.array([ [5, 78, 2, 34, 0], [6, 79, 3, 35, 1], [7, 80, 4, 36, 2]]) 3D张量与更高维的张量: 矩阵组成的数据叫作 3D 张量, 3D 张量组成的数组叫作 4D 张量, 以此类推.</description>
+    </item>
+    
+  </channel>
+</rss>
