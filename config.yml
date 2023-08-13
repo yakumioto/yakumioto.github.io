@@ -33,9 +33,9 @@ outputs:
 
 params:
   env: production # to enable google analytics, opengraph, twitter-cards and schema.
-  title: Mioto's Blog
+  title: 圁水
   description: "我们都期待自己的存在是特殊的，到头来却平凡不已。"
-  keywords: ["Mioto's Blog", "Mioto","Yaku Mioto", "Mioto Yaku", "yakumioto"]
+  keywords: ["圁水", "Mioto's Blog", "Mioto","Yaku Mioto", "Mioto Yaku", "yakumioto"]
   author: 'Mioto Yaku'
   # images: ["<link or path of image for opengraph, twitter-cards>"]
   DateFormat: "January 2, 2006"
