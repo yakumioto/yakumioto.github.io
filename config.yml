@@ -1,7 +1,7 @@
 baseURL: 'https://mioto.me'
 languageCode: zh
 defaultContentLanguage: zh
-title: Mioto's Blog
+title: 圁水
 theme: PaperMod
 enableRobotsTXT: true
 paginate: 10
