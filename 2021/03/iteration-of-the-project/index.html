@@ -41,7 +41,7 @@
 以上架构的优势：
 完全基于 K8S 部署，横向扩容，高可用。 我负责的模块完全独立于他的前后端，再也不需要因为前后端的机子出现问题，导致的被迫介入。 规则可配，插件可扩展，基本满足后续的需求。 前后端可 一对多，多对多，多对一，SIP 转发层基本实现了 SIP 协议的真正转发。 第四阶段（规划） 基于 TensorFlow 替换规则的手动设置！！！！
 以上 以上算是对接手这个项目的总结，在项目期间也确实接触了好多新的知识。
-如 GRPC 并不能在 K8S Service 层做到负载均衡，需要 Service Mesh 的介入（Linkerd2 等）。"><meta property="og:type" content="article"><meta property="og:url" content="https://mioto.me/2021/03/iteration-of-the-project/"><meta property="article:section" content="post"><meta property="article:published_time" content="2021-03-23T00:00:00+00:00"><meta property="article:modified_time" content="2021-03-23T00:00:00+00:00"><meta property="og:site_name" content="Mioto's Blog"><meta name=twitter:card content="summary"><meta name=twitter:title content="项目的迭代升级"><meta name=twitter:description content="只是写自己接手的项目迭代过程，单纯的记录。
+如 GRPC 并不能在 K8S Service 层做到负载均衡，需要 Service Mesh 的介入（Linkerd2 等）。"><meta property="og:type" content="article"><meta property="og:url" content="https://mioto.me/2021/03/iteration-of-the-project/"><meta property="article:section" content="post"><meta property="article:published_time" content="2021-03-23T00:00:00+00:00"><meta property="article:modified_time" content="2021-03-23T00:00:00+00:00"><meta property="og:site_name" content="圁水"><meta name=twitter:card content="summary"><meta name=twitter:title content="项目的迭代升级"><meta name=twitter:description content="只是写自己接手的项目迭代过程，单纯的记录。
 这个项目的目的是为了控制电话营销的投诉率，前前后后搞了也有小一年了，大的迭代基本上有三次，这篇文章主要就是记录一下迭代的过程以及自己的想法。
 项目伊始 需求：获取 SIP 协议中的手机号信息，去特定的网站查询该手机号在不在投诉黑名单中，并将命中的手机号缓存。
 开始的需求很简单，但是本身并不是这个行业的，对 SIP 协议也不是很了解，看了看资料用了最简单的方法实现了他的需求。
