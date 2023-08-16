@@ -43,7 +43,9 @@ params:
   DateFormat: "January 2, 2006"
   defaultTheme: auto # dark, light
   disableThemeToggle: false
-  comments: false
+  comments: true
+  showReadingTime: true
+  showToc: true
 
   homeInfoParams:
     Title: "银翼杀手 2049"
@@ -57,7 +59,6 @@ params:
     - name: telegram
       url: "https://t.me/yakumioto"
 
-  # ShowReadingTime: true
   # ShowShareButtons: true
   # ShowPostNavLinks: true
   # ShowBreadCrumbs: true
