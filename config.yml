@@ -31,6 +31,8 @@ outputs:
     - RSS
     - JSON # is necessary
 
+disqusShortname: yakumioto
+
 params:
   env: production # to enable google analytics, opengraph, twitter-cards and schema.
   title: 一只麻酱
@@ -41,6 +43,7 @@ params:
   DateFormat: "January 2, 2006"
   defaultTheme: auto # dark, light
   disableThemeToggle: false
+  comments: false
 
   homeInfoParams:
     Title: "银翼杀手 2049"
@@ -64,7 +67,6 @@ params:
   # UseHugoToc: true
   # disableSpecial1stPost: false
   # disableScrollToTop: false
-  # comments: false
   # hidemeta: false
   # hideSummary: false
   # showtoc: false
