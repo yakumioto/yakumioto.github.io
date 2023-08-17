@@ -11,6 +11,8 @@ permalinks:
 
 googleAnalytics: "UA-102233768-1"
 
+disqusShortname: yakumioto
+
 menu:
   main:
     - identifier: archives
@@ -30,8 +32,6 @@ outputs:
     - HTML
     - RSS
     - JSON # is necessary
-
-disqusShortname: yakumioto
 
 params:
   env: production # to enable google analytics, opengraph, twitter-cards and schema.
