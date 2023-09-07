@@ -1,10 +1,34 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Posts on 一只麻酱</title><link>https://mioto.me/post/</link><description>Recent content in Posts on 一只麻酱</description><generator>Hugo -- gohugo.io</generator><language>zh</language><lastBuildDate>Fri, 24 Sep 2021 10:30:23 +0800</lastBuildDate><atom:link href="https://mioto.me/post/index.xml" rel="self" type="application/rss+xml"/><item><title>Bitwarden 白皮书简析</title><link>https://mioto.me/2021/09/bitwarden-security-white-paper/</link><pubDate>Fri, 24 Sep 2021 10:30:23 +0800</pubDate><guid>https://mioto.me/2021/09/bitwarden-security-white-paper/</guid><description>1Password 太贵了，$2.99 和 $4.99 分别对应单人和家庭套餐！！！现在的 1password 收费模式也转向了订阅付费，同时架构也转向了 CS 架构，所以本质上和 Bitwarden 也差不多了。
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Posts on 一只麻酱</title>
+    <link>https://mioto.me/post/</link>
+    <description>Recent content in Posts on 一只麻酱</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <lastBuildDate>Fri, 24 Sep 2021 10:30:23 +0800</lastBuildDate><atom:link href="https://mioto.me/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Bitwarden 白皮书简析</title>
+      <link>https://mioto.me/2021/09/bitwarden-security-white-paper/</link>
+      <pubDate>Fri, 24 Sep 2021 10:30:23 +0800</pubDate>
+      
+      <guid>https://mioto.me/2021/09/bitwarden-security-white-paper/</guid>
+      <description>1Password 太贵了，$2.99 和 $4.99 分别对应单人和家庭套餐！！！现在的 1password 收费模式也转向了订阅付费，同时架构也转向了 CS 架构，所以本质上和 Bitwarden 也差不多了。
 Bitwarden 是一款自由且开源的密码管理服务，用户可在加密的保管库中存储敏感信息（例如网站登录凭据）。Bitwarden 平台提供有多种客户端应用程序，包括网页用户界面、桌面应用，浏览器扩展、移动应用以及命令行界面。Bitwarden 提供云端托管服务，并支持自行部署解决方案。 &amp;ndash; 维基百科
 Bitwarden 安全原则 端到端加密：所有的密码和私人数据都通过 AES-256 进行加密。所有的加密密钥均在客户端生成和管理，加密过程均在客户端完成。 零知识加密：Bitwarden 服务端不存储你的主密钥以及加密密钥，你的数据使用你的个人邮箱以及主密钥进行加密。 源代码可用：代码完全开源，并可自行编译使用。 隐私设计：所有登录信息在你的设备中进行加密后在存储到 Bitwarden服务器的保管库中，并将保管库同步到所用你的设备，你的数据采用 AES-CBC 256 位加密、加盐散列和 PBKDF2 SHA-256 进行密封。 安全审计与合规：Open source and third-party audited, Bitwarden complies with AICPA SOC2 Type 2 / Privacy Shield, GDPR, and CCPA regulations. Bitwarden 核心概念 主密钥（Master Key） 最核心的密钥，所有后续的密钥和加密密钥均通过主密钥派生，主密钥也是解密所有登录信息以及私人数据的唯一密钥，丢失会导致无法获取已经保存的数据，泄漏将导致所有的数据公之于众。所以主密钥复杂点毕竟你所有的密钥都不需要记了，主密钥在特别简单岂不是很危险？
 伪代码：
 masterKeyHash = pbkdf2(masterKey, email) 主密钥哈希 用来鉴权登录，身份认证，从 Bitwarden 服务端获取密码保管库。
 伪代码：
-masterKeyHashHash = pbkdf2(masterKeyHash, masterKey) 扩展主密钥（Stretched Master Key） 通过主密钥派生出加密密钥和签名密钥，并将两个密钥拼接成扩展主密钥。</description></item><item><title>项目的迭代升级</title><link>https://mioto.me/2021/03/iteration-of-the-project/</link><pubDate>Tue, 23 Mar 2021 00:00:00 +0000</pubDate><guid>https://mioto.me/2021/03/iteration-of-the-project/</guid><description>只是写自己接手的项目迭代过程，单纯的记录。
+masterKeyHashHash = pbkdf2(masterKeyHash, masterKey) 扩展主密钥（Stretched Master Key） 通过主密钥派生出加密密钥和签名密钥，并将两个密钥拼接成扩展主密钥。</description>
+    </item>
+    
+    <item>
+      <title>项目的迭代升级</title>
+      <link>https://mioto.me/2021/03/iteration-of-the-project/</link>
+      <pubDate>Tue, 23 Mar 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://mioto.me/2021/03/iteration-of-the-project/</guid>
+      <description>只是写自己接手的项目迭代过程，单纯的记录。
 这个项目的目的是为了控制电话营销的投诉率，前前后后搞了也有小一年了，大的迭代基本上有三次，这篇文章主要就是记录一下迭代的过程以及自己的想法。
 项目伊始 需求：获取 SIP 协议中的手机号信息，去特定的网站查询该手机号在不在投诉黑名单中，并将命中的手机号缓存。
 开始的需求很简单，但是本身并不是这个行业的，对 SIP 协议也不是很了解，看了看资料用了最简单的方法实现了他的需求。
@@ -25,147 +49,448 @@ masterKeyHashHash = pbkdf2(masterKeyHash, masterKey) 扩展主密钥（Stretched
 以上架构的优势：
 完全基于 K8S 部署，横向扩容，高可用。 我负责的模块完全独立于他的前后端，再也不需要因为前后端的机子出现问题，导致的被迫介入。 规则可配，插件可扩展，基本满足后续的需求。 前后端可 一对多，多对多，多对一，SIP 转发层基本实现了 SIP 协议的真正转发。 第四阶段（规划） 基于 TensorFlow 替换规则的手动设置！！！！
 以上 以上算是对接手这个项目的总结，在项目期间也确实接触了好多新的知识。
-如 GRPC 并不能在 K8S Service 层做到负载均衡，需要 Service Mesh 的介入（Linkerd2 等）。</description></item><item><title>回顾 2020</title><link>https://mioto.me/2021/02/2020review/</link><pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate><guid>https://mioto.me/2021/02/2020review/</guid><description>2020 年，多灾多难的一年，戴了一年的口罩，过年也没回家，相比上一年并没有获得很大的进步，相反体重继续走高涨幅 3.9% 。
+如 GRPC 并不能在 K8S Service 层做到负载均衡，需要 Service Mesh 的介入（Linkerd2 等）。</description>
+    </item>
+    
+    <item>
+      <title>回顾 2020</title>
+      <link>https://mioto.me/2021/02/2020review/</link>
+      <pubDate>Fri, 26 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://mioto.me/2021/02/2020review/</guid>
+      <description>2020 年，多灾多难的一年，戴了一年的口罩，过年也没回家，相比上一年并没有获得很大的进步，相反体重继续走高涨幅 3.9% 。
 工作 2020年8月加入了联通大数据，继续做着区块链方向，但是不做交付相关了，转向了 BaaS 平台，工资也小有涨幅，这里要感谢我的同事然而他并不活跃在社交网站就不 @他 了。
 学习 在前半年继续较为深入的了解了 Hyperledger Fabric 共识相关的底层实现，也写下了几篇自认为有用文章。 开了个 Fabric BaaS 的坑 Alkaid，但是后面慢慢的就没时间更新了（理直气壮）。 开始了新公司的工作，完成平台的区块链 BaaS。 朋友开了新坑还是跟 VOIP 有关，做了个稍微有点大的项目，预计 TPS 在 500/s 左右，数据量大概有个几亿的数据。 建了个 K8S 集群，搞了个高可用的 Mongo Sharded Cluster 集群。 研究了 Makefile 的编写。 看了看 Plan9 的汇编。 文章 今年共水了 9 篇文章。
-回顾 2019 Fabric 中 etcdraft 共识讲解 基于 Windows 的开发环境 Go 删除 Slice 中的某一个值 Hyperledger Fabric peer block 的交付流程详解 Hyperledger Fabric 加入通道时遇到 channel doesn&amp;rsquo;t exist 问题 神经网络的数据基础 Go HTTP Response 写超时导致的 EOF 错误 Plan9 汇编入门讲解 B站 还是晚上看视频，看的最多相关的视频是 彩虹六号 嗯，是个不错的游戏。</description></item><item><title>Plan9 汇编入门讲解</title><link>https://mioto.me/2021/01/plan9-assembly/</link><pubDate>Tue, 19 Jan 2021 17:23:23 +0800</pubDate><guid>https://mioto.me/2021/01/plan9-assembly/</guid><description>为什么要看 Plan9 汇编？如果你是 Go 开发者，去学习和理解一下 Plan9 是很有必要的，因为它可以解决你对一段代码的理解（为什么这样不行？那样却可以？）。
+回顾 2019 Fabric 中 etcdraft 共识讲解 基于 Windows 的开发环境 Go 删除 Slice 中的某一个值 Hyperledger Fabric peer block 的交付流程详解 Hyperledger Fabric 加入通道时遇到 channel doesn&amp;rsquo;t exist 问题 神经网络的数据基础 Go HTTP Response 写超时导致的 EOF 错误 Plan9 汇编入门讲解 B站 还是晚上看视频，看的最多相关的视频是 彩虹六号 嗯，是个不错的游戏。</description>
+    </item>
+    
+    <item>
+      <title>Plan9 汇编入门讲解</title>
+      <link>https://mioto.me/2021/01/plan9-assembly/</link>
+      <pubDate>Tue, 19 Jan 2021 17:23:23 +0800</pubDate>
+      
+      <guid>https://mioto.me/2021/01/plan9-assembly/</guid>
+      <description>为什么要看 Plan9 汇编？如果你是 Go 开发者，去学习和理解一下 Plan9 是很有必要的，因为它可以解决你对一段代码的理解（为什么这样不行？那样却可以？）。
 Plan9 不同于 AT&amp;amp;T 和 Intel 汇编器，但是懂这两个汇编语法的话对理解 Plan9 还是有很大帮助的。
 疑惑 // 为什么这个函数的返回值会是 -1 func demo1() int { ret := -1 defer func() { ret = 1 }() return ret } // output: -1 // 为什么这个函数的返回值会是 1 func demo2() (ret int) { defer func() { ret = 1 }() return ret } // output: 1 相信大部分人都看过类似的解答，demo1 中是临时变量导致的，而 demo2 中没有临时变量，这是最终结果。
 在汇编层面到底做了什么？本文将会探讨这个问题。（本文所使用的平台是 MacOS AMD64）不同的平台指令集和寄存器都不一样。
-基础 通用寄存器 下面是通用通用寄存器的名字在 IA64 和 plan9 中的对应关系：</description></item><item><title>Go HTTP Response 写超时导致的 EOF 错误</title><link>https://mioto.me/2020/10/http-response-write-timeout/</link><pubDate>Thu, 01 Oct 2020 00:00:00 +0000</pubDate><guid>https://mioto.me/2020/10/http-response-write-timeout/</guid><description>前天在联调过程中出现了一个神奇的错误, 错误在 client 端的表现为 http 请求错误 Get &amp;quot;http://127.0.0.1:8800&amp;quot;: EOF, 但是服务端却没有任何 异常 所有的日志都是正常执行
+基础 通用寄存器 下面是通用通用寄存器的名字在 IA64 和 plan9 中的对应关系：</description>
+    </item>
+    
+    <item>
+      <title>Go HTTP Response 写超时导致的 EOF 错误</title>
+      <link>https://mioto.me/2020/10/http-response-write-timeout/</link>
+      <pubDate>Thu, 01 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://mioto.me/2020/10/http-response-write-timeout/</guid>
+      <description>前天在联调过程中出现了一个神奇的错误, 错误在 client 端的表现为 http 请求错误 Get &amp;quot;http://127.0.0.1:8800&amp;quot;: EOF, 但是服务端却没有任何 异常 所有的日志都是正常执行
 由于只有 client 端的错误, 所以 Google 搜索的处理结果全都不是实际场景导致的(并没有怀疑到服务端出了问题), 无奈只能抓包, 最终问题得以解决
 原因 server 端处理请求耗时 30s, 但是 http.Server 的 write timeout 设置的时间是 10s, 所以在 handler 处理请求完毕的时候, server 端和 client 端的连接已经被关闭了
 但是由于 server 端写入的 data 远远小于 http/net 包中设定的 write buffer 缓冲大小(4096 byte), 所以 bufio 的 Write 方法并没有返回 error
 抓包 源码: https://github.com/yakumioto/demo-response-write-timeout
 由于测试环境太过复杂, 所以写了个 demo 复现了整个流程， 以下是 wireshark 导出的 svc 由此可以看出:
-客户端通过三次握手和服务端建立了 TCP 连接 客户端正常的发送了 HTTP Request 请求 正常的保持了一段时间的 Keep-Alive 服务端通过四次挥手和客户端断开了连接 &amp;#34;No.</description></item><item><title>神经网络的数据基础</title><link>https://mioto.me/2020/09/the-data-foundation-of-neural-networks/</link><pubDate>Sun, 06 Sep 2020 00:00:00 +0000</pubDate><guid>https://mioto.me/2020/09/the-data-foundation-of-neural-networks/</guid><description>神经网络的数据表示 张量(tensor) 是一个数据容器, 它包含的数据几乎总是数值数据, 因此它的数字容器, 张量是矩阵向任意维度的推广, 维度(dimension) 通常也叫作 轴(axis).
+客户端通过三次握手和服务端建立了 TCP 连接 客户端正常的发送了 HTTP Request 请求 正常的保持了一段时间的 Keep-Alive 服务端通过四次挥手和客户端断开了连接 &amp;#34;No.</description>
+    </item>
+    
+    <item>
+      <title>神经网络的数据基础</title>
+      <link>https://mioto.me/2020/09/the-data-foundation-of-neural-networks/</link>
+      <pubDate>Sun, 06 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://mioto.me/2020/09/the-data-foundation-of-neural-networks/</guid>
+      <description>神经网络的数据表示 张量(tensor) 是一个数据容器, 它包含的数据几乎总是数值数据, 因此它的数字容器, 张量是矩阵向任意维度的推广, 维度(dimension) 通常也叫作 轴(axis).
 标量(scalar): 仅包含一个数字的张量叫作 标量(标量张量, 零维张量, 0D 张量), 一个 float32 或 float64 的数字就是一个标量张量.
 x = numpy.array(12) 向量(vector): 数字组成的数组叫作 向量(一维张量, 1D 张量), 张量有一个轴.
 x = numpy.array([12, 3, 6, 14, 7]) 矩阵(matrix): 向量组成的数组叫作 矩阵(二维张量, 2D 张量), 矩阵有两个轴(行, 列).
-x = numpy.array([ [5, 78, 2, 34, 0], [6, 79, 3, 35, 1], [7, 80, 4, 36, 2]]) 3D张量与更高维的张量: 矩阵组成的数据叫作 3D 张量, 3D 张量组成的数组叫作 4D 张量, 以此类推.</description></item><item><title>Hyperledger Fabric 加入通道时遇到 channel doesn't exist 问题</title><link>https://mioto.me/2020/06/fab-join-channel-issue/</link><pubDate>Sat, 27 Jun 2020 00:00:00 +0000</pubDate><guid>https://mioto.me/2020/06/fab-join-channel-issue/</guid><description>据同事说 node sdk@v2.x.x 版本中没有对网络操作相关的 API 实现, 所以只能自己照着 v1.4.x 版本的 手撸底层代码, 但是在实现 JoinChain 这个功能时出现了 channel doesn't exist 错误
+x = numpy.array([ [5, 78, 2, 34, 0], [6, 79, 3, 35, 1], [7, 80, 4, 36, 2]]) 3D张量与更高维的张量: 矩阵组成的数据叫作 3D 张量, 3D 张量组成的数组叫作 4D 张量, 以此类推.</description>
+    </item>
+    
+    <item>
+      <title>Hyperledger Fabric 加入通道时遇到 channel doesn&#39;t exist 问题</title>
+      <link>https://mioto.me/2020/06/fab-join-channel-issue/</link>
+      <pubDate>Sat, 27 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://mioto.me/2020/06/fab-join-channel-issue/</guid>
+      <description>据同事说 node sdk@v2.x.x 版本中没有对网络操作相关的 API 实现, 所以只能自己照着 v1.4.x 版本的 手撸底层代码, 但是在实现 JoinChain 这个功能时出现了 channel doesn&#39;t exist 错误
 原因 // SignedProposal 部分结构 { &amp;#34;proposal_bytes&amp;#34;: { &amp;#34;header&amp;#34;: { &amp;#34;channel_header&amp;#34;: { &amp;#34;channel_id&amp;#34;: &amp;#34;&amp;#34; }, &amp;#34;signature_header&amp;#34;: { &amp;#34;creator&amp;#34;: { &amp;#34;mspid&amp;#34;: &amp;#34;&amp;#34;, &amp;#34;id_bytes&amp;#34;: &amp;#34;&amp;#34; } } }, &amp;#34;payload&amp;#34;: &amp;#34;&amp;#34; }, &amp;#34;signature&amp;#34;: &amp;#34;&amp;#34; } 当 peer 收到 client 发来的 SignedProposal 时, 会进行签名校验
-根据 proposal_bytes.header.channel_header.channel_id 获取对应的 mspMgmtMgr, 如果此时通道不存在, 则会创建一个未经初始化的 mspMgmtMgr 根据 proposal_bytes.header.signature_header.creator.mspid 获取对应的 mspManagerImpl, 但是由于 mspMgmtMgr 未初始化, 所以直接返回了 channel doesn't exist 源码追踪 重要的事情说三遍</description></item><item><title>Hyperledger Fabric peer block 的交付流程详解</title><link>https://mioto.me/2020/06/fab-peer-deliver-block/</link><pubDate>Mon, 15 Jun 2020 00:00:00 +0000</pubDate><guid>https://mioto.me/2020/06/fab-peer-deliver-block/</guid><description>本文基于 hyperldeger fabric 1.4.7 进行代码追踪讲解
+根据 proposal_bytes.header.channel_header.channel_id 获取对应的 mspMgmtMgr, 如果此时通道不存在, 则会创建一个未经初始化的 mspMgmtMgr 根据 proposal_bytes.header.signature_header.creator.mspid 获取对应的 mspManagerImpl, 但是由于 mspMgmtMgr 未初始化, 所以直接返回了 channel doesn&#39;t exist 源码追踪 重要的事情说三遍</description>
+    </item>
+    
+    <item>
+      <title>Hyperledger Fabric peer block 的交付流程详解</title>
+      <link>https://mioto.me/2020/06/fab-peer-deliver-block/</link>
+      <pubDate>Mon, 15 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://mioto.me/2020/06/fab-peer-deliver-block/</guid>
+      <description>本文基于 hyperldeger fabric 1.4.7 进行代码追踪讲解
 假设场景描述:
 peer 重启场景 peer 有 user channel peer 使用的是 goleveldb peer 的 core.peer.gossip.orgLeader 为 true 流程简介 初始化账本根据账本中保存的 channel id 创建通道实例, 并初始化与之对等的 gossip 服务, 用 来接收对应通道的最新的 配置或交易 block, 接收到 block 后, 经过 Verify, Validate, Validate RW sets 三个验证步骤, 提交给 Ledger Commiter 进行写入文件, 并将当前通道的 blkMgrInfo 更新到最新状态
 源码追踪 伊始: main -&amp;gt; node.Cmd -&amp;gt; startCmd -&amp;gt; nodeStartCmd -&amp;gt; serve
 peer.Initialize 文件: core/peer/peer.go:241
 初始化 ledgermgmt, 里面做的事情太多了, 要讲清楚有点困难建议大家自己去看看, 里面主要做的就是 各种初始化工作
-// /var/hyperledger/production/ledgersData 下有这些东西, 这里面的工作跟此目录有关 // chains/index goleveldb: 保存了所有通道的最新状态信息 // fileLock goleveldb: 用于锁程序的,文章最末尾有介绍 // historyLeveldb goleveldb: 保存历史交易的 // ledgerProvider goleveldb: 保存的是 chain ids, 也就是通道id // pvtdataStore goleveldb: 存储私有数据库 // stateLeveldb goleveldb: 世界状态数据库, 可以替换为 couchdb // 这两个我不确定没有细追 // configHistory 看名字应该是保存了 config block 相关的东西.</description></item><item><title>Go 删除 Slice 中的某一个值</title><link>https://mioto.me/2020/06/delete-element-slice/</link><pubDate>Wed, 03 Jun 2020 00:00:00 +0000</pubDate><guid>https://mioto.me/2020/06/delete-element-slice/</guid><description>方法一 优点: 速度最快 缺点: 会导致切片数据顺序改变
+// /var/hyperledger/production/ledgersData 下有这些东西, 这里面的工作跟此目录有关 // chains/index goleveldb: 保存了所有通道的最新状态信息 // fileLock goleveldb: 用于锁程序的,文章最末尾有介绍 // historyLeveldb goleveldb: 保存历史交易的 // ledgerProvider goleveldb: 保存的是 chain ids, 也就是通道id // pvtdataStore goleveldb: 存储私有数据库 // stateLeveldb goleveldb: 世界状态数据库, 可以替换为 couchdb // 这两个我不确定没有细追 // configHistory 看名字应该是保存了 config block 相关的东西.</description>
+    </item>
+    
+    <item>
+      <title>Go 删除 Slice 中的某一个值</title>
+      <link>https://mioto.me/2020/06/delete-element-slice/</link>
+      <pubDate>Wed, 03 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://mioto.me/2020/06/delete-element-slice/</guid>
+      <description>方法一 优点: 速度最快 缺点: 会导致切片数据顺序改变
 a := []string{&amp;#34;A&amp;#34;, &amp;#34;B&amp;#34;, &amp;#34;C&amp;#34;, &amp;#34;D&amp;#34;, &amp;#34;E&amp;#34;} i := 2 a[i] = a[len(a)-1] // 将数组的最后一位赋值给需要删除的 index 上 a = a[:len(a)-1] // 移除掉最后一个没用的数据 // Output: // [A B E D] 方法二 优点: 速度会随着切片长度改变 缺点: 保持原有切片顺序
-a := []string{&amp;#34;A&amp;#34;, &amp;#34;B&amp;#34;, &amp;#34;C&amp;#34;, &amp;#34;D&amp;#34;, &amp;#34;E&amp;#34;} i := 2 a = append(a[:i], a[i+1:]...) // Output: // [A B D E] Benchmark goos: linux goarch: amd64 pkg: github.com/yakumioto/go-example/benchmark/delete-element-slice Benchmark1 Benchmark1-4 1000000000 0.</description></item><item><title>基于 Windows 的开发环境</title><link>https://mioto.me/2020/03/working-on-windows10/</link><pubDate>Wed, 25 Mar 2020 00:00:00 +0000</pubDate><guid>https://mioto.me/2020/03/working-on-windows10/</guid><description>换电脑啦！！！退役了用了 6 年的笔记本！！！由于未知错误原因导致无法安装 Manjaro Linux，所以决定尝试使用 Windows 进行开发。
+a := []string{&amp;#34;A&amp;#34;, &amp;#34;B&amp;#34;, &amp;#34;C&amp;#34;, &amp;#34;D&amp;#34;, &amp;#34;E&amp;#34;} i := 2 a = append(a[:i], a[i+1:]...) // Output: // [A B D E] Benchmark goos: linux goarch: amd64 pkg: github.com/yakumioto/go-example/benchmark/delete-element-slice Benchmark1 Benchmark1-4 1000000000 0.</description>
+    </item>
+    
+    <item>
+      <title>基于 Windows 的开发环境</title>
+      <link>https://mioto.me/2020/03/working-on-windows10/</link>
+      <pubDate>Wed, 25 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://mioto.me/2020/03/working-on-windows10/</guid>
+      <description>换电脑啦！！！退役了用了 6 年的笔记本！！！由于未知错误原因导致无法安装 Manjaro Linux，所以决定尝试使用 Windows 进行开发。
 由于最开始并没有考虑使用 Windows 所以显卡选择比较随意 GTX 1660 Super，导致无法玩大作，后悔啊！！！
 目前的开发工具主要是：
 JetBrains Goland Microsoft VSCode （主要用来编辑一些非项目的文件，如 Terminal 的配置文件等） Windows Terminal （主要用于打开 WSL2 子系统的，偶尔用来开 PowerShell） Windows Ubuntu WSL2 （用来 编译，调试 项目，启停 docker） Docker For Windows （WSL2 中操作 docker 容器 都会启动在这个里面） Chocolatey （类似 Linux 中的包管理工具，如 Ubuntu 的 apt） VirtualBox （甲骨文的虚拟机软件，如创建一个 Kubernetes 集群什么的） Vagrant （虚拟机管理工具，如用于一键启动 Kubernetes 集群） Putty （SSH 客户端） 以上就是我目前主要用到的开发工具。
 Chocolatey https://chocolatey.org/
 无意中接触到的一个工具，很对胃口所以就决定尝试一下了。
 安装也很简单，以管理员模式启动 PowerShell.exe，然后执行一下命令就可以了。
-Set-ExecutionPolicy Bypass -Scope Process -Force; [System.</description></item><item><title>Fabric 中 etcdraft 共识讲解</title><link>https://mioto.me/2020/01/etcdraft-exploration-in-fabric-orderer/</link><pubDate>Wed, 15 Jan 2020 00:00:00 +0000</pubDate><guid>https://mioto.me/2020/01/etcdraft-exploration-in-fabric-orderer/</guid><description>为什么要通过 etcdraft 来进行共识?
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.</description>
+    </item>
+    
+    <item>
+      <title>Fabric 中 etcdraft 共识讲解</title>
+      <link>https://mioto.me/2020/01/etcdraft-exploration-in-fabric-orderer/</link>
+      <pubDate>Wed, 15 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://mioto.me/2020/01/etcdraft-exploration-in-fabric-orderer/</guid>
+      <description>为什么要通过 etcdraft 来进行共识?
 我觉得有以下原因
 solo 并不适合大多数场景, 例如: 组织A, 组织B, 都想在自己放置共识节点 kafka 虽然能满足以上需求, 但是 kafka 加上 zookeeper 需要额外部署并且实在是太重了, 不方便部署 所以基于 etcdraft 的共识来了, 解决了以上的痛点
 重要的话说三遍!
 千万不要错过文章中的源码部分, 里面有很多很多的注释!!! 千万不要错过文章中的源码部分, 里面有很多很多的注释!!! 千万不要错过文章中的源码部分, 里面有很多很多的注释!!!
 核心接口 以下是我认为实现 etcdraft 共识核心的接口
-// ClusterServer 集群Server接口 type ClusterServer interface { Step(Cluster_StepServer) error } // ClusterClient 集群Client接口 type ClusterClient interface { Step(ctx context.Context, opts ...grpc.CallOption) (orderer.Cluster_StepClient, error) } // Handler 用于共识的两个接口 type Handler interface { OnConsensus(channel string, sender uint64, req *orderer.ConsensusRequest) error OnSubmit(channel string, sender uint64, req *orderer.</description></item><item><title>回顾 2019</title><link>https://mioto.me/2020/01/2019review/</link><pubDate>Thu, 02 Jan 2020 00:00:00 +0000</pubDate><guid>https://mioto.me/2020/01/2019review/</guid><description>第一次写年终总结, 每次准备写脑海里都飘过 &amp;ldquo;你比上一年又重了N公斤&amp;rdquo;, 今年可以写的感觉也并不多, 但是总结一下总是好的.
+// ClusterServer 集群Server接口 type ClusterServer interface { Step(Cluster_StepServer) error } // ClusterClient 集群Client接口 type ClusterClient interface { Step(ctx context.Context, opts ...grpc.CallOption) (orderer.Cluster_StepClient, error) } // Handler 用于共识的两个接口 type Handler interface { OnConsensus(channel string, sender uint64, req *orderer.ConsensusRequest) error OnSubmit(channel string, sender uint64, req *orderer.</description>
+    </item>
+    
+    <item>
+      <title>回顾 2019</title>
+      <link>https://mioto.me/2020/01/2019review/</link>
+      <pubDate>Thu, 02 Jan 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://mioto.me/2020/01/2019review/</guid>
+      <description>第一次写年终总结, 每次准备写脑海里都飘过 &amp;ldquo;你比上一年又重了N公斤&amp;rdquo;, 今年可以写的感觉也并不多, 但是总结一下总是好的.
 体重 涨幅 0.052, 目前体重算 95KG 好了, 另外明年的目标一定要下降到 70 左右!!!
 加薪 涨幅 0.428, 虽然加薪来的迟了, 但是总比没有要好.
-学习 虽然 Hyperledger Fabric 国密支持并不是我实现, 但是我也充分参与到了其中, 算是对 TLS, 加密, 签名, 证书 有了较为深入的研究. 完成了对 Hyperledger Fabric statedb 的扩展, 支持了 TiDB. 部署实施了两个 Hyperledger Fabric 的落地项目. 对 Hyperledger Fabric 以及 Hyperledger Fabric Go SDK 有了较为深入的了解. 给 Hyperledger Fabric Go SDK 贡献了2次源码, 支持了 Java Chaincode 的 安装, 实例化, 升级. 编写了 hlf-deploy 项目, 支持了几乎所有的 Hyperledger Fabric 所有的操作, 例如: 动态更新通道, 动态切换共识算法 等.</description></item><item><title>Go 100 行实现 HTTP(S) 正向代理</title><link>https://mioto.me/2019/08/http-s-proxy-in-golang-in-less-than-100-lines-of-code/</link><pubDate>Wed, 21 Aug 2019 00:00:00 +0000</pubDate><guid>https://mioto.me/2019/08/http-s-proxy-in-golang-in-less-than-100-lines-of-code/</guid><description>目标是现实一个 HTTP HTTPS 的代理服务器, 目前代理的实现方法有两种
+学习 虽然 Hyperledger Fabric 国密支持并不是我实现, 但是我也充分参与到了其中, 算是对 TLS, 加密, 签名, 证书 有了较为深入的研究. 完成了对 Hyperledger Fabric statedb 的扩展, 支持了 TiDB. 部署实施了两个 Hyperledger Fabric 的落地项目. 对 Hyperledger Fabric 以及 Hyperledger Fabric Go SDK 有了较为深入的了解. 给 Hyperledger Fabric Go SDK 贡献了2次源码, 支持了 Java Chaincode 的 安装, 实例化, 升级. 编写了 hlf-deploy 项目, 支持了几乎所有的 Hyperledger Fabric 所有的操作, 例如: 动态更新通道, 动态切换共识算法 等.</description>
+    </item>
+    
+    <item>
+      <title>Go 100 行实现 HTTP(S) 正向代理</title>
+      <link>https://mioto.me/2019/08/http-s-proxy-in-golang-in-less-than-100-lines-of-code/</link>
+      <pubDate>Wed, 21 Aug 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://mioto.me/2019/08/http-s-proxy-in-golang-in-less-than-100-lines-of-code/</guid>
+      <description>目标是现实一个 HTTP HTTPS 的代理服务器, 目前代理的实现方法有两种
 普通代理: 这种代理扮演的是中间人角色, 对于客户端来说, 它就服务器, 对于服务端来说, 它是客户端, 它负责在中间来回传递 HTTP 报文
 隧道代理: 它是通过 HTTP 正文部分(body) 完成代理, 以 HTTP 的方式实现基于 TCP 的应用层协议代理, 这种代理使用 HTTP 的 CONNECT 方法建立连接
 这是一次 HTTP 的请求, 用 \r\n 进行换行, 碰到连续两个 \r\n 后内容为请求数据, 分为以下几个部分
-请求行 (request line) 请求头 (header) 空行 请求数据 (body) curl -Lv http://baidu.com &amp;gt; GET / HTTP/1.1 &amp;gt; Host: baidu.com &amp;gt; User-Agent: curl/7.68.0 &amp;gt; Accept: */* &amp;gt; * Mark bundle as not supporting multiuse &amp;lt; HTTP/1.</description></item><item><title>破解某Wi-Fi探针魔盒的过程</title><link>https://mioto.me/2019/06/cracking-mohe-process/</link><pubDate>Fri, 07 Jun 2019 00:00:00 +0000</pubDate><guid>https://mioto.me/2019/06/cracking-mohe-process/</guid><description>有个老同学，在老家做销售工作， 某一天忽然联系我说我有个路由器可以扫描周边的 MAC Address 直接得到手机号，我一听这个牛逼啊，然后就让把路由器发来玩玩了
+请求行 (request line) 请求头 (header) 空行 请求数据 (body) curl -Lv http://baidu.com &amp;gt; GET / HTTP/1.1 &amp;gt; Host: baidu.com &amp;gt; User-Agent: curl/7.68.0 &amp;gt; Accept: */* &amp;gt; * Mark bundle as not supporting multiuse &amp;lt; HTTP/1.</description>
+    </item>
+    
+    <item>
+      <title>破解某Wi-Fi探针魔盒的过程</title>
+      <link>https://mioto.me/2019/06/cracking-mohe-process/</link>
+      <pubDate>Fri, 07 Jun 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://mioto.me/2019/06/cracking-mohe-process/</guid>
+      <description>有个老同学，在老家做销售工作， 某一天忽然联系我说我有个路由器可以扫描周边的 MAC Address 直接得到手机号，我一听这个牛逼啊，然后就让把路由器发来玩玩了
 这东西有两个部分一个是手机应用程序，一个是路由器。
 App抓包 最初设想路由器既然要用 Wi-Fi 手机当作热点数据必定经过手机，说干就干，下载了个 HttpCanary 然后对 App 抓包
 过滤掉没用的接口后得到了两个核心接口（说真的 App 设计的真心让人恶心，所有权限都要可能为了读取手机上的联系人把）
 用来获取已经匹配到的手机号的接口 GET http://x.hnyzlp.com/api/merchart/Operative/phone 用来设置心跳的接口，同时设置经纬度 GET http://x.hnyzlp.com/api/merchart/Operative/set_address 到此为止并没有 MAC 实际发出的地址， 所以由此可证明路由器直接将数据发送到了远端服务器，这条路被斩断了
 路由器抓包 起初想的是通过 ARP 诈骗让自己家的路由器把数据发送到我指定的设备来实现抓包，但是！Mac 下各种问题，搞了一个多小时没搞定，卒！
 后来想起来我的路由器是可编程的啊！，于是乎找了个 AC68U 可用的 tcpdump 路由器上抓指定网卡的的指定IP，然后！又得到了两个核心接口
-用来设置路由器心跳， 一分钟请求一次 获取路由器上的运行时间， ARM 状况 等。 POST http://api.swsf3.cn/api_v1/remotecontrol 用来发送 mac 地址到服务端， 频率是 30 秒一次 POST http://api.swsf3.cn/api_v2/report 由此可见所有东西都全了！， 上传数据的接口， 以及查看数据的接口</description></item><item><title>部署 Kubernetes 遇到的问题</title><link>https://mioto.me/2019/05/problem-swith-deploying-kubernetes/</link><pubDate>Wed, 29 May 2019 00:00:00 +0000</pubDate><guid>https://mioto.me/2019/05/problem-swith-deploying-kubernetes/</guid><description>Unable to update cni config: No networks found in /etc/cni/net.d 由于设置了代理导致的错误, kubelet 无法通过代理链接到 kube-apiserve
+用来设置路由器心跳， 一分钟请求一次 获取路由器上的运行时间， ARM 状况 等。 POST http://api.swsf3.cn/api_v1/remotecontrol 用来发送 mac 地址到服务端， 频率是 30 秒一次 POST http://api.swsf3.cn/api_v2/report 由此可见所有东西都全了！， 上传数据的接口， 以及查看数据的接口</description>
+    </item>
+    
+    <item>
+      <title>部署 Kubernetes 遇到的问题</title>
+      <link>https://mioto.me/2019/05/problem-swith-deploying-kubernetes/</link>
+      <pubDate>Wed, 29 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://mioto.me/2019/05/problem-swith-deploying-kubernetes/</guid>
+      <description>Unable to update cni config: No networks found in /etc/cni/net.d 由于设置了代理导致的错误, kubelet 无法通过代理链接到 kube-apiserve
 解决办法:
 unset http_proxy https_proxy # or export no_proxy=&amp;lt;your_kube_apiserver_ip&amp;gt; port 10251 and 10252 are in use 多次 init 导致的错误
 解决办法:
 kubeadm reset ROLES none 关于 ROLES &amp;lt;none&amp;gt; 的问题, 据说在 kubeadm join 的时候可以指定, 不过我每次都没看..
 解决办法:
-# 添加标签 kubectl label node {node name} node-role.kubernetes.io/{key}={value} # example kubectl label node host2 node-role.kubernetes.io/node2=node2 # 删除标签 kubectl label node {node name} node-role.kubernetes.io/{key}- # example kubectl label node host2 node-role.</description></item><item><title>Go HTTP POST 附件</title><link>https://mioto.me/2019/05/go-http-post-attachment/</link><pubDate>Thu, 16 May 2019 00:00:00 +0000</pubDate><guid>https://mioto.me/2019/05/go-http-post-attachment/</guid><description>前段时间为了使用 adb 进行钉钉打卡, 写了个 Go 的程序, 想着万一没打上怎么办, 不如截个图发给自己(现在以 root, 辣鸡钉钉), 文章只为了记录一下实现.
-// curl -X POST https://example.com/sendPhoto -F photo=@./screen.png // 以下代码是根据以上 curl 命令的实现 buf := &amp;amp;bytes.Buffer{} mu := multipart.NewWriter(buf) part, err := mu.CreatePart(textproto.MIMEHeader{ &amp;#34;Content-Disposition&amp;#34;: []string{`form-data; name=&amp;#34;photo&amp;#34;; filename=&amp;#34;screen.png&amp;#34;`}, &amp;#34;Content-Type&amp;#34;:[]string{&amp;#34;application/octet-stream&amp;#34;}, }) checkError(err) fp, _ := os.Open(&amp;#34;/home/mioto/screen.png&amp;#34;) io.Copy(part, fp) mu.Close() req, err := http.NewRequest(http.MethodPost, &amp;#34;https://example.com/sendPhoto&amp;#34;, bf) checkError(err) req.Header.Set(&amp;#34;Content-Type&amp;#34;, mu.FormDataContentType()) res, err := http.DefaultClient.Do(req) checkError(err)</description></item><item><title>Go 解析 ECPrivate Key 遇到的问题</title><link>https://mioto.me/2019/05/go-parse-ec-private-key/</link><pubDate>Tue, 07 May 2019 08:45:00 +0000</pubDate><guid>https://mioto.me/2019/05/go-parse-ec-private-key/</guid><description>最近在做 fabric 证书私钥管理系统, 遇到的一个问题, 在使用 x509.ParseECPrivateKey() 方法的时候会直接报错, 而 fabric 确实用的是 椭圆曲线算法
-错误输出: x509: failed to parse EC private key: asn1: structure error: tags don't match (4 vs {class:0 tag:16 length:19 isCompound:true}) {optional:false explicit:false application:false private:false defaultValue:&amp;lt;nil&amp;gt; tag:&amp;lt;nil&amp;gt; stringType:0 timeType:0 set:false omitEmpty:false} @5
+# 添加标签 kubectl label node {node name} node-role.kubernetes.io/{key}={value} # example kubectl label node host2 node-role.kubernetes.io/node2=node2 # 删除标签 kubectl label node {node name} node-role.kubernetes.io/{key}- # example kubectl label node host2 node-role.</description>
+    </item>
+    
+    <item>
+      <title>Go HTTP POST 附件</title>
+      <link>https://mioto.me/2019/05/go-http-post-attachment/</link>
+      <pubDate>Thu, 16 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://mioto.me/2019/05/go-http-post-attachment/</guid>
+      <description>前段时间为了使用 adb 进行钉钉打卡, 写了个 Go 的程序, 想着万一没打上怎么办, 不如截个图发给自己(现在以 root, 辣鸡钉钉), 文章只为了记录一下实现.
+// curl -X POST https://example.com/sendPhoto -F photo=@./screen.png // 以下代码是根据以上 curl 命令的实现 buf := &amp;amp;bytes.Buffer{} mu := multipart.NewWriter(buf) part, err := mu.CreatePart(textproto.MIMEHeader{ &amp;#34;Content-Disposition&amp;#34;: []string{`form-data; name=&amp;#34;photo&amp;#34;; filename=&amp;#34;screen.png&amp;#34;`}, &amp;#34;Content-Type&amp;#34;:[]string{&amp;#34;application/octet-stream&amp;#34;}, }) checkError(err) fp, _ := os.Open(&amp;#34;/home/mioto/screen.png&amp;#34;) io.Copy(part, fp) mu.Close() req, err := http.NewRequest(http.MethodPost, &amp;#34;https://example.com/sendPhoto&amp;#34;, bf) checkError(err) req.Header.Set(&amp;#34;Content-Type&amp;#34;, mu.FormDataContentType()) res, err := http.DefaultClient.Do(req) checkError(err) </description>
+    </item>
+    
+    <item>
+      <title>Go 解析 ECPrivate Key 遇到的问题</title>
+      <link>https://mioto.me/2019/05/go-parse-ec-private-key/</link>
+      <pubDate>Tue, 07 May 2019 08:45:00 +0000</pubDate>
+      
+      <guid>https://mioto.me/2019/05/go-parse-ec-private-key/</guid>
+      <description>最近在做 fabric 证书私钥管理系统, 遇到的一个问题, 在使用 x509.ParseECPrivateKey() 方法的时候会直接报错, 而 fabric 确实用的是 椭圆曲线算法
+错误输出: x509: failed to parse EC private key: asn1: structure error: tags don&#39;t match (4 vs {class:0 tag:16 length:19 isCompound:true}) {optional:false explicit:false application:false private:false defaultValue:&amp;lt;nil&amp;gt; tag:&amp;lt;nil&amp;gt; stringType:0 timeType:0 set:false omitEmpty:false} @5
 原因是 fabric 将私钥转成 pem 格式的时候使用的方法是 x509.MarshalPKCS8PrivateKey()
-解决办法 block, _ := pem.Decode(pemBytes) key, err := x509.ParsePKCS8PrivateKey(block.Bytes) checkErr(err) switch priv := key.(type) { case *ecdsa.PrivateKey: // do something }</description></item><item><title>i3wm 更换默认打开的文件管理器</title><link>https://mioto.me/2019/04/i3-change-default-file-manager/</link><pubDate>Sun, 28 Apr 2019 11:00:00 +0000</pubDate><guid>https://mioto.me/2019/04/i3-change-default-file-manager/</guid><description>可以通过 xdg-mime 来查询当前默认的文件管理器 xdg-mime query default inode/directory
+解决办法 block, _ := pem.Decode(pemBytes) key, err := x509.ParsePKCS8PrivateKey(block.Bytes) checkErr(err) switch priv := key.(type) { case *ecdsa.PrivateKey: // do something } </description>
+    </item>
+    
+    <item>
+      <title>i3wm 更换默认打开的文件管理器</title>
+      <link>https://mioto.me/2019/04/i3-change-default-file-manager/</link>
+      <pubDate>Sun, 28 Apr 2019 11:00:00 +0000</pubDate>
+      
+      <guid>https://mioto.me/2019/04/i3-change-default-file-manager/</guid>
+      <description>可以通过 xdg-mime 来查询当前默认的文件管理器 xdg-mime query default inode/directory
 mioto:~/ $ xdg-mime query default inode/directory visual-studio-code.desktop 方法一 还是可以通过 xdg-mime 来设置默认文件管理器 xdg-mime default {file manager}.desktop inode/directory
 mioto:~/ $ xdg-mime default ranger.desktop inode/directory mioto:~/ $ xdg-mime query default inode/directory ranger.desktop 方法二 我记录有2个 mimeapps.list 文件修改点
 ~/.local/share/applications/mimeapps.list, ~/.config/mimeapps.list 选一个修改(没有添加) inode/directory=ranger.desktop
-但是我的系统 Manjaro-I3 使用的是 ~/.config/mimeapps.list, 所以有针对性的修改就行</description></item><item><title>Go反序列化JSON格式化时间</title><link>https://mioto.me/2018/11/go-serialize-json-fromat-time/</link><pubDate>Sun, 25 Nov 2018 19:46:00 +0000</pubDate><guid>https://mioto.me/2018/11/go-serialize-json-fromat-time/</guid><description>默认得到的序列化后的结果是 {&amp;quot;t&amp;quot;:&amp;quot;2018-11-25T20:04:51.362485618+08:00&amp;quot;}, 但如果我想得到 {&amp;quot;t&amp;quot;:&amp;quot;2018-11-25 20:04:51&amp;quot;} 该怎么办呢?
+但是我的系统 Manjaro-I3 使用的是 ~/.config/mimeapps.list, 所以有针对性的修改就行</description>
+    </item>
+    
+    <item>
+      <title>Go反序列化JSON格式化时间</title>
+      <link>https://mioto.me/2018/11/go-serialize-json-fromat-time/</link>
+      <pubDate>Sun, 25 Nov 2018 19:46:00 +0000</pubDate>
+      
+      <guid>https://mioto.me/2018/11/go-serialize-json-fromat-time/</guid>
+      <description>默认得到的序列化后的结果是 {&amp;quot;t&amp;quot;:&amp;quot;2018-11-25T20:04:51.362485618+08:00&amp;quot;}, 但如果我想得到 {&amp;quot;t&amp;quot;:&amp;quot;2018-11-25 20:04:51&amp;quot;} 该怎么办呢?
 方法一 实现 MarshalJSON 接口, 同时可能也需要反序列化, 所以还需要实现 UnmarshalJSON, 以下代码为实现
-package main import ( &amp;#34;encoding/json&amp;#34; &amp;#34;fmt&amp;#34; &amp;#34;time&amp;#34; ) type Time struct { T time.Time `json:&amp;#34;t,omitempty&amp;#34;` } func (t *Time) MarshalJSON() ([]byte, error) { type alias Time return json.Marshal(struct { *alias T string `json:&amp;#34;t,omitempty&amp;#34;` }{ alias: (*alias)(t), T: t.T.Format(&amp;#34;2006-01-02 15:04:05&amp;#34;), }) } func (t *Time) UnmarshalJSON(data []byte) error { type alias Time tmp := &amp;amp;struct { *alias T string `json:&amp;#34;t,omitempty&amp;#34;` }{ alias: (*alias)(t), } err := json.</description></item><item><title>RaspberryZero网络与OTG配置.md</title><link>https://mioto.me/2018/11/raspberry-zero-network-and-otg-configuration/</link><pubDate>Thu, 01 Nov 2018 19:08:00 +0000</pubDate><guid>https://mioto.me/2018/11/raspberry-zero-network-and-otg-configuration/</guid><description>买 Raspberry Zero 的原因呢, 是因为钉钉打卡, 每次可能晚了那么几分钟, 但我就是起不来啊&amp;hellip;
+package main import ( &amp;#34;encoding/json&amp;#34; &amp;#34;fmt&amp;#34; &amp;#34;time&amp;#34; ) type Time struct { T time.Time `json:&amp;#34;t,omitempty&amp;#34;` } func (t *Time) MarshalJSON() ([]byte, error) { type alias Time return json.Marshal(struct { *alias T string `json:&amp;#34;t,omitempty&amp;#34;` }{ alias: (*alias)(t), T: t.T.Format(&amp;#34;2006-01-02 15:04:05&amp;#34;), }) } func (t *Time) UnmarshalJSON(data []byte) error { type alias Time tmp := &amp;amp;struct { *alias T string `json:&amp;#34;t,omitempty&amp;#34;` }{ alias: (*alias)(t), } err := json.</description>
+    </item>
+    
+    <item>
+      <title>RaspberryZero网络与OTG配置.md</title>
+      <link>https://mioto.me/2018/11/raspberry-zero-network-and-otg-configuration/</link>
+      <pubDate>Thu, 01 Nov 2018 19:08:00 +0000</pubDate>
+      
+      <guid>https://mioto.me/2018/11/raspberry-zero-network-and-otg-configuration/</guid>
+      <description>买 Raspberry Zero 的原因呢, 是因为钉钉打卡, 每次可能晚了那么几分钟, 但我就是起不来啊&amp;hellip;
 这篇文章主要讲三个点 无屏幕 SSH, Static IP, 开启OTG模式
 SSH 当然在 ssh 的时候要保证 Raspberry Zero 是有网的状态, 编辑第二个分区 wpa-supplicant 的配置文件 /etc/wpa_supplicant/wpa_supplicant.conf
 基本网络配置 network={ ssid=&amp;#34;testing&amp;#34; psk=&amp;#34;testingPassword&amp;#34; } ssid 无线网络名称, psk 无线网络密码
 隐藏网络配置 network={ ssid=&amp;#34;testing&amp;#34; scan_ssid=1 psk=&amp;#34;testingPassword&amp;#34; } 多个网络配置 network={ ssid=&amp;#34;HomeOneSSID&amp;#34; psk=&amp;#34;passwordOne&amp;#34; priority=1 id_str=&amp;#34;homeOne&amp;#34; } network={ ssid=&amp;#34;HomeTwoSSID&amp;#34; psk=&amp;#34;passwordTwo&amp;#34; priority=2 id_str=&amp;#34;homeTwo&amp;#34; } priority 网络优先级
 连接 SSH 如果网络配置没问题的话,现在应该已经连接上了无线网络了, 接下来就是在无屏幕状态下如何 ssh 到 Raspberry Zero
-挂载第一分区在 / 目录创建 SSH 文件就可以了, 然后插电启动 Raspberry Zero 等待自动连接到网络后进行后续操作</description></item><item><title>为终端设置代理</title><link>https://mioto.me/2018/10/setting-up-agents-for-terminals/</link><pubDate>Fri, 05 Oct 2018 16:21:00 +0000</pubDate><guid>https://mioto.me/2018/10/setting-up-agents-for-terminals/</guid><description>现在一般都是使用 SS FQ 了吧, 所以都是 SOCKS5 代理, 但是在终端有些程序是不支持 SOCKS5 的, 比如 go get
+挂载第一分区在 / 目录创建 SSH 文件就可以了, 然后插电启动 Raspberry Zero 等待自动连接到网络后进行后续操作</description>
+    </item>
+    
+    <item>
+      <title>为终端设置代理</title>
+      <link>https://mioto.me/2018/10/setting-up-agents-for-terminals/</link>
+      <pubDate>Fri, 05 Oct 2018 16:21:00 +0000</pubDate>
+      
+      <guid>https://mioto.me/2018/10/setting-up-agents-for-terminals/</guid>
+      <description>现在一般都是使用 SS FQ 了吧, 所以都是 SOCKS5 代理, 但是在终端有些程序是不支持 SOCKS5 的, 比如 go get
 方法一 如果你的 SS 目前 Cow 支持的加密算法有: aes-128-cfb, aes-192-cfb, aes-256-cfb, bf-cfb, cast5-cfb, des-cfb, rc4-md5, chacha20, salsa20, rc4, table
 安装教程参见 https://github.com/cyfdecyf/cow#快速开始
 方法二 如果你用的 SS 加密算法不在以上支持的情况
-可以先使用 ss-local 在本地开启 SOCKS5 然后在通过 Cow 将 SOCKS5 转 HTTP</description></item><item><title>安装 Manjaro I3 记录</title><link>https://mioto.me/2018/10/install-manjaro-i3-records/</link><pubDate>Fri, 05 Oct 2018 02:16:00 +0000</pubDate><guid>https://mioto.me/2018/10/install-manjaro-i3-records/</guid><description>用 Manjaro I3 差不多快半年了, 重装了两三次, 记录一下自己的安装记录, 避免以后遇到一些坑
+可以先使用 ss-local 在本地开启 SOCKS5 然后在通过 Cow 将 SOCKS5 转 HTTP</description>
+    </item>
+    
+    <item>
+      <title>安装 Manjaro I3 记录</title>
+      <link>https://mioto.me/2018/10/install-manjaro-i3-records/</link>
+      <pubDate>Fri, 05 Oct 2018 02:16:00 +0000</pubDate>
+      
+      <guid>https://mioto.me/2018/10/install-manjaro-i3-records/</guid>
+      <description>用 Manjaro I3 差不多快半年了, 重装了两三次, 记录一下自己的安装记录, 避免以后遇到一些坑
 配置文件 配置文件使用 [Mackup](https://github.com/lra/mackup) 进行备份, 备份至 Dropbox 中
 输入法 搜狗输入法&amp;hellip;, 怎么说呢, 用起来很可以,简单方便. 但是在 Manjro 下安装简直是一种煎熬, 需要自己 building QTwebkit, 所需要的时间你自己想&amp;hellip; 可能有更简单的方法, 但是我不知道&amp;hellip;
 我现在使用的输入法是 ibus rime, 简单好用, 虽然不能同步输入习惯,但是通过 Mackup 解决了
 字体 编程字体主要是用 manoco, Dejavu Sans Mono 两个都很好看, 可以尝试一下, 因为使用 zsh 可能还需要装一下 [Powerline Font](https://github.com/powerline/fonts)
-常用软件 JetBrain 全家桶, 主要用 Goland Google Chrome 浏览器 VSCode 用来写 Markdown zeal 类似于 Mac 下的 Dash, 用起来还不错 Dropbox 同步 dotfiles, 以及一堆的资料 Ibus Rime 中文输入法, 台湾人开发的?</description></item><item><title>私有-docker-registry-搭建</title><link>https://mioto.me/2018/08/private-docker-registry-deploy/</link><pubDate>Sun, 19 Aug 2018 18:14:15 +0000</pubDate><guid>https://mioto.me/2018/08/private-docker-registry-deploy/</guid><description>简介 这个东西可能并没有你想象中的那么完美, 适合个人使用, 上传后无法删除镜像, 但是有第三方工具帮你删除后面会讲. 如果这几点你都不介意的话, 可以继续往下看了!!!
+常用软件 JetBrain 全家桶, 主要用 Goland Google Chrome 浏览器 VSCode 用来写 Markdown zeal 类似于 Mac 下的 Dash, 用起来还不错 Dropbox 同步 dotfiles, 以及一堆的资料 Ibus Rime 中文输入法, 台湾人开发的?</description>
+    </item>
+    
+    <item>
+      <title>私有-docker-registry-搭建</title>
+      <link>https://mioto.me/2018/08/private-docker-registry-deploy/</link>
+      <pubDate>Sun, 19 Aug 2018 18:14:15 +0000</pubDate>
+      
+      <guid>https://mioto.me/2018/08/private-docker-registry-deploy/</guid>
+      <description>简介 这个东西可能并没有你想象中的那么完美, 适合个人使用, 上传后无法删除镜像, 但是有第三方工具帮你删除后面会讲. 如果这几点你都不介意的话, 可以继续往下看了!!!
 docker 的基础操作我都不会讲, 如果不太了解的话建议去官网学习
 必备的程序 docker-ce, docker-compose.
 本机搭建 registry 的默认端口为 5000
 如果想将 hub.docker.com 上的 alpine 做个镜像.
 docker pull alpine:latest docker tag alpine:latest localhost:5000/alpine:latest docker push localhost:5000/alpine:latest --- version: &amp;#34;2&amp;#34; services: registry: image: registry:latest restart: always volumes: - registry:/var/lib/registry volumes: registry: 配置前端 registry-frontend 是 registry 的前端, 如果想详细设置可以去 konradkleine/docker-registry-frontend 这里看.
 效果图如下:
---- version: &amp;#34;2&amp;#34; services: registry: image: registry:latest restart: always volumes: - registry:/var/lib/registry registry-frontend: image: konradkleine/docker-registry-frontend:v2 environment: ENV_DOCKER_REGISTRY_HOST: registry ENV_DOCKER_REGISTRY_PORT: &amp;#34;5000&amp;#34; ENV_MODE_BROWSE_ONLY: &amp;#34;true&amp;#34; depends_on: - registry volumes: registry: 配置域名与认证 我使用的是 caddy 作为我的反向代理服务器, 当然你也可以使用 nginx 等.</description></item><item><title>Go byte 数组转 string</title><link>https://mioto.me/2018/03/go-bytearray-tostring/</link><pubDate>Sun, 11 Mar 2018 11:01:03 +0000</pubDate><guid>https://mioto.me/2018/03/go-bytearray-tostring/</guid><description>&lt;p>今天遇到个问题, 如何将 &lt;code>[32]byte&lt;/code> 转 &lt;code>string&lt;/code>&lt;/p>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-go" data-lang="go">&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// https://play.golang.org/p/JkK_B5609GN
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="kd">func&lt;/span> &lt;span class="nf">main&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">hs&lt;/span> &lt;span class="o">:=&lt;/span> &lt;span class="nx">sha256&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nf">Sum256&lt;/span>&lt;span class="p">([]&lt;/span>&lt;span class="nb">byte&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s">&amp;#34;hahaha&amp;#34;&lt;/span>&lt;span class="p">))&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nx">fmt&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nf">Println&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">hs&lt;/span>&lt;span class="p">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">}&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// =====
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// [190 23 140 5 67 235 23 245 243 4 48 33 201 229 252 243 2 133 229 87 164 252 48 156 206 151 255 156 166 24 41 18]
-&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>Go Slice 原理解析</title><link>https://mioto.me/2018/03/go-slice-analysis/</link><pubDate>Fri, 09 Mar 2018 16:41:51 +0000</pubDate><guid>https://mioto.me/2018/03/go-slice-analysis/</guid><description>今天被一道题目恶心到了, 发现不研究这些东西可能真的活不下去了, 狠下心来读了一个多小时的源码, 写下些自己对 Slice 的见解吧.
+--- version: &amp;#34;2&amp;#34; services: registry: image: registry:latest restart: always volumes: - registry:/var/lib/registry registry-frontend: image: konradkleine/docker-registry-frontend:v2 environment: ENV_DOCKER_REGISTRY_HOST: registry ENV_DOCKER_REGISTRY_PORT: &amp;#34;5000&amp;#34; ENV_MODE_BROWSE_ONLY: &amp;#34;true&amp;#34; depends_on: - registry volumes: registry: 配置域名与认证 我使用的是 caddy 作为我的反向代理服务器, 当然你也可以使用 nginx 等.</description>
+    </item>
+    
+    <item>
+      <title>Go byte 数组转 string</title>
+      <link>https://mioto.me/2018/03/go-bytearray-tostring/</link>
+      <pubDate>Sun, 11 Mar 2018 11:01:03 +0000</pubDate>
+      
+      <guid>https://mioto.me/2018/03/go-bytearray-tostring/</guid>
+      <description>&lt;p&gt;今天遇到个问题, 如何将 &lt;code&gt;[32]byte&lt;/code&gt; 转 &lt;code&gt;string&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// https://play.golang.org/p/JkK_B5609GN
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;main&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nx&#34;&gt;hs&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;sha256&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Sum256&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;([]&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;byte&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;hahaha&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;    &lt;span class=&#34;nx&#34;&gt;fmt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Println&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;hs&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// =====
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// [190 23 140 5 67 235 23 245 243 4 48 33 201 229 252 243 2 133 229 87 164 252 48 156 206 151 255 156 166 24 41 18]
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+    </item>
+    
+    <item>
+      <title>Go Slice 原理解析</title>
+      <link>https://mioto.me/2018/03/go-slice-analysis/</link>
+      <pubDate>Fri, 09 Mar 2018 16:41:51 +0000</pubDate>
+      
+      <guid>https://mioto.me/2018/03/go-slice-analysis/</guid>
+      <description>今天被一道题目恶心到了, 发现不研究这些东西可能真的活不下去了, 狠下心来读了一个多小时的源码, 写下些自己对 Slice 的见解吧.
 先说说那个题目.
 // https://play.golang.org/p/2fA3BylTgtf // 请问 s1 和 s2 的值分别是? func main() { s1 := []int{1, 2, 3} s2 := s1[:0] s2 = append(s2, 4) fmt.Println(s1) fmt.Println(s2) } //========== // [4 2 3] // [4] Slice 定义 先看看 Slice 在 Go 底层的定义
-// https://github.com/golang/go/blob/master/src/reflect/value.go#L1806 type sliceHeader struct { Data unsafe.Pointer // Array pointer Len int // slice length Cap int // slice capacity } 原理讲解 第一行 s1 := []int{1, 2, 3} 是将 [1, 2, 3] 的首地址 存入了 Data 中, 设置了 Len 为 3, 设置了 Cap 为 3.</description></item><item><title>Go HTTP JSONRPC Service</title><link>https://mioto.me/2018/03/go-http-jsonrpc-service/</link><pubDate>Tue, 06 Mar 2018 11:13:31 +0000</pubDate><guid>https://mioto.me/2018/03/go-http-jsonrpc-service/</guid><description>就贴一段代码&amp;hellip;
-package main import ( &amp;#34;bytes&amp;#34; &amp;#34;errors&amp;#34; &amp;#34;io&amp;#34; &amp;#34;log&amp;#34; &amp;#34;net/http&amp;#34; &amp;#34;net/rpc&amp;#34; &amp;#34;net/rpc/jsonrpc&amp;#34; ) type Args struct { A, B int } type Quotient struct { Quo, Rem int } type Arith int func (t *Arith) Multiply(args *Args, reply *int) error { *reply = args.A * args.B return nil } func (t *Arith) Divide(args *Args, quo *Quotient) error { if args.B == 0 { return errors.New(&amp;#34;divide by zero&amp;#34;) } quo.Quo = args.</description></item><item><title>基于 Go 的 RESTful API 怎么设计权限控制</title><link>https://mioto.me/2018/02/design-permission-control-based-on-restful/</link><pubDate>Thu, 22 Feb 2018 13:53:59 +0000</pubDate><guid>https://mioto.me/2018/02/design-permission-control-based-on-restful/</guid><description>&lt;p>其实 &lt;code>RESTful API&lt;/code> 实现权限控制的方法很多很多, 比如在每个 &lt;code>Handler&lt;/code> 中进行判断, 但是这种写法会导致工作量无限增加, 万一增加了其他的角色还要不停的更改源码, 所以要以尽量优雅的方式来实现这个部分. 比如 &lt;code>Middleware&lt;/code> 的方式.&lt;/p></description></item><item><title>openssl 自签证书</title><link>https://mioto.me/2018/01/openssl-self-signed-certificate/</link><pubDate>Mon, 29 Jan 2018 21:38:31 +0000</pubDate><guid>https://mioto.me/2018/01/openssl-self-signed-certificate/</guid><description>&lt;p>最开始主要是想玩玩 &lt;code>Go http 2 Push&lt;/code> 的, 但是发现以前那种最简单的自签 &lt;code>Chrome58+&lt;/code> 后就不认了&amp;hellip;&lt;/p>
-&lt;p>查询后才知道 &lt;code>Chrome58+&lt;/code> 后只允许包含SAN(Subject Alternative Name)信息的证书.&lt;/p></description></item><item><title>使用GoBase64标准包遇到的问题</title><link>https://mioto.me/2018/01/problems-encountered-in-using-gobase64-standard-library/</link><pubDate>Mon, 29 Jan 2018 15:53:07 +0000</pubDate><guid>https://mioto.me/2018/01/problems-encountered-in-using-gobase64-standard-library/</guid><description>&lt;p>在解析 &lt;code>jwt&lt;/code> 中的 &lt;code>Playload&lt;/code> 部分的 &lt;code>base64&lt;/code> 时遇到了错误.&lt;/p>
-&lt;h2 id="报错代码">报错代码&lt;/h2>
-&lt;div class="highlight">&lt;pre tabindex="0" class="chroma">&lt;code class="language-go" data-lang="go">&lt;span class="line">&lt;span class="cl">&lt;span class="nx">enstr&lt;/span> &lt;span class="o">:=&lt;/span> &lt;span class="s">&amp;#34;eyJBY2NvdW50SWQiOiIxIiwiQ2xpZW50IjoiIiwiRW1haWwiOiJ5YWt1Lm1pb3RvQGdtYWlsLmNvbSIsIk1hc3RlckZsYWciOnRydWUsImV4cCI6MTU0ODc0NTY5OSwidHlwZSI6ImVtcGxveWVlcyJ9&amp;#34;&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// {&amp;#34;AccountId&amp;#34;:&amp;#34;1&amp;#34;,&amp;#34;Client&amp;#34;:&amp;#34;&amp;#34;,&amp;#34;Email&amp;#34;:&amp;#34;yaku.mioto@gmail.com&amp;#34;,&amp;#34;MasterFlag&amp;#34;:true,&amp;#34;exp&amp;#34;:1548745699,&amp;#34;type&amp;#34;:&amp;#34;employees&amp;#34;}
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nx">debytes&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">err&lt;/span> &lt;span class="o">:=&lt;/span> &lt;span class="nx">base64&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">StdEncoding&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nf">DecodeString&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">enstr&lt;/span>&lt;span class="p">)&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="k">if&lt;/span> &lt;span class="nx">err&lt;/span> &lt;span class="o">:=&lt;/span> &lt;span class="kc">nil&lt;/span> &lt;span class="p">{&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1">// ...
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span> &lt;span class="c1">// err output: illegal base64 data at input byte xxx
-&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">&lt;/span>&lt;span class="p">}&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1">// ...
-&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>故障Google Pixel退换流程</title><link>https://mioto.me/2018/01/failure-google-pixel-return-process/</link><pubDate>Sun, 07 Jan 2018 16:10:35 +0000</pubDate><guid>https://mioto.me/2018/01/failure-google-pixel-return-process/</guid><description>二话不说先上一张退回后所有的配件&amp;hellip;, 没错就是这么点东西!!!, 所以只要给 Google 寄回坏手机就好了.
+// https://github.com/golang/go/blob/master/src/reflect/value.go#L1806 type sliceHeader struct { Data unsafe.Pointer // Array pointer Len int // slice length Cap int // slice capacity } 原理讲解 第一行 s1 := []int{1, 2, 3} 是将 [1, 2, 3] 的首地址 存入了 Data 中, 设置了 Len 为 3, 设置了 Cap 为 3.</description>
+    </item>
+    
+    <item>
+      <title>Go HTTP JSONRPC Service</title>
+      <link>https://mioto.me/2018/03/go-http-jsonrpc-service/</link>
+      <pubDate>Tue, 06 Mar 2018 11:13:31 +0000</pubDate>
+      
+      <guid>https://mioto.me/2018/03/go-http-jsonrpc-service/</guid>
+      <description>就贴一段代码&amp;hellip;
+package main import ( &amp;#34;bytes&amp;#34; &amp;#34;errors&amp;#34; &amp;#34;io&amp;#34; &amp;#34;log&amp;#34; &amp;#34;net/http&amp;#34; &amp;#34;net/rpc&amp;#34; &amp;#34;net/rpc/jsonrpc&amp;#34; ) type Args struct { A, B int } type Quotient struct { Quo, Rem int } type Arith int func (t *Arith) Multiply(args *Args, reply *int) error { *reply = args.A * args.B return nil } func (t *Arith) Divide(args *Args, quo *Quotient) error { if args.B == 0 { return errors.New(&amp;#34;divide by zero&amp;#34;) } quo.Quo = args.</description>
+    </item>
+    
+    <item>
+      <title>基于 Go 的 RESTful API 怎么设计权限控制</title>
+      <link>https://mioto.me/2018/02/design-permission-control-based-on-restful/</link>
+      <pubDate>Thu, 22 Feb 2018 13:53:59 +0000</pubDate>
+      
+      <guid>https://mioto.me/2018/02/design-permission-control-based-on-restful/</guid>
+      <description>&lt;p&gt;其实 &lt;code&gt;RESTful API&lt;/code&gt; 实现权限控制的方法很多很多, 比如在每个 &lt;code&gt;Handler&lt;/code&gt; 中进行判断, 但是这种写法会导致工作量无限增加, 万一增加了其他的角色还要不停的更改源码, 所以要以尽量优雅的方式来实现这个部分. 比如 &lt;code&gt;Middleware&lt;/code&gt; 的方式.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>openssl 自签证书</title>
+      <link>https://mioto.me/2018/01/openssl-self-signed-certificate/</link>
+      <pubDate>Mon, 29 Jan 2018 21:38:31 +0000</pubDate>
+      
+      <guid>https://mioto.me/2018/01/openssl-self-signed-certificate/</guid>
+      <description>&lt;p&gt;最开始主要是想玩玩 &lt;code&gt;Go http 2 Push&lt;/code&gt; 的, 但是发现以前那种最简单的自签 &lt;code&gt;Chrome58+&lt;/code&gt; 后就不认了&amp;hellip;&lt;/p&gt;
+&lt;p&gt;查询后才知道 &lt;code&gt;Chrome58+&lt;/code&gt; 后只允许包含SAN(Subject Alternative Name)信息的证书.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>使用GoBase64标准包遇到的问题</title>
+      <link>https://mioto.me/2018/01/problems-encountered-in-using-gobase64-standard-library/</link>
+      <pubDate>Mon, 29 Jan 2018 15:53:07 +0000</pubDate>
+      
+      <guid>https://mioto.me/2018/01/problems-encountered-in-using-gobase64-standard-library/</guid>
+      <description>&lt;p&gt;在解析 &lt;code&gt;jwt&lt;/code&gt; 中的 &lt;code&gt;Playload&lt;/code&gt; 部分的 &lt;code&gt;base64&lt;/code&gt; 时遇到了错误.&lt;/p&gt;
+&lt;h2 id=&#34;报错代码&#34;&gt;报错代码&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;enstr&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;eyJBY2NvdW50SWQiOiIxIiwiQ2xpZW50IjoiIiwiRW1haWwiOiJ5YWt1Lm1pb3RvQGdtYWlsLmNvbSIsIk1hc3RlckZsYWciOnRydWUsImV4cCI6MTU0ODc0NTY5OSwidHlwZSI6ImVtcGxveWVlcyJ9&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// {&amp;#34;AccountId&amp;#34;:&amp;#34;1&amp;#34;,&amp;#34;Client&amp;#34;:&amp;#34;&amp;#34;,&amp;#34;Email&amp;#34;:&amp;#34;yaku.mioto@gmail.com&amp;#34;,&amp;#34;MasterFlag&amp;#34;:true,&amp;#34;exp&amp;#34;:1548745699,&amp;#34;type&amp;#34;:&amp;#34;employees&amp;#34;}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nx&#34;&gt;debytes&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;err&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;base64&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;StdEncoding&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;DecodeString&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;enstr&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;err&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;nil&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;c1&#34;&gt;// ...
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;  &lt;span class=&#34;c1&#34;&gt;// err output: illegal base64 data at input byte xxx
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// ...
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+    </item>
+    
+    <item>
+      <title>故障Google Pixel退换流程</title>
+      <link>https://mioto.me/2018/01/failure-google-pixel-return-process/</link>
+      <pubDate>Sun, 07 Jan 2018 16:10:35 +0000</pubDate>
+      
+      <guid>https://mioto.me/2018/01/failure-google-pixel-return-process/</guid>
+      <description>二话不说先上一张退回后所有的配件&amp;hellip;, 没错就是这么点东西!!!, 所以只要给 Google 寄回坏手机就好了.
 废话不多说开始讲讲大概的流程,
 咨询方法有两种, 打电话和在线聊天, 如果英文够好, 估计也不会来这里了, emmm&amp;hellip;
 联系 Google https://support.google.com/pixelphone, 找到 CONTACT US -&amp;gt; Pixel Device Support -&amp;gt; 对应的手机型号 进行聊天.
 需要注意以下的几点:
-将网站设置成英文, 不然无法看到 CONTACT US. 准备好 双,全币 信用卡 因为要交押金的. 大概是 $869刀, 21天 必须把手机寄到美国,不然会扣钱 准备一个收货地址必须是美国的, 找朋友或者转运公司都行. Google在线聊天工作的时间是 6:00 AM to 9:00 PM PST, 美国的时区是 UTC-8 中国的时区是 UTC+8, 所以中国 10:00 PM 的时候他们刚刚上班&amp;hellip; 如果他们给的方法 (基本联系他们的时候就全部做过了) 全部试过还是无法开机的话. 他们会给你说给你寄送一部翻新机, 在 21天 内将坏手机寄回他们给的地址, 这些东西都会在聊天完毕后给你发一封详细电子邮件. 最好在他们发货的时候就将自己的坏手机准备寄送出去, 因为手机到美国有差不多10多天的才能到.</description></item><item><title>[译] 在Ubuntu 17.10服务器上配置静态IP地址</title><link>https://mioto.me/2017/12/configure-static-ip-address-on-ubuntu-17.10-server/</link><pubDate>Tue, 05 Dec 2017 15:54:50 +0000</pubDate><guid>https://mioto.me/2017/12/configure-static-ip-address-on-ubuntu-17.10-server/</guid><description>原文: https://websiteforstudents.com/configuring-static-ips-ubuntu-17-10-servers/
+将网站设置成英文, 不然无法看到 CONTACT US. 准备好 双,全币 信用卡 因为要交押金的. 大概是 $869刀, 21天 必须把手机寄到美国,不然会扣钱 准备一个收货地址必须是美国的, 找朋友或者转运公司都行. Google在线聊天工作的时间是 6:00 AM to 9:00 PM PST, 美国的时区是 UTC-8 中国的时区是 UTC+8, 所以中国 10:00 PM 的时候他们刚刚上班&amp;hellip; 如果他们给的方法 (基本联系他们的时候就全部做过了) 全部试过还是无法开机的话. 他们会给你说给你寄送一部翻新机, 在 21天 内将坏手机寄回他们给的地址, 这些东西都会在聊天完毕后给你发一封详细电子邮件. 最好在他们发货的时候就将自己的坏手机准备寄送出去, 因为手机到美国有差不多10多天的才能到.</description>
+    </item>
+    
+    <item>
+      <title>[译] 在Ubuntu 17.10服务器上配置静态IP地址</title>
+      <link>https://mioto.me/2017/12/configure-static-ip-address-on-ubuntu-17.10-server/</link>
+      <pubDate>Tue, 05 Dec 2017 15:54:50 +0000</pubDate>
+      
+      <guid>https://mioto.me/2017/12/configure-static-ip-address-on-ubuntu-17.10-server/</guid>
+      <description>原文: https://websiteforstudents.com/configuring-static-ips-ubuntu-17-10-servers/
 Ubuntu 17.10 的时候网络配置方法完全改变了, 是否听说过 NetPlan?可能并没有吧~, NetPlan 是 Ubuntu 17.10 中引入的一种新的网络配置工具，用于管理网络设置.
 NetPlan 的配置文件是 YAML 格式的, 所以配置起来也不算麻烦~
 NetPlan 取代了以前在 /etc/network/interfaces 以前用来配置Ubuntu网络接口的文件. 现在你必须使用 /etc/netplan/*.yaml 来配置
 以下是简短的例子教你使用 NetPlan 来配置 Ubuntu 的静态网络.
 新的配置文件目录在 /etc/netplan 文件夹中, 使用名为 01-netcfg.yaml 的文件作为第一的配置文件. 一下是 DHCP 的默认配置.
 # This file describes the network interfaces available on your system # For more information, see netplan(5). network: version: 2 renderer: networkd ethernets: ens33: dhcp4: yes dhcp6: yes 如果需要应用, 就执行以下命令.
-sudo netplan apply 配置静态IP # This file describes the network interfaces available on your system # For more information, see netplan(5).</description></item><item><title>使用docker自动部署hexo</title><link>https://mioto.me/2017/11/automated-deployment-of-hexo-using-docker/</link><pubDate>Sun, 26 Nov 2017 22:16:29 +0000</pubDate><guid>https://mioto.me/2017/11/automated-deployment-of-hexo-using-docker/</guid><description>使用这种实现自动部署 hexo 必须有台自己的服务器, 如果没有的话我也没办法~~
+sudo netplan apply 配置静态IP # This file describes the network interfaces available on your system # For more information, see netplan(5).</description>
+    </item>
+    
+    <item>
+      <title>使用docker自动部署hexo</title>
+      <link>https://mioto.me/2017/11/automated-deployment-of-hexo-using-docker/</link>
+      <pubDate>Sun, 26 Nov 2017 22:16:29 +0000</pubDate>
+      
+      <guid>https://mioto.me/2017/11/automated-deployment-of-hexo-using-docker/</guid>
+      <description>使用这种实现自动部署 hexo 必须有台自己的服务器, 如果没有的话我也没办法~~
 原理 我实现的原理其实很简单. 当 source 被提交后, 触发 webhook 然后通过执行 bash script 自动进行编译部署
 实现 给 hexo 准备个仓库, 例: github.com/xxxx/hexo-source, 如果你有私有仓库 如 gogs gitlib 等都可以
 在 hexo 的根目录创建一个 deploy.sh 的脚本
 #/bin/bash set -ev export TZ=&amp;#39;Asia/Shanghai&amp;#39; npm install hexo-cli -g npm install hexo g -d 制作 node-caddy 的 docker, 当然也可以使用我已经写好的. yakumioto/node-caddy, 并编写 Caddyfile, 因为我使用的是自己部署的 Gogs 所以引用了 key
-:80 { gzip git { repo git@git.mioto.me:yakumioto/mioto.me.git branch master key /root/.ssh/id_rsa hook /webhook miotoyaku then bash .</description></item><item><title>Go32位系统计算大于4GB文件sha1遇到的问题</title><link>https://mioto.me/2017/11/go-the-problem-of-finding-hash-in-32-bit-system/</link><pubDate>Sat, 25 Nov 2017 23:11:39 +0000</pubDate><guid>https://mioto.me/2017/11/go-the-problem-of-finding-hash-in-32-bit-system/</guid><description>文件大于 4GB 以下方法一定行不通, 32位操作系统 最大的寻址空间就是 4GB
+:80 { gzip git { repo git@git.mioto.me:yakumioto/mioto.me.git branch master key /root/.ssh/id_rsa hook /webhook miotoyaku then bash .</description>
+    </item>
+    
+    <item>
+      <title>Go32位系统计算大于4GB文件sha1遇到的问题</title>
+      <link>https://mioto.me/2017/11/go-the-problem-of-finding-hash-in-32-bit-system/</link>
+      <pubDate>Sat, 25 Nov 2017 23:11:39 +0000</pubDate>
+      
+      <guid>https://mioto.me/2017/11/go-the-problem-of-finding-hash-in-32-bit-system/</guid>
+      <description>文件大于 4GB 以下方法一定行不通, 32位操作系统 最大的寻址空间就是 4GB
 package main import ( &amp;#34;crypto/sha1&amp;#34; &amp;#34;fmt&amp;#34; &amp;#34;io/ioutil&amp;#34; &amp;#34;log&amp;#34; ) func main() { bytes, err := ioutil.ReadFile(&amp;#34;file.txt&amp;#34;) if err != nil { log.Fatal(err) } h := sha1.New() h.Write(bytes) fmt.Printf(&amp;#34;% x&amp;#34;, h.Sum(nil)) } 以下方法可以算出大于 4GB 文件的 sha1, 但是如果直接表面理解代码, 给人的感觉是无法运行的
 io.Copy(h, f) 这里给人的感觉也是一次性读取文件到 h 变量中, &amp;ldquo;给人一种把 整个文件读取到内存的感觉&amp;rdquo;
-package main import ( &amp;#34;crypto/sha1&amp;#34; &amp;#34;fmt&amp;#34; &amp;#34;io&amp;#34; &amp;#34;log&amp;#34; &amp;#34;os&amp;#34; ) func main() { f, err := os.Open(&amp;#34;file.txt&amp;#34;) if err != nil { log.</description></item><item><title>docker caddy 克隆私有仓库遇到的问题</title><link>https://mioto.me/2017/11/docker-caddy-git-clone-private-repo-problem/</link><pubDate>Sat, 04 Nov 2017 11:26:45 +0000</pubDate><guid>https://mioto.me/2017/11/docker-caddy-git-clone-private-repo-problem/</guid><description>问题描述 我使用的是 gogs 作为自己私有的 git server. 正常的将 .ssh 目录直接导入到了 docker 中. 然后启动 docker 报错如下
+package main import ( &amp;#34;crypto/sha1&amp;#34; &amp;#34;fmt&amp;#34; &amp;#34;io&amp;#34; &amp;#34;log&amp;#34; &amp;#34;os&amp;#34; ) func main() { f, err := os.Open(&amp;#34;file.txt&amp;#34;) if err != nil { log.</description>
+    </item>
+    
+    <item>
+      <title>docker caddy 克隆私有仓库遇到的问题</title>
+      <link>https://mioto.me/2017/11/docker-caddy-git-clone-private-repo-problem/</link>
+      <pubDate>Sat, 04 Nov 2017 11:26:45 +0000</pubDate>
+      
+      <guid>https://mioto.me/2017/11/docker-caddy-git-clone-private-repo-problem/</guid>
+      <description>问题描述 我使用的是 gogs 作为自己私有的 git server. 正常的将 .ssh 目录直接导入到了 docker 中. 然后启动 docker 报错如下
 Warning: Permanently added the RSA host key for IP address &amp;#39;xx.xx.xx.xx&amp;#39; to the list of known hosts. 想必经常玩 vps 的人对这个提示并不陌生.. 我们每次是有 ssh 尝试连接一台我们从没有连接过服务器都会出现, 但是在 docker 中如何避免这个提示
 解决 其实就是要跳过这个验证, 网上一搜基本就能找到. 将 StrictHostKeyChecking 直接配置到 .ssh/config 中 就可以了
-# 文件 .ssh/config # 以 github.com 为例 自行替换成自己的 git server 地址 Host github.com StrictHostKeyChecking no 这样请求的时候就会跳过跳过验证直接 clone 代码了</description></item><item><title>Negroni 源码分析</title><link>https://mioto.me/2017/08/negroni-source-code-analysis/</link><pubDate>Wed, 09 Aug 2017 13:05:00 +0000</pubDate><guid>https://mioto.me/2017/08/negroni-source-code-analysis/</guid><description>negroni 用了很久很久了, 一直觉得很不错, 目前为止核心源码只有 175 行, 很适合用来学习 Go
+# 文件 .ssh/config # 以 github.com 为例 自行替换成自己的 git server 地址 Host github.com StrictHostKeyChecking no 这样请求的时候就会跳过跳过验证直接 clone 代码了</description>
+    </item>
+    
+    <item>
+      <title>Negroni 源码分析</title>
+      <link>https://mioto.me/2017/08/negroni-source-code-analysis/</link>
+      <pubDate>Wed, 09 Aug 2017 13:05:00 +0000</pubDate>
+      
+      <guid>https://mioto.me/2017/08/negroni-source-code-analysis/</guid>
+      <description>negroni 用了很久很久了, 一直觉得很不错, 目前为止核心源码只有 175 行, 很适合用来学习 Go
 初始化 New 将传入的 handlers 构建成链表并保存的过程
-type Handler interface { ServeHTTP(rw http.ResponseWriter, r *http.Request, next http.HandlerFunc) } // middleware 是个单向链表 type middleware struct { handler Handler next *middleware } // Negroni type Negroni struct { middleware middleware // 单向链表 handlers []Handler // 用于存储所有传入的 handler } // New 就是用来构建 middleware 链表的方法 func New(handlers ...Handler) *Negroni { return &amp;amp;Negroni{ handlers: handlers, middleware: build(handlers), } } 这里把传入的 handlers 保存并传给了 build 方法.</description></item></channel></rss>
+type Handler interface { ServeHTTP(rw http.ResponseWriter, r *http.Request, next http.HandlerFunc) } // middleware 是个单向链表 type middleware struct { handler Handler next *middleware } // Negroni type Negroni struct { middleware middleware // 单向链表 handlers []Handler // 用于存储所有传入的 handler } // New 就是用来构建 middleware 链表的方法 func New(handlers ...Handler) *Negroni { return &amp;amp;Negroni{ handlers: handlers, middleware: build(handlers), } } 这里把传入的 handlers 保存并传给了 build 方法.</description>
+    </item>
+    
+  </channel>
+</rss>
