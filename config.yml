@@ -2,7 +2,7 @@ baseURL: 'https://mioto.me'
 languageCode: zh
 defaultContentLanguage: zh
 title: 一只麻酱
-theme: PaperMod
+theme: ["PaperMod"]
 enableRobotsTXT: true
 paginate: 10
 

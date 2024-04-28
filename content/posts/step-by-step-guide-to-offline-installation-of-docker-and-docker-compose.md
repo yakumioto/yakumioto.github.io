@@ -1,11 +1,10 @@
 ---
 categories:
 - 学习
-date: "2024-04-28 08:16:29"
+date: "2024-04-28T08:16:29+08:00"
 tags:
 - Docker
-- Docker Compose
-title: 离线安装 Docker 和 Docker Compose 详细教程
+title: "离线安装 Docker 和 Docker Compose 详细教程"
 ---
 
 Docker 是一种广泛使用的容器化平台，它可以让开发者将应用程序和依赖打包到一个可移植的容器中，从而简化了应用程序的部署和管理。Docker Compose 是一个用于定义和运行多容器 Docker 应用程序的工具。本文将详细介绍如何在离线环境下安装 Docker 和 Docker Compose。
