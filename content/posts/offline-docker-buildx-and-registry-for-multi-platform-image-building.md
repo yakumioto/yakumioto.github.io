@@ -139,3 +139,4 @@ docker manifest push --insecure 192.168.10.10:5000/ubuntu:24.04
 - <https://github.com/docker/buildx/discussions/1088>
 - <https://github.com/moby/buildkit/blob/master/docs/buildkitd.toml.md>
 - <https://community.arm.com/arm-community-blogs/b/tools-software-ides-blog/posts/deploying-multi-architecture-docker-registry>
+- <https://github.com/docker/buildx?tab=readme-ov-file#linux-packages>
